@@ -1,7 +1,6 @@
 var tcount = new TimeCounter();
+document.addEventListener("deviceready", onDeviceReady, false);
 $(document).on('pageinit', function() {
-
-    document.addEventListener("deviceready", onDeviceReady, false);
     _sincronicacao.produtos.total();
 
     $('a.reload').on('click', function() {
@@ -141,13 +140,17 @@ function onDeviceReady() {
 }
 
 function checkConnection() {
+    alert('aaa');
+    alert(navigator.connection);
     if (navigator.connection == undefined) {
         _sincronicacao.produtos.qtdPaginacao = 50;
         _sincronicacao.conexao.status = true;
         _sincronicacao.conexao.nome = 'Conexão desconhecida';
+        alert('bbb');
     } else {
+        alert('ccc');
         var networkState = navigator.connection.type;
-
+        alert(networkState);
         var states = {};
         states[Connection.UNKNOWN] = 'Conexão desconhecida';
         states[Connection.ETHERNET] = 'Conexão Ethernet';
@@ -158,6 +161,8 @@ function checkConnection() {
         states[Connection.NONE] = 'Sem ligação à rede';
 
         _sincronicacao.conexao.nome = states[networkState];
+
+        alert(_sincronicacao.conexao.nome);
 
         switch (states[networkState])
         {
