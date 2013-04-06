@@ -5,7 +5,6 @@ $(document).on('pageinit', function() {
 
     $('.reload').on('click', function() {
         var acao = $(this).closest('tr').attr('id');
-
         switch (acao) {
             case 'tr_produtos':
                 _sincronicacao.produtos.total();
@@ -63,16 +62,19 @@ _sincronicacao = {
                 beforeSend: function() {
                     tcount.start();
                     block(false);
+                    $('#tr_produtos td:eq(1)').html('<b class="ui-table-cell-label">Total sincronizado</b> 0');
                     $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> 0');
                 },
                 success: function(result) {
                     $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> ' + result);
                     $('#tr_produtos td:eq(0)').html('<b class="ui-table-cell-label">Atualização</b> ' + date('d/m/Y H:i:s'));
                     _sincronicacao.produtos.qtdMax = result;
+                    _sincronicacao.produtos.sequencia = 0;
+                    _sincronicacao.produtos.qtdAtual = 0;
                     _sincronicacao.produtos.lista();
                 },
-                error: function() {
-                    _sincronicacao.produtos.error();
+                error: function(xhr, ajaxOptions, thrownError) {
+                    _sincronicacao.produtos.error(xhr, ajaxOptions, thrownError);
                 }
             });
         },
@@ -100,14 +102,31 @@ _sincronicacao = {
                         _sincronicacao.fim();
                     }
                 },
-                error: function() {
-                    _sincronicacao.produtos.error();
+                error: function(xhr, ajaxOptions, thrownError) {
+                    _sincronicacao.produtos.error(xhr, ajaxOptions, thrownError);
                 }
             });
         },
-        error: function() {
-            _sincronicacao.fim();
+        error: function(jqXHR, exception, thrownError) {
             $('#tr_produtos td:eq(3)').html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
+            _sincronicacao.fim();
+            var resp = '';
+            if (jqXHR.status === 0) {
+                resp = ('Não conectar.<br />Verifique Rede.');
+            } else if (jqXHR.status === 404) {
+                resp = ('A página solicitada não foi encontrada. [404]');
+            } else if (jqXHR.status === 500) {
+                resp = ('Erro interno do servidor. [500]');
+            } else if (exception === 'parsererror') {
+                resp = ('Solicitado JSON análise falhou.');
+            } else if (exception === 'timeout') {
+               resp = ('Erro de tempo limite.');
+            } else if (exception === 'abort') {
+                resp = ('Pedido Ajax abortada.');
+            } else {
+                resp = ('Tipo do erro não detectado.<br />' + jqXHR.responseText);
+            }
+            jAviso(resp);
         }
     },
     fim: function() {
