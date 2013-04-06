@@ -3,7 +3,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 $(document).on('pageinit', function() {
     _sincronicacao.produtos.total();
 
-    $('recaregar').on('click', function() {
+    $('.recaregar').on('click', function() {
         var acao = $(this).closest('tr').attr('id');
         alert(acao);
         switch (acao) {
