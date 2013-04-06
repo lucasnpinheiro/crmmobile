@@ -3,7 +3,7 @@ $(document).on('pageinit', function() {
 
     _sincronicacao.produtos.total();
 
-    $('a.reload').on('click', function() {
+    $('.reload').on('click', function() {
         var acao = $(this).closest('tr').attr('id');
 
         switch (acao) {
@@ -108,8 +108,6 @@ _sincronicacao = {
         error: function() {
             _sincronicacao.fim();
             $('#tr_produtos td:eq(3)').html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
-            $('#tr_produtos td:eq(4)').html('<b class="ui-table-cell-label">Ação</b> <a href="#" class="reload" data-role="button" data-icon="refresh" data-iconpos="notext" data-theme="c" data-inline="true">Recarregar</a>');
-            //$('a.reload').button('refresh');
         }
     },
     fim: function() {
