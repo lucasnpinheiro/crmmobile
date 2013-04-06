@@ -9,6 +9,8 @@ $(document).on('pageinit', function() {
 
         switch (acao) {
             case 'tr_produtos':
+                tcount.start();
+                block(false);
                 _sincronicacao.produtos.lista();
                 break;
             case 'tr_clientes':
@@ -23,7 +25,7 @@ $(document).on('pageinit', function() {
 
 _sincronicacao = {
     conexao: {
-        nome: '',
+        nome: 'Conexão desconhecida',
         status: true
     },
     produtos: {
@@ -67,10 +69,10 @@ _sincronicacao = {
                     dataType: 'html',
                     type: 'GET',
                     beforeSend: function() {
+                        $('#ul_titulo').prepend('<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-first-child ui-last-child">' + _sincronicacao.conexao.nome + '</li>');
+                        $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> 0');
                         tcount.start();
                         block(false);
-                        $('.conteudo ul').append('<li data-role="list-divider">' + _sincronicacao.conexao.nome + '</li>');
-                        $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> 0');
                     },
                     success: function(result) {
                         $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> ' + result);
