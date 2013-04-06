@@ -3,14 +3,14 @@ document.addEventListener("deviceready", onDeviceReady, false);
 $(document).on('pageinit', function() {
     _sincronicacao.produtos.total();
 
-    $('a.reload').on('click', function() {
+    $('recaregar').on('click', function() {
         var acao = $(this).closest('tr').attr('id');
-
+        alert(acao);
         switch (acao) {
             case 'tr_produtos':
                 tcount.start();
                 block(false);
-                _sincronicacao.produtos.lista();
+                _sincronicacao.produtos.total();
                 break;
             case 'tr_clientes':
                 break;
@@ -124,7 +124,8 @@ _sincronicacao = {
         error: function() {
             _sincronicacao.fim();
             $('#tr_produtos td:eq(3)').html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
-            $('#tr_produtos td:eq(4)').html('<b class="ui-table-cell-label">Ação</b> <a href="#" class="reload" data-role="button" data-icon="refresh" data-iconpos="notext" data-theme="c" data-inline="true">Recarregar</a>');
+            $('#tr_produtos td:eq(4)').html('<b class="ui-table-cell-label">Ação</b> <a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" title="Detalhes" class="recaregar ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-notext ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text">Recarregar</span><span class="ui-icon ui-icon-bars ui-icon-shadow">&nbsp;</span></span></a>');
+            //$('#tr_produtos td:eq(4)').html('<b class="ui-table-cell-label">Ação</b> <a href="#" class="reload" data-role="button" data-icon="refresh" data-iconpos="notext" data-theme="c" data-inline="true">Recarregar</a>');
             //$('a.reload').button('refresh');
         }
     },
