@@ -68,7 +68,6 @@ _sincronicacao = {
                     dataType: 'html',
                     type: 'GET',
                     beforeSend: function() {
-                        $('#ul_titulo').prepend('<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-first-child ui-last-child">' + _sincronicacao.conexao.nome + '</li>');
                         $('#tr_produtos td:eq(2)').html('<b class="ui-table-cell-label">Total registro</b> 0');
                         tcount.start();
                         block(false);
@@ -140,17 +139,12 @@ function onDeviceReady() {
 }
 
 function checkConnection() {
-    alert('aaa');
-    alert(navigator.connection);
     if (navigator.connection == undefined) {
         _sincronicacao.produtos.qtdPaginacao = 50;
         _sincronicacao.conexao.status = true;
         _sincronicacao.conexao.nome = 'Conexão desconhecida';
-        alert('bbb');
     } else {
-        alert('ccc');
         var networkState = navigator.connection.type;
-        alert(networkState);
         var states = {};
         states[Connection.UNKNOWN] = 'Conexão desconhecida';
         states[Connection.ETHERNET] = 'Conexão Ethernet';
@@ -161,8 +155,6 @@ function checkConnection() {
         states[Connection.NONE] = 'Sem ligação à rede';
 
         _sincronicacao.conexao.nome = states[networkState];
-
-        alert(_sincronicacao.conexao.nome);
 
         switch (states[networkState])
         {
@@ -185,4 +177,5 @@ function checkConnection() {
                 _sincronicacao.conexao.status = true;
         }
     }
+    $('#ul_titulo').prepend('<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-first-child ui-last-child">Conexão atual: ' + _sincronicacao.conexao.nome + '</li>');
 }
