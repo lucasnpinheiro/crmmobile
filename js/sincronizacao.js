@@ -1,5 +1,7 @@
 var tcount = new TimeCounter();
+
 document.addEventListener("deviceready", onDeviceReady, false);
+
 $(document).on('pageinit', function() {
     _sincronicacao.produtos.total();
 
@@ -140,6 +142,7 @@ function onDeviceReady() {
 }
 
 function checkConnection() {
+    
     if (navigator.connection == undefined) {
         _sincronicacao.produtos.qtdPaginacao = 50;
         _sincronicacao.conexao.status = true;
@@ -178,5 +181,5 @@ function checkConnection() {
                 _sincronicacao.conexao.status = true;
         }
     }
-    $('#ul_titulo').prepend('<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-first-child ui-last-child">Conexão atual: ' + _sincronicacao.conexao.nome + '</li>');
+    //$('#ul_titulo').prepend('<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-first-child ui-last-child">Conexão atual: ' + _sincronicacao.conexao.nome + '</li>');
 }
