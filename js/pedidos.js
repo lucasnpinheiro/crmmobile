@@ -1,4 +1,4 @@
-$(document).on('pageinit', function() {
+$(document).on('pageinit pagebeforecreate pagecreate', function() {
     var i = 0;
     $('table#table-consulta-pedidos tbody tr').each(function() {
         i++;
@@ -7,5 +7,5 @@ $(document).on('pageinit', function() {
         }
         $(this).find("td:eq(3)").html('<b class="ui-table-cell-label">Situação</b><span class="situacoes_pedido_' + i + '">' + _situacoes.pedido[i] + '</span>');
     });
-    $('form').insere_mascara();
+    $('form, table').insere_mascara();
 });
