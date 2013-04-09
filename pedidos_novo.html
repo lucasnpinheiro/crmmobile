@@ -343,11 +343,12 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
             </div><!-- /header -->
 
             <div data-role="content" class="conteudo">
+                
                 <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
                     <li data-role="list-divider">Resumo Pedido</li>
+                    <li data-role="list-divider">Dados do Cliente</li>
                 </ul>
 
-                <div data-theme="b">Dados do Cliente</div>
                 <table data-role="table" id="table-resumo-pedidos-cliente" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>
                         <tr class="ui-bar-a">
@@ -365,7 +366,9 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     </tbody>
                 </table>
 
-                <div data-theme="b">Itens do Pedido</div>
+                <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                    <li data-role="list-divider">Itens do Pedido</li>
+                </ul>
                 <table data-role="table" id="table-resumo-pedidos-itens" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>
                         <tr class="ui-bar-a">
@@ -397,8 +400,10 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     </tbody>
                 </table>
 
-                <div data-theme="b">Formas de Pagamento</div>
-                <table data-role="table" id="table-resumo-pedidos-forma_pagamento" data-mode="reflow" class="ui-responsive table-stroke">
+                <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                    <li data-role="list-divider">Formas de Pagamento</li>
+                </ul>
+                <table data-role="table" id="table-resumo-pedidos-forma-pagamento" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>
                         <tr class="ui-bar-a">
                             <th title="Forma de Pagamento">Forma de pagamento</th>
@@ -435,8 +440,14 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     </tbody>
                 </table>
                 
+                <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                    <li data-role="list-divider">Observações</li>
+                </ul>
                 <div>
                     <textarea name="observacao" id="observacao" placeholder="Observação" style="height: 100px;"></textarea>
+                </div>
+                <div>
+                     <a href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Finalizar</a>
                 </div>
             </div><!-- /content -->
 
