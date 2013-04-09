@@ -14,21 +14,26 @@ $(document).on("pageinit", function() {
         verificar_tabelas();
         _session.clear();
     });
+    document.addEventListener("deviceready", onDeviceReady, true);
+    onDeviceReady();
 });
 
 // Wait for Cordova to load
 // 
-document.addEventListener("deviceready", onDeviceReady, false);
+
 
 // Cordova is loaded and it is now safe to make calls Cordova methods
 //
 function onDeviceReady() {
+    alert('aaa');
+    alert(device);
     _session.set("config_device_name", device.name);
     _session.set("config_device_cordova", device.cordova);
     _session.set("config_device_platform", device.platform);
     _session.set("config_device_uuid", device.uuid);
     _session.set("config_device_model", device.model);
     _session.set("config_device_version", device.version);
+    checkConnection();
 }
 
 function checkConnection() {
