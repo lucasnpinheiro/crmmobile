@@ -46,8 +46,3 @@ div.hasDatepicker{display:block;overflow:visible;margin:8px 0;padding:0}
         margin:0;
     }
 }
-@media (min-width: 35em){
-    .ui-table-reflow.ui-responsive {
-        display: table;
-    }
-}

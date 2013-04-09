@@ -1,6 +1,13 @@
-var _constant = {version: "1.00.00", maxPaginacao: 10, titles: {aviso: 'CRM Mobile informa:', erro: 'CRM Mobile informa erros localizados:'}, redirect: function(url) {
+var _constant = {
+    version: "1.00.00",
+    maxPaginacao: 10,
+    titles: {
+        aviso: 'CRM Mobile informa:',
+        erro: 'CRM Mobile informa erros localizados:'
+    }, redirect: function(url) {
         window.location.href = url;
     }};
+
 (function(factory) {
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
@@ -60,6 +67,7 @@ var _constant = {version: "1.00.00", maxPaginacao: 10, titles: {aviso: 'CRM Mobi
         return false;
     };
 }));
+
 var _session = {get: function(key) {
         if (typeof localStorage === 'object') {
             return localStorage.getItem(key);
@@ -81,6 +89,7 @@ var _session = {get: function(key) {
             $.removeCookie(key)
         }
     }};
+
 $.fn.serializeObject = function() {
     "use strict";
     var result = {};
@@ -99,6 +108,7 @@ $.fn.serializeObject = function() {
     $.each(this.serializeArray(), extend);
     return result;
 };
+
 function date(format, timestamp) {
     timestamp = !timestamp ? (new Date()).getTime() / 1000 : timestamp;
     var that = this, jsdate, f, formatChr = /\\?([a-z])/gi, formatChrCb, _pad = function(n, c) {
@@ -202,6 +212,7 @@ function date(format, timestamp) {
     };
     return this.date(format, timestamp);
 }
+
 (function(jQuery, undefined) {
     var push = Array.prototype.push, rcheck = /^(?:radio|checkbox)$/i, rplus = /\+/g, rselect = /^(?:option|select-one|select-multiple)$/i, rvalue = /^(?:button|color|date|datetime|datetime-local|email|hidden|month|number|password|range|reset|search|submit|tel|text|textarea|time|url|week)$/i;
     function getElements(elements) {
@@ -289,17 +300,21 @@ function date(format, timestamp) {
         return this;
     };
 })(jQuery);
+
 function jAviso(msg) {
     $.pnotify({title: 'CRM Mobile Informa:', text: msg, hide: true, sticker: false, history: false, icon: false, styling: 'jqueryui'});
     debug('AVISO', msg);
 }
+
 function jSucesso(msg) {
     $.pnotify({title: 'CRM Mobile Informa:', text: msg, hide: true, sticker: false, history: false, icon: false, styling: 'jqueryui'});
     debug('SUCESSO', msg);
 }
+
 function debug(tipo, msg) {
     console.log(date('Y-m-d H:i:s', (new Date()).getTime() / 1000) + "\n" + ' Mesagem: "' + msg + '" ' + "\n\n\n");
 }
+
 function number_format(number, decimals, dec_point, thousands_sep) {
     number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
     var n = !isFinite(+number) ? 0 : +number, prec = !isFinite(+decimals) ? 0 : Math.abs(decimals), sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep, dec = (typeof dec_point === 'undefined') ? '.' : dec_point, s = '', toFixedFix = function(n, prec) {
@@ -319,7 +334,8 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 var _valida = {clear: function(string) {
         var exp = /\.|\_|\:|\;|\ |\-/g;
         return string.toString().replace(exp, "");
-    }, cpf: function(cpf) {
+    },
+    cpf: function(cpf) {
         var exp = /\.|\-/g;
         cpf = cpf.toString().replace(exp, "");
         var erro = false;
@@ -364,7 +380,8 @@ var _valida = {clear: function(string) {
             }
         }
         return erro;
-    }, cnpj: function(cnpj) {
+    },
+    cnpj: function(cnpj) {
         var erro = false;
         var exp = /\.|\-|\//g;
         cnpj = cnpj.toString().replace(exp, "");
@@ -390,14 +407,16 @@ var _valida = {clear: function(string) {
             }
         }
         return erro;
-    }, email: function(mail) {
+    },
+    email: function(mail) {
         var er = new RegExp(/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/);
         if (er.test(mail)) {
             return true;
         } else {
             return false;
         }
-    }};
+    }
+};
 (function($) {
     $.fn.extend({form_valida: function() {
             var erro = 0;
@@ -474,6 +493,7 @@ var _valida = {clear: function(string) {
             }
         }});
 })(jQuery);
+
 (function($) {
     $.fn.extend({color_campos_form: function(parametros) {
             var defaults = {campos: {}};
@@ -488,37 +508,7 @@ var _valida = {clear: function(string) {
             jAviso(msg);
         }});
 })(jQuery);
-(function($, undefined) {
-    var prevDp = $.fn.datepicker;
-    $.fn.datepicker = function(options) {
-        var dp = this;
-        prevDp.call(this, options);
-        function updateDatepicker() {
-            $(".ui-datepicker-header", dp).addClass("ui-body-c ui-corner-top").removeClass("ui-corner-all");
-            $(".ui-datepicker-prev, .ui-datepicker-next", dp).attr("href", "#");
-            $(".ui-datepicker-prev", dp).buttonMarkup({iconpos: "notext", icon: "arrow-l", shadow: true, corners: true});
-            $(".ui-datepicker-next", dp).buttonMarkup({iconpos: "notext", icon: "arrow-r", shadow: true, corners: true});
-            $(".ui-datepicker-calendar th", dp).addClass("ui-bar-c");
-            $(".ui-datepicker-calendar td", dp).addClass("ui-body-c");
-            $(".ui-datepicker-calendar a", dp).buttonMarkup({corners: false, shadow: false});
-            $(".ui-datepicker-calendar a.ui-state-active", dp).addClass("ui-btn-active");
-            $(".ui-datepicker-calendar a.ui-state-highlight", dp).addClass("ui-btn-up-e");
-            $(".ui-datepicker-calendar .ui-btn", dp).each(function() {
-                var el = $(this);
-                el.html(el.find(".ui-btn-text").text());
-            });
-        }
-        ;
-        updateDatepicker();
-        $(dp).click(updateDatepicker);
-        return this;
-    };
-    $(".ui-page").on("pagecreate", function() {
-        $(".data", this).each(function() {
-            $(this).after($("<div />").datepicker({altField: "#" + $(this).attr("id"), showOtherMonths: true}));
-        });
-    });
-})(jQuery);
+
 (function($) {
     $.fn.extend({insere_mascara: function(parametros) {
             $.each($(this).find(":input").not(':button'), function() {
@@ -565,15 +555,7 @@ var _valida = {clear: function(string) {
             });
         }});
 })(jQuery);
-String.prototype.replaceAll = function(de, para) {
-    var str = this;
-    var pos = str.indexOf(de);
-    while (pos > -1) {
-        str = str.replace(de, para);
-        pos = str.indexOf(de);
-    }
-    return(str);
-};
+
 function md5(str) {
     var xl;
     var rotateLeft = function(lValue, iShiftBits) {
@@ -742,128 +724,6 @@ function md5(str) {
     }
     var temp = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
     return temp.toLowerCase();
-}
-function utf8_encode(argString) {
-    if (argString === null || typeof argString === "undefined") {
-        return"";
-    }
-    var string = (argString + '');
-    var utftext = '', start, end, stringl = 0;
-    start = end = 0;
-    stringl = string.length;
-    for (var n = 0; n < stringl; n++) {
-        var c1 = string.charCodeAt(n);
-        var enc = null;
-        if (c1 < 128) {
-            end++;
-        } else if (c1 > 127 && c1 < 2048) {
-            enc = String.fromCharCode((c1 >> 6) | 192, (c1 & 63) | 128);
-        } else {
-            enc = String.fromCharCode((c1 >> 12) | 224, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
-        }
-        if (enc !== null) {
-            if (end > start) {
-                utftext += string.slice(start, end);
-            }
-            utftext += enc;
-            start = end = n + 1;
-        }
-    }
-    if (end > start) {
-        utftext += string.slice(start, stringl);
-    }
-    return utftext;
-}
-function json_encode(mixed_val) {
-    var retVal, json = this.window.JSON;
-    try {
-        if (typeof json === 'object' && typeof json.stringify === 'function') {
-            retVal = json.stringify(mixed_val);
-            if (retVal === undefined) {
-                throw new SyntaxError('json_encode');
-            }
-            return retVal;
-        }
-        var value = mixed_val;
-        var quote = function(string) {
-            var escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-            var meta = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"': '\\"', '\\': '\\\\'};
-            escapable.lastIndex = 0;
-            return escapable.test(string) ? '"' + string.replace(escapable, function(a) {
-                var c = meta[a];
-                return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-            }) + '"' : '"' + string + '"';
-        };
-        var str = function(key, holder) {
-            var gap = '';
-            var indent = '    ';
-            var i = 0;
-            var k = '';
-            var v = '';
-            var length = 0;
-            var mind = gap;
-            var partial = [];
-            var value = holder[key];
-            if (value && typeof value === 'object' && typeof value.toJSON === 'function') {
-                value = value.toJSON(key);
-            }
-            switch (typeof value) {
-                case'string':
-                    return quote(value);
-                case'number':
-                    return isFinite(value) ? String(value) : 'null';
-                case'boolean':
-                case'null':
-                    return String(value);
-                case'object':
-                    if (!value) {
-                        return'null';
-                    }
-                    if ((this.PHPJS_Resource && value instanceof this.PHPJS_Resource) || (window.PHPJS_Resource && value instanceof window.PHPJS_Resource)) {
-                        throw new SyntaxError('json_encode');
-                    }
-                    gap += indent;
-                    partial = [];
-                    if (Object.prototype.toString.apply(value) === '[object Array]') {
-                        length = value.length;
-                        for (i = 0; i < length; i += 1) {
-                            partial[i] = str(i, value) || 'null';
-                        }
-                        v = partial.length === 0 ? '[]' : gap ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' : '[' + partial.join(',') + ']';
-                        gap = mind;
-                        return v;
-                    }
-                    for (k in value) {
-                        if (Object.hasOwnProperty.call(value, k)) {
-                            v = str(k, value);
-                            if (v) {
-                                partial.push(quote(k) + (gap ? ': ' : ':') + v);
-                            }
-                        }
-                    }
-                    v = partial.length === 0 ? '{}' : gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' : '{' + partial.join(',') + '}';
-                    gap = mind;
-                    return v;
-                case'undefined':
-                case'function':
-                default:
-                    throw new SyntaxError('json_encode');
-            }
-        };
-        return str('', {'': value});
-    } catch (err) {
-        if (!(err instanceof SyntaxError)) {
-            throw new Error('Unexpected error type in json_encode()');
-        }
-        this.php_js = this.php_js || {};
-        this.php_js.last_error_json = 4;
-        return null;
-    }
-}
-function rtrim(str, charlist) {
-    charlist = !charlist ? ' \\s\u00A0' : (charlist + '').replace(/([\[\]\(\)\.\?\/\*\{\}\+\$\^\:])/g, '\\$1');
-    var re = new RegExp('[' + charlist + ']+$', 'g');
-    return(str + '').replace(re, '');
 }
 String.prototype.format = function() {
     var formatted = this;
