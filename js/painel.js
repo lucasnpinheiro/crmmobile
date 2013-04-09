@@ -15,7 +15,6 @@ $(document).on("pageinit", function() {
         _session.clear();
     });
     document.addEventListener("deviceready", onDeviceReady, true);
-    onDeviceReady();
 });
 
 // Wait for Cordova to load
