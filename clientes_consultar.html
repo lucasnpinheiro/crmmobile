@@ -14,13 +14,12 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
         <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
         <link rel="stylesheet" href="css/jquery.pnotify.default.css" />
         <link rel="stylesheet" href="css/jquery.pnotify.default.icons.css" />
+        <link rel="stylesheet" href="css/jquery-mobile-fluid960.min.css" />
         <link rel="stylesheet" href="css/config.css" />
         <script src="js/cordova-2.5.0.js"></script>
         <script src="js/jquery.js"></script>
         <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
-
         <script src="js/jquery.pnotify.min.js"></script>
-        
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile-1.3.0.min.js"></script>
@@ -40,8 +39,16 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     <li data-role="list-divider">Consulta de Clientes</li>
                 </ul>
 
-                <label for="search">Nome:</label>
-                <input type="search" name="search" id="search" value="" placeholder="Nome do clientes">
+                <form id="frm_clientes_consultar" name="frm_clientes_consultar" class="container_12">
+                    <div class="grid_10">
+                        <input type="search" name="search" id="search" value="" placeholder="Informe o nome do cliente ou o código do cliente">
+                    </div>
+                    <div class="grid_2">
+                        <a href="#" data-role="button" data-iconpos="notext" data-theme="c" data-inline="true" data-icon="search" id="bt_consultar_cliente">Consultar</a>
+                    </div>
+                </form>
+
+                <div class="clear"></div>
 
                 <table data-role="table" id="table-clientes" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>

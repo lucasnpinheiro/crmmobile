@@ -6,17 +6,13 @@ $(document).on("pageinit", function() {
     }
     $(".logout").click(function(a) {
         a.preventDefault();
-        _session.remove("reset_banco");
-        _session.remove("usuario");
-        _session.remove("id_usuario");
+        _session.clear();
         _constant.redirect("index.html")
     });
     $(".limpar_banco_dados").click(function(a) {
         a.preventDefault();
         verificar_tabelas();
-        _session.remove("reset_banco");
-        _session.remove("usuario");
-        _session.remove("id_usuario")
+        _session.clear();
     });
 });
 
@@ -27,7 +23,12 @@ document.addEventListener("deviceready", onDeviceReady, false);
 // Cordova is loaded and it is now safe to make calls Cordova methods
 //
 function onDeviceReady() {
-    checkConnection();
+    _session.set("config_device_name", device.name);
+    _session.set("config_device_cordova", device.cordova);
+    _session.set("config_device_platform", device.platform);
+    _session.set("config_device_uuid", device.uuid);
+    _session.set("config_device_model", device.model);
+    _session.set("config_device_version", device.version);
 }
 
 function checkConnection() {
@@ -42,5 +43,6 @@ function checkConnection() {
     states[Connection.CELL_4G] = 'Cell 4G connection';
     states[Connection.NONE] = 'No network connection';
 
-    alert('Connection type: ' + states[networkState]);
+    _session.set("config_conexao_nome", states[networkState]);
+    _session.set("config_conexao_id", networkState);
 }

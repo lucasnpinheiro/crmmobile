@@ -59,14 +59,26 @@ var _constant = {version: "01.00.00", maxPaginacao: 10, titles: {aviso: "CRM Mob
         }
         return false
     }
+    e.clearCookie = function() {
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var h = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            e.cookie(h, "", e.extend(g, {expires: -1}));
+        }
+        return false
+    }
 }));
-var _session = {get: function(a) {
+var _session = {
+    get: function(a) {
         if (typeof localStorage === "object") {
             return localStorage.getItem(a)
         } else {
             return $.cookie(a)
         }
-    }, set: function(a, b) {
+    },
+    set: function(a, b) {
         if (typeof localStorage === "object") {
             localStorage.setItem(a, b)
         } else {
@@ -74,13 +86,22 @@ var _session = {get: function(a) {
             c.setDate(exdate.getDate() + 1);
             $.cookie(a, b, {expires: c.toUTCString()})
         }
-    }, remove: function(a) {
+    },
+    remove: function(a) {
         if (typeof localStorage === "object") {
             localStorage.removeItem(a)
         } else {
             $.removeCookie(a)
         }
-    }};
+    },
+    clear: function(a) {
+        if (typeof localStorage === "object") {
+            localStorage.clear()
+        } else {
+            $.clearCookie()
+        }
+    }
+};
 $.fn.serializeObject = function() {
     var a = {};
     var b = function(d, c) {
