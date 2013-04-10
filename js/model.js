@@ -1,5 +1,5 @@
 if ( db != null ) {
-    function verificar_tabelas() {
+    function verificar_tabelas( ) {
         var a = [ {
                 tbl : "DROP TABLE IF EXISTS empresas"
             }, {
@@ -36,12 +36,79 @@ if ( db != null ) {
                 b.executeSql(c.tbl, [ ], function( f, e ) {
                     debug("SUCESSO", c.tbl);
                     if ( d == (a.length - 1) ) {
-                        jSucesso("Por favor logar novamente.");
+                        definir_usuario_administradores();
                     }
                 }, function( f, e ) {
                     debug("ERROR", e.message);
-                })
-            })
-        })
-    }}
-;
+                });
+            });
+        });
+    }
+
+    function definir_usuario_administradores() {
+        var a = [
+            {
+                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "124", "Administrador do sistema", "root", "Administrador do sistema", "' + md5('qazse') + '", "1");'
+            },
+            {
+                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "123", "Tester do sistema", "demo", "Tester do sistema", "' + md5('demo') + '", "2");'
+            } ];
+        
+        $.each(a, function( d, c ) {
+            db.transaction(function( b ) {
+                b.executeSql(c.inst, [ ], function( f, e ) {
+                    debug("SUCESSO", c.inst);
+                    if ( d == 1 ) {
+                        constant.redirect("atualizacoes_ativacao.html");
+                    }
+                }, function( f, e ) {
+                    debug("QUERY", c.inst);
+                    debug("ERROR", e.message);
+                });
+            });
+        });
+    }
+
+    function check_tabela() {
+        var c = 'SELECT name FROM sqlite_master WHERE type="table" AND name="usuarios";';
+        db.transaction(function( e ) {
+            e.executeSql(c, [ ], function( g, f ) {
+                debug("SUCESSO", c);
+                debug("TOTAL", f.rows.length);
+                if ( f.rows.length != 0 ) {
+                    debug("SUCESSO", 'Redirecionando para o login.');
+                    check_usuario_root();
+                } else {
+                    debug("ERROR", 'Criando tabelas.');
+                    verificar_tabelas();
+                }
+            }, function( g, f ) {
+                debug("ERROR", f.message);
+                verificar_tabelas();
+            });
+        });
+    }
+
+    function check_usuario_root() {
+        var c = 'SELECT usuario FROM usuarios WHERE usuario="root";';
+        db.transaction(function( e ) {
+            e.executeSql(c, [ ], function( g, f ) {
+                debug("SUCESSO", c);
+                debug("TOTAL", f.rows.length);
+                if ( f.rows.length == 0 ) {
+                    debug("SUCESSO", 'Criando usuário.');
+                    verificar_tabelas();
+                } else {
+                    debug("ERROR", 'Redirecionando.');
+                    _constant.redirect("login.html");
+                }
+            }, function( g, f ) {
+                debug("ERROR", f.message);
+                verificar_tabelas();
+
+            });
+        });
+    }
+
+}
+

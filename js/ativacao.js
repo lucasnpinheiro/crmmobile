@@ -5,6 +5,7 @@ $(document).on('pageinit', function() {
         if ( $(this).closest("form").form_valida() == true ) {
             var codigo_cliente = $('#codigo_cliente').val();
             var uuid = $('#devUUID').text();
+            uuid = (uuid == '' ? '123456' : uuid);
             var codigo_ativacao = Math.random()*10000;
             solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao );
         }
@@ -12,14 +13,15 @@ $(document).on('pageinit', function() {
 });
 
 function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
-    var c = 'INSERT INTO usuarios (uuid, codigo_cliente, codigo_ativacao, cpf_cnpj, nome_empresa, data_hora_cadastro) VALUES ("'+uuid+'", "'+codigo_cliente+'", "'+codigo_ativacao+'", "15382516000115", "S2I MOBILE, Teste", "'+date('Y-m-d H:i:s')+'");';
+    var c = 'INSERT INTO empresas ("uuid", "codigo_cliente", "codigo_ativacao", "cpf_cnpj", "nome_empresa", "data_hora_cadastro") VALUES ("'+uuid+'", "'+codigo_cliente+'", "'+codigo_ativacao+'", "15382516000115", "S2I MOBILE - Teste", "'+date('Y-m-d H:i:s')+'");';
     db.transaction(function( e ) {
         e.executeSql(c, [ ], function( g, f ) {
             debug("SUCESSO", c);
             jSucesso('Ativação realizada com sucesso.');
-            _constant.redirect("painel.html");
+            _constant.redirect("login.html");
         }, function( g, f ) {
             jAviso('Problemas na ativação tentar novamente.');
+            debug("ERROR", c);
             debug("ERROR", f.message);
         });
     });

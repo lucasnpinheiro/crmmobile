@@ -1,6 +1,9 @@
 $(document).on("pageinit", function() {
     if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
         $(".crm_mobile_atutenticacao").html("Usuário: " + _session.get("usuario"));
+        if(_session.get('nivel') == 1){
+            $('.painel_extra').show();
+        }
     } else {
         window.location.href = 'index.html';
     }
