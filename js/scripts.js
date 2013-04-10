@@ -1,101 +1,118 @@
-var _constant = {version: "01.00.00", maxPaginacao: 10, titles: {aviso: "CRM Mobile informa:", erro: "CRM Mobile informa erros localizados:"}, redirect: function(a) {
+var _constant = {
+    version : "01.00.00",
+    maxPaginacao : 10,
+    titles : {
+        aviso : "CRM Mobile informa:",
+        erro : "CRM Mobile informa erros localizados:"
+    },
+    redirect : function( a ) {
         window.location.href = a
-    }};
-(function(a) {
-    if (typeof define === "function" && define.amd) {
-        define(["jquery"], a)
+    }
+};
+(function( a ) {
+    if ( typeof define === "function" && define.amd ) {
+        define([ "jquery" ], a)
     } else {
         a(jQuery)
     }
-}(function(e) {
+}(function( e ) {
     var a = /\+/g;
-    function d(g) {
+    function d( g ) {
         return g
     }
-    function b(g) {
+    function b( g ) {
         return decodeURIComponent(g.replace(a, " "))
     }
-    function f(g) {
-        if (g.indexOf('"') === 0) {
+    function f( g ) {
+        if ( g.indexOf('"') === 0 ) {
             g = g.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, "\\")
         }
         try {
             return c.json ? JSON.parse(g) : g
-        } catch (h) {
+        } catch ( h ) {
         }
     }
-    var c = e.cookie = function(p, o, u) {
-        if (o !== undefined) {
-            u = e.extend({}, c.defaults, u);
-            if (typeof u.expires === "number") {
+    var c = e.cookie = function( p, o, u ) {
+        if ( o !== undefined ) {
+            u = e.extend({
+            }, c.defaults, u);
+            if ( typeof u.expires === "number" ) {
                 var q = u.expires, s = u.expires = new Date();
                 s.setDate(s.getDate() + q)
             }
             o = c.json ? JSON.stringify(o) : String(o);
-            return(document.cookie = [c.raw ? p : encodeURIComponent(p), "=", c.raw ? o : encodeURIComponent(o), u.expires ? "; expires=" + u.expires.toUTCString() : "", u.path ? "; path=" + u.path : "", u.domain ? "; domain=" + u.domain : "", u.secure ? "; secure" : ""].join(""))
+            return(document.cookie = [ c.raw ? p : encodeURIComponent(p), "=", c.raw ? o : encodeURIComponent(o), u.expires ? "; expires=" + u.expires.toUTCString() : "", u.path ? "; path=" + u.path : "", u.domain ? "; domain=" + u.domain : "", u.secure ? "; secure" : "" ].join(""))
         }
         var g = c.raw ? d : b;
         var r = document.cookie.split("; ");
-        var v = p ? undefined : {};
-        for (var n = 0, k = r.length; n < k; n++) {
+        var v = p ? undefined : {
+        };
+        for ( var n = 0, k = r.length; n < k; n++ ) {
             var m = r[n].split("=");
             var h = g(m.shift());
             var j = g(m.join("="));
-            if (p && p === h) {
+            if ( p && p === h ) {
                 v = f(j);
                 break
             }
-            if (!p) {
+            if ( !p ) {
                 v[h] = f(j)
             }
         }
         return v
     };
-    c.defaults = {};
-    e.removeCookie = function(h, g) {
-        if (e.cookie(h) !== undefined) {
-            e.cookie(h, "", e.extend(g, {expires: -1}));
+    c.defaults = {
+    };
+    e.removeCookie = function( h, g ) {
+        if ( e.cookie(h) !== undefined ) {
+            e.cookie(h, "", e.extend(g, {
+                expires : -1
+            }));
             return true
         }
         return false
     }
     e.clearCookie = function() {
         var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
+        for ( var i = 0; i < cookies.length; i++ ) {
             var cookie = cookies[i];
             var eqPos = cookie.indexOf("=");
             var h = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            e.cookie(h, "", e.extend(g, {expires: -1}));
+            e.cookie(h, "", e.extend(g, {
+                expires : -1
+            }));
         }
         return false
     }
 }));
 var _session = {
-    get: function(a) {
-        if (typeof localStorage === "object") {
+    get : function( a ) {
+        if ( typeof localStorage === "object" ) {
             return localStorage.getItem(a)
         } else {
             return $.cookie(a)
         }
     },
-    set: function(a, b) {
-        if (typeof localStorage === "object") {
+    set : function( a, b ) {
+        if ( typeof localStorage === "object" ) {
             localStorage.setItem(a, b)
         } else {
             var c = new Date();
             c.setDate(exdate.getDate() + 1);
-            $.cookie(a, b, {expires: c.toUTCString()})
+            $.cookie(a, b, {
+                expires : c.toUTCString()
+            })
         }
     },
-    remove: function(a) {
-        if (typeof localStorage === "object") {
+    remove : function( a ) {
+        if ( typeof localStorage === "object" ) {
             localStorage.removeItem(a)
         } else {
             $.removeCookie(a)
         }
     },
-    clear: function(a) {
-        if (typeof localStorage === "object") {
+    clear : function( a ) {
+        if ( typeof localStorage === "object" ) {
             localStorage.clear()
         } else {
             $.clearCookie()
@@ -103,14 +120,15 @@ var _session = {
     }
 };
 $.fn.serializeObject = function() {
-    var a = {};
-    var b = function(d, c) {
+    var a = {
+    };
+    var b = function( d, c ) {
         var e = a[c.name];
-        if ("undefined" !== typeof e && e !== null) {
-            if ($.isArray(e)) {
+        if ( "undefined" !== typeof e && e !== null ) {
+            if ( $.isArray(e) ) {
                 e.push(c.value)
             } else {
-                a[c.name] = [e, c.value]
+                a[c.name] = [ e, c.value ]
             }
         } else {
             a[c.name] = c.value
@@ -119,196 +137,246 @@ $.fn.serializeObject = function() {
     $.each(this.serializeArray(), b);
     return a
 };
-function date(k, h) {
+function date( k, h ) {
     h = !h ? (new Date()).getTime() / 1000 : h;
-    var g = this, j, e, b = /\\?([a-z])/gi, a, c = function(l, f) {
+    var g = this, j, e, b = /\\?([a-z])/gi, a, c = function( l, f ) {
         l = l.toString();
         return l.length < f ? c("0" + l, f, "0") : l
-    }, d = ["Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Satur", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    a = function(f, l) {
+    }, d = [ "Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Satur", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    a = function( f, l ) {
         return e[f] ? e[f]() : l
     };
-    e = {d: function() {
+    e = {
+        d : function() {
             return c(e.j(), 2)
-        }, D: function() {
+        },
+        D : function() {
             return e.l().slice(0, 3)
-        }, j: function() {
+        },
+        j : function() {
             return j.getDate()
-        }, l: function() {
+        },
+        l : function() {
             return d[e.w()] + "day"
-        }, N: function() {
+        },
+        N : function() {
             return e.w() || 7
-        }, S: function() {
+        },
+        S : function() {
             var f = e.j();
             i = f % 10;
-            if (i <= 3 && parseInt((f % 100) / 10) == 1) {
+            if ( i <= 3 && parseInt((f % 100) / 10) == 1 ) {
                 i = 0
             }
-            return["st", "nd", "rd"][i - 1] || "th"
-        }, w: function() {
+            return[ "st", "nd", "rd" ][i - 1] || "th"
+        },
+        w : function() {
             return j.getDay()
-        }, z: function() {
+        },
+        z : function() {
             var l = new Date(e.Y(), e.n() - 1, e.j()), f = new Date(e.Y(), 0, 1);
             return Math.round((l - f) / 86400000)
-        }, W: function() {
+        },
+        W : function() {
             var l = new Date(e.Y(), e.n() - 1, e.j() - e.N() + 3), f = new Date(l.getFullYear(), 0, 4);
             return c(1 + Math.round((l - f) / 86400000 / 7), 2)
-        }, F: function() {
+        },
+        F : function() {
             return d[6 + e.n()]
-        }, m: function() {
+        },
+        m : function() {
             return c(e.n(), 2)
-        }, M: function() {
+        },
+        M : function() {
             return e.F().slice(0, 3)
-        }, n: function() {
+        },
+        n : function() {
             return j.getMonth() + 1
-        }, t: function() {
+        },
+        t : function() {
             return(new Date(e.Y(), e.n(), 0)).getDate()
-        }, L: function() {
+        },
+        L : function() {
             var f = e.Y();
             return f % 4 === 0 & f % 100 !== 0 | f % 400 === 0
-        }, o: function() {
+        },
+        o : function() {
             var m = e.n(), f = e.W(), l = e.Y();
             return l + (m === 12 && f < 9 ? 1 : m === 1 && f > 9 ? -1 : 0)
-        }, Y: function() {
+        },
+        Y : function() {
             return j.getFullYear()
-        }, y: function() {
+        },
+        y : function() {
             return e.Y().toString().slice(-2)
-        }, a: function() {
+        },
+        a : function() {
             return j.getHours() > 11 ? "pm" : "am"
-        }, A: function() {
+        },
+        A : function() {
             return e.a().toUpperCase()
-        }, B: function() {
+        },
+        B : function() {
             var l = j.getUTCHours() * 3600, f = j.getUTCMinutes() * 60, m = j.getUTCSeconds();
             return c(Math.floor((l + f + m + 3600) / 86.4) % 1000, 3)
-        }, g: function() {
+        },
+        g : function() {
             return e.G() % 12 || 12
-        }, G: function() {
+        },
+        G : function() {
             return j.getHours()
-        }, h: function() {
+        },
+        h : function() {
             return c(e.g(), 2)
-        }, H: function() {
+        },
+        H : function() {
             return c(e.G(), 2)
-        }, i: function() {
+        },
+        i : function() {
             return c(j.getMinutes(), 2)
-        }, s: function() {
+        },
+        s : function() {
             return c(j.getSeconds(), 2)
-        }, u: function() {
+        },
+        u : function() {
             return c(j.getMilliseconds() * 1000, 6)
-        }, e: function() {
+        },
+        e : function() {
             throw"Not supported (see source code of date() for timezone on how to add support)"
-        }, I: function() {
+        },
+        I : function() {
             var l = new Date(e.Y(), 0), n = Date.UTC(e.Y(), 0), f = new Date(e.Y(), 6), m = Date.UTC(e.Y(), 6);
             return((l - n) !== (f - m)) ? 1 : 0
-        }, O: function() {
+        },
+        O : function() {
             var l = j.getTimezoneOffset(), f = Math.abs(l);
             return(l > 0 ? "-" : "+") + c(Math.floor(f / 60) * 100 + f % 60, 4)
-        }, P: function() {
+        },
+        P : function() {
             var f = e.O();
             return(f.substr(0, 3) + ":" + f.substr(3, 2))
-        }, T: function() {
+        },
+        T : function() {
             return"UTC"
-        }, Z: function() {
+        },
+        Z : function() {
             return -j.getTimezoneOffset() * 60
-        }, c: function() {
+        },
+        c : function() {
             return"Y-m-d\\TH:i:sP".replace(b, a)
-        }, r: function() {
+        },
+        r : function() {
             return"D, d M Y H:i:s O".replace(b, a)
-        }, U: function() {
+        },
+        U : function() {
             return j / 1000 | 0
-        }};
-    this.date = function(l, f) {
+        }
+    };
+    this.date = function( l, f ) {
         g = this;
         j = (f === undefined ? new Date() : (f instanceof Date) ? new Date(f) : new Date(f * 1000));
         return l.replace(b, a)
     };
     return this.date(k, h)
 }
-(function(j, b) {
+(function( j, b ) {
     var f = Array.prototype.push, a = /^(?:radio|checkbox)$/i, e = /\+/g, d = /^(?:option|select-one|select-multiple)$/i, g = /^(?:button|color|date|datetime|datetime-local|email|hidden|month|number|password|range|reset|search|submit|tel|text|textarea|time|url|week)$/i;
-    function c(k) {
+    function c( k ) {
         return k.map(function() {
             return this.elements ? j.makeArray(this.elements) : this
         }).filter(":input").get()
     }
-    function h(k) {
-        var l, m = {};
-        j.each(k, function(o, n) {
+    function h( k ) {
+        var l, m = {
+        };
+        j.each(k, function( o, n ) {
             l = m[n.name];
-            m[n.name] = l === b ? n : (j.isArray(l) ? l.concat(n) : [l, n])
+            m[n.name] = l === b ? n : (j.isArray(l) ? l.concat(n) : [ l, n ])
         });
         return m
     }
-    j.fn.deserialize = function(A, l) {
-        var y, n, q = c(this), t = [];
-        if (!A || !q.length) {
+    j.fn.deserialize = function( A, l ) {
+        var y, n, q = c(this), t = [ ];
+        if ( !A || !q.length ) {
             return this
         }
-        if (j.isArray(A)) {
+        if ( j.isArray(A) ) {
             t = A
         } else {
-            if (j.isPlainObject(A)) {
+            if ( j.isPlainObject(A) ) {
                 var B, w;
-                for (B in A) {
-                    j.isArray(w = A[B]) ? f.apply(t, j.map(w, function(D) {
-                        return{name: B, value: D}
-                    })) : f.call(t, {name: B, value: w})
+                for ( B in A ) {
+                    j.isArray(w = A[B]) ? f.apply(t, j.map(w, function( D ) {
+                        return{
+                            name : B,
+                            value : D
+                        }
+                    })) : f.call(t, {
+                        name : B,
+                        value : w
+                    })
                 }
             } else {
-                if (typeof A === "string") {
+                if ( typeof A === "string" ) {
                     var v;
                     A = A.split("&");
-                    for (y = 0, n = A.length; y < n; y++) {
+                    for ( y = 0, n = A.length; y < n; y++ ) {
                         v = A[y].split("=");
-                        f.call(t, {name: decodeURIComponent(v[0]), value: decodeURIComponent(v[1].replace(e, "%20"))})
+                        f.call(t, {
+                            name : decodeURIComponent(v[0]),
+                            value : decodeURIComponent(v[1].replace(e, "%20"))
+                        })
                     }
                 }
             }
         }
-        if (!(n = t.length)) {
+        if ( !(n = t.length) ) {
             return this
         }
-        var u, k, x, z, C, o, m, w, p = j.noop, s = j.noop, r = {};
-        l = l || {};
+        var u, k, x, z, C, o, m, w, p = j.noop, s = j.noop, r = {
+        };
+        l = l || {
+        };
         q = h(q);
-        if (j.isFunction(l)) {
+        if ( j.isFunction(l) ) {
             s = l
         } else {
             p = j.isFunction(l.change) ? l.change : p;
             s = j.isFunction(l.complete) ? l.complete : s
         }
-        for (y = 0; y < n; y++) {
+        for ( y = 0; y < n; y++ ) {
             u = t[y];
             C = u.name;
             w = u.value;
-            if (!(k = q[C])) {
+            if ( !(k = q[C]) ) {
                 continue
             }
             m = (z = k.length) ? k[0] : k;
             m = (m.type || m.nodeName).toLowerCase();
             o = null;
-            if (g.test(m)) {
-                if (z) {
+            if ( g.test(m) ) {
+                if ( z ) {
                     x = r[C];
                     k = k[r[C] = (x == b) ? 0 : ++x]
                 }
                 p.call(k, (k.value = w))
             } else {
-                if (a.test(m)) {
+                if ( a.test(m) ) {
                     o = "checked"
                 } else {
-                    if (d.test(m)) {
+                    if ( d.test(m) ) {
                         o = "selected"
                     }
                 }
             }
-            if (o) {
-                if (!z) {
-                    k = [k];
+            if ( o ) {
+                if ( !z ) {
+                    k = [ k ];
                     z = 1
                 }
-                for (x = 0; x < z; x++) {
+                for ( x = 0; x < z; x++ ) {
                     u = k[x];
-                    if (u.value == w) {
+                    if ( u.value == w ) {
                         p.call(u, (u[o] = true) && w)
                     }
                 }
@@ -318,71 +386,73 @@ function date(k, h) {
         return this
     }
 })(jQuery);
-function jAviso(a) {
+function jAviso( a ) {
     alert(a);
     debug("AVISO", a)
 }
-function jSucesso(a) {
+function jSucesso( a ) {
     alert(a);
     debug("SUCESSO", a)
 }
-function debug(a, b) {
+function debug( a, b ) {
     console.log(date("Y-m-d H:i:s", (new Date()).getTime() / 1000) + '\n Mesagem: "' + b + '" \n\n\n')
 }
-function number_format(f, c, h, e) {
+function number_format( f, c, h, e ) {
     f = (f + "").replace(/[^0-9+\-Ee.]/g, "");
-    var b = !isFinite(+f) ? 0 : +f, a = !isFinite(+c) ? 0 : Math.abs(c), k = (typeof e === "undefined") ? "," : e, d = (typeof h === "undefined") ? "." : h, j = "", g = function(o, m) {
+    var b = !isFinite(+f) ? 0 : +f, a = !isFinite(+c) ? 0 : Math.abs(c), k = (typeof e === "undefined") ? "," : e, d = (typeof h === "undefined") ? "." : h, j = "", g = function( o, m ) {
         var l = Math.pow(10, m);
         return"" + Math.round(o * l) / l
     };
     j = (a ? g(b, a) : "" + Math.round(b)).split(".");
-    if (j[0].length > 3) {
+    if ( j[0].length > 3 ) {
         j[0] = j[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, k)
     }
-    if ((j[1] || "").length < a) {
+    if ( (j[1] || "").length < a ) {
         j[1] = j[1] || "";
         j[1] += new Array(a - j[1].length + 1).join("0")
     }
     return j.join(d)
 }
-var _valida = {clear: function(a) {
+var _valida = {
+    clear : function( a ) {
         var b = /\.|\_|\:|\;|\ |\-/g;
         return a.toString().replace(b, "")
-    }, cpf: function(b) {
+    },
+    cpf : function( b ) {
         var d = /\.|\-/g;
         b = b.toString().replace(d, "");
         var h = false;
         var c = 1;
-        if (b.length != 11) {
+        if ( b.length != 11 ) {
             h = true
         } else {
-            if (b == "00000000000" || b == "11111111111" || b == "22222222222" || b == "33333333333" || b == "44444444444" || b == "55555555555" || b == "66666666666" || b == "77777777777" || b == "88888888888" || b == "99999999999") {
+            if ( b == "00000000000" || b == "11111111111" || b == "22222222222" || b == "33333333333" || b == "44444444444" || b == "55555555555" || b == "66666666666" || b == "77777777777" || b == "88888888888" || b == "99999999999" ) {
                 h = true
             } else {
-                for (f = 0; f < b.length - 1; f++) {
-                    if (b.charAt(f) != b.charAt(f + 1)) {
+                for ( f = 0; f < b.length - 1; f++ ) {
+                    if ( b.charAt(f) != b.charAt(f + 1) ) {
                         c = 0;
                         break
                     }
                 }
-                if (!c) {
+                if ( !c ) {
                     var a = b.substring(0, 9);
                     var g = b.substring(9);
                     var j = 0;
-                    for (f = 10; f > 1; f--) {
+                    for ( f = 10; f > 1; f-- ) {
                         j += a.charAt(10 - f) * f
                     }
                     var e = j % 11 < 2 ? 0 : 11 - j % 11;
-                    if (e != g.charAt(0)) {
+                    if ( e != g.charAt(0) ) {
                         h = true
                     }
                     a = b.substring(0, 10);
                     j = 0;
-                    for (var f = 11; f > 1; f--) {
+                    for ( var f = 11; f > 1; f-- ) {
                         j += a.charAt(11 - f) * f
                     }
                     e = j % 11 < 2 ? 0 : 11 - j % 11;
-                    if (e != g.charAt(1)) {
+                    if ( e != g.charAt(1) ) {
                         h = true
                     } else {
                         h = false
@@ -393,193 +463,207 @@ var _valida = {clear: function(a) {
             }
         }
         return h
-    }, cnpj: function(cnpj) {
+    },
+    cnpj : function( cnpj ) {
         var erro = false;
         var exp = /\.|\-|\//g;
         cnpj = cnpj.toString().replace(exp, "");
-        if (cnpj.length != 14) {
+        if ( cnpj.length != 14 ) {
             erro = true
         } else {
-            if (cnpj == "00000000000000" || cnpj == "11111111111111" || cnpj == "22222222222222" || cnpj == "33333333333333" || cnpj == "44444444444444" || cnpj == "55555555555555" || cnpj == "66666666666666" || cnpj == "88888888888888" || cnpj == "99999999999999") {
+            if ( cnpj == "00000000000000" || cnpj == "11111111111111" || cnpj == "22222222222222" || cnpj == "33333333333333" || cnpj == "44444444444444" || cnpj == "55555555555555" || cnpj == "66666666666666" || cnpj == "88888888888888" || cnpj == "99999999999999" ) {
                 erro = true
             } else {
                 var valida = new Array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
                 var dig1 = new Number;
                 var dig2 = new Number;
                 var digito = new Number(eval(cnpj.charAt(12) + cnpj.charAt(13)));
-                for (i = 0; i < valida.length; i++) {
+                for ( i = 0; i < valida.length; i++ ) {
                     dig1 += (i > 0 ? (cnpj.charAt(i - 1) * valida[i]) : 0);
                     dig2 += cnpj.charAt(i) * valida[i]
                 }
                 dig1 = (((dig1 % 11) < 2) ? 0 : (11 - (dig1 % 11)));
                 dig2 = (((dig2 % 11) < 2) ? 0 : (11 - (dig2 % 11)));
-                if (((dig1 * 10) + dig2) != digito) {
+                if ( ((dig1 * 10) + dig2) != digito ) {
                     erro = true
                 }
             }
         }
         return erro
-    }, email: function(a) {
+    },
+    email : function( a ) {
         var b = new RegExp(/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/);
-        if (b.test(a)) {
+        if ( b.test(a) ) {
             return true
         } else {
             return false
         }
-    }};
-(function(a) {
-    a.fn.extend({form_valida: function() {
+    }
+};
+(function( a ) {
+    a.fn.extend({
+        form_valida : function() {
             var d = 0;
             var c = this;
             var b = "";
             a.each(a(this).find(":input").not(":button, :disabled"), function() {
                 var e = a(this).attr("id");
                 var f = "";
-                if (a(this).hasClass("obrigatorio") && a.trim(a(this).val()) == "") {
+                if ( a(this).hasClass("obrigatorio") && a.trim(a(this).val()) == "" ) {
                     d++;
-                    if (f != "") {
+                    if ( f != "" ) {
                         f += "<br />"
                     }
                     f += "Campo obrigatório"
                 }
-                if (a(this).hasClass("cpf")) {
-                    if (_valida.cpf(a.trim(a(this).val())) == true) {
+                if ( a(this).hasClass("cpf") ) {
+                    if ( _valida.cpf(a.trim(a(this).val())) == true ) {
                         d++;
-                        if (f != "") {
+                        if ( f != "" ) {
                             f += "<br />"
                         }
                         f += "CPF inválido"
                     }
                 }
-                if (a(this).hasClass("cnpj")) {
-                    if (_valida.cnpj(a.trim(a(this).val())) == true) {
+                if ( a(this).hasClass("cnpj") ) {
+                    if ( _valida.cnpj(a.trim(a(this).val())) == true ) {
                         d++;
-                        if (f != "") {
+                        if ( f != "" ) {
                             f += "<br />"
                         }
                         f += "CNPJ inválido"
                     }
                 }
-                if (a(this).hasClass("cpf_cnpj")) {
-                    if (a.trim(a(this).val()).length == 14) {
-                        if (_valida.cpf(a.trim(a(this).val())) == true) {
+                if ( a(this).hasClass("cpf_cnpj") ) {
+                    if ( a.trim(a(this).val()).length == 14 ) {
+                        if ( _valida.cpf(a.trim(a(this).val())) == true ) {
                             d++;
-                            if (f != "") {
+                            if ( f != "" ) {
                                 f += "<br />"
                             }
                             f += "CPF inválido"
                         }
                     } else {
-                        if (_valida.cnpj(a.trim(a(this).val())) == true) {
+                        if ( _valida.cnpj(a.trim(a(this).val())) == true ) {
                             d++;
-                            if (f != "") {
+                            if ( f != "" ) {
                                 f += "<br />"
                             }
                             f += "CNPJ inválido"
                         }
                     }
                 }
-                if (a(this).hasClass("email")) {
-                    if (_valida.email(a.trim(a(this).val())) == false) {
+                if ( a(this).hasClass("email") ) {
+                    if ( _valida.email(a.trim(a(this).val())) == false ) {
                         d++;
-                        if (f != "") {
+                        if ( f != "" ) {
                             f += "<br />"
                         }
                         f += "E-mail inválida"
                     }
                 }
-                if (f != "") {
-                    if (b != "") {
+                if ( f != "" ) {
+                    if ( b != "" ) {
                         b += ", "
                     }
                     b += '"' + e + '" : "' + a.trim(f) + '"'
                 }
             });
-            if (d > 0) {
-                a(c).color_campos_form({campos: a.parseJSON("{ " + b + " }")});
+            if ( d > 0 ) {
+                a(c).color_campos_form({
+                    campos : a.parseJSON("{ " + b + " }")
+                });
                 return false
             } else {
                 return true
             }
-        }})
+        }
+    })
 })(jQuery);
-(function(a) {
-    a.fn.extend({color_campos_form: function(c) {
-            var d = {campos: {}};
+(function( a ) {
+    a.fn.extend({
+        color_campos_form : function( c ) {
+            var d = {
+                campos : {
+                }
+            };
             var b = a.extend(true, d, c);
             var e = "";
-            a.each(b.campos, function(g, f) {
-                if (e != "") {
+            a.each(b.campos, function( g, f ) {
+                if ( e != "" ) {
                     e += "<br />"
                 }
                 e += f
             });
             jAviso(e)
-        }})
+        }
+    })
 })(jQuery);
-(function(a) {
-    a.fn.extend({insere_mascara: function(b) {
+(function( a ) {
+    a.fn.extend({
+        insere_mascara : function( b ) {
             a.each(a(this).find(":input").not(":button"), function() {
-                if (a(this).attr("disabled")) {
+                if ( a(this).attr("disabled") ) {
                     a(this).addClass("disabled");
                     a(this).parent().addClass("disabled")
                 }
-                if (a(this).attr("required")) {
+                if ( a(this).attr("required") ) {
                     a(this).addClass("obrigatorio")
                 }
-                if (a(this).hasClass("obrigatorio")) {
+                if ( a(this).hasClass("obrigatorio") ) {
                     a(this).removeAttr("title");
                     a(this).attr("required", "required");
                     a(this).parent().addClass("obrigatorio")
                 }
-                if (a(this).hasClass("email")) {
+                if ( a(this).hasClass("email") ) {
                     a(this).attr("title", "Informe um E-mail.").attr("maxlength", "255").css("width", "90%")
                 }
-                if (a(this).hasClass("cpf")) {
+                if ( a(this).hasClass("cpf") ) {
                     a(this).attr("title", "Informe um CPF.").attr("size", "16").attr("maxlength", "14")
                 }
-                if (a(this).hasClass("cnpj")) {
+                if ( a(this).hasClass("cnpj") ) {
                     a(this).attr("title", "Informe um CNPJ.").attr("size", "20").attr("maxlength", "18")
                 }
-                if (a(this).hasClass("numero")) {
+                if ( a(this).hasClass("numero") ) {
                     a(this).attr("type", "number");
                     a(this).attr("pattern", "[0-9]*")
                 }
-                if (a(this).hasClass("alfa")) {
+                if ( a(this).hasClass("alfa") ) {
                     a(this).attr("type", "text");
                     a(this).attr("pattern", "[a-zA-Z]*")
                 }
             });
             a.each(a(this).find(":input").not(":button"), function() {
                 var c = "";
-                if (a(this).hasClass("obrigatorio")) {
+                if ( a(this).hasClass("obrigatorio") ) {
                     c = a(this).attr("title");
-                    if (c == undefined || a.trim(c) == "") {
+                    if ( c == undefined || a.trim(c) == "" ) {
                         a(this).attr("title", "Campo obrigatório.")
                     } else {
                         a(this).attr("title", "Campo obrigatório, " + c)
                     }
                 }
             })
-        }})
+        }
+    })
 })(jQuery);
-function md5(D) {
+function md5( D ) {
     var E;
-    var y = function(b, a) {
+    var y = function( b, a ) {
         return(b << a) | (b >>> (32 - a))
     };
-    var I = function(k, b) {
+    var I = function( k, b ) {
         var W, a, d, x, c;
         d = (k & 2147483648);
         x = (b & 2147483648);
         W = (k & 1073741824);
         a = (b & 1073741824);
         c = (k & 1073741823) + (b & 1073741823);
-        if (W & a) {
+        if ( W & a ) {
             return(c ^ 2147483648 ^ d ^ x)
         }
-        if (W | a) {
-            if (c & 1073741824) {
+        if ( W | a ) {
+            if ( c & 1073741824 ) {
                 return(c ^ 3221225472 ^ d ^ x)
             } else {
                 return(c ^ 1073741824 ^ d ^ x)
@@ -588,35 +672,35 @@ function md5(D) {
             return(c ^ d ^ x)
         }
     };
-    var s = function(a, c, b) {
+    var s = function( a, c, b ) {
         return(a & c) | ((~a) & b)
     };
-    var r = function(a, c, b) {
+    var r = function( a, c, b ) {
         return(a & b) | (c & (~b))
     };
-    var q = function(a, c, b) {
+    var q = function( a, c, b ) {
         return(a ^ c ^ b)
     };
-    var o = function(a, c, b) {
+    var o = function( a, c, b ) {
         return(c ^ (a | (~b)))
     };
-    var v = function(X, W, ab, aa, k, Y, Z) {
+    var v = function( X, W, ab, aa, k, Y, Z ) {
         X = I(X, I(I(s(W, ab, aa), k), Z));
         return I(y(X, Y), W)
     };
-    var f = function(X, W, ab, aa, k, Y, Z) {
+    var f = function( X, W, ab, aa, k, Y, Z ) {
         X = I(X, I(I(r(W, ab, aa), k), Z));
         return I(y(X, Y), W)
     };
-    var G = function(X, W, ab, aa, k, Y, Z) {
+    var G = function( X, W, ab, aa, k, Y, Z ) {
         X = I(X, I(I(q(W, ab, aa), k), Z));
         return I(y(X, Y), W)
     };
-    var u = function(X, W, ab, aa, k, Y, Z) {
+    var u = function( X, W, ab, aa, k, Y, Z ) {
         X = I(X, I(I(o(W, ab, aa), k), Z));
         return I(y(X, Y), W)
     };
-    var e = function(W) {
+    var e = function( W ) {
         var X;
         var d = W.length;
         var c = d + 8;
@@ -625,7 +709,7 @@ function md5(D) {
         var Y = new Array(x - 1);
         var a = 0;
         var k = 0;
-        while (k < d) {
+        while ( k < d ) {
             X = (k - (k % 4)) / 4;
             a = (k % 4) * 8;
             Y[X] = (Y[X] | (W.charCodeAt(k) << a));
@@ -638,16 +722,16 @@ function md5(D) {
         Y[x - 1] = d >>> 29;
         return Y
     };
-    var t = function(d) {
+    var t = function( d ) {
         var a = "", b = "", k, c;
-        for (c = 0; c <= 3; c++) {
+        for ( c = 0; c <= 3; c++ ) {
             k = (d >>> (c * 8)) & 255;
             b = "0" + k.toString(16);
             a = a + b.substr(b.length - 2, 2)
         }
         return a
     };
-    var F = [], M, h, H, w, g, V, U, T, S, P = 7, N = 12, K = 17, J = 22, C = 5, B = 9, A = 14, z = 20, p = 4, n = 11, m = 16, l = 23, R = 6, Q = 10, O = 15, L = 21;
+    var F = [ ], M, h, H, w, g, V, U, T, S, P = 7, N = 12, K = 17, J = 22, C = 5, B = 9, A = 14, z = 20, p = 4, n = 11, m = 16, l = 23, R = 6, Q = 10, O = 15, L = 21;
     D = this.utf8_encode(D);
     F = e(D);
     V = 1732584193;
@@ -655,7 +739,7 @@ function md5(D) {
     T = 2562383102;
     S = 271733878;
     E = F.length;
-    for (M = 0; M < E; M += 16) {
+    for ( M = 0; M < E; M += 16 ) {
         h = V;
         H = U;
         w = T;
@@ -734,17 +818,22 @@ function md5(D) {
 }
 String.prototype.format = function() {
     var c = this;
-    for (var a = 0; a < arguments.length; a++) {
+    for ( var a = 0; a < arguments.length; a++ ) {
         var b = new RegExp("\\{" + a + "\\}", "gi");
         c = c.replace(b, arguments[a])
     }
     return c
 };
-function block(a) {
+function block( a ) {
     $("body").append("<div class='ui-loader-background'> </div>");
-    $.mobile.loading("show", {text: "Aguarde sincronizando a base de dados.", textVisible: true, theme: "e", textonly: false});
+    $.mobile.loading("show", {
+        text : "Aguarde sincronizando a base de dados.",
+        textVisible : true,
+        theme : "e",
+        textonly : false
+    });
     $(".ui-loader").css("display", "block");
-    if (a == true) {
+    if ( a == true ) {
         $("div.ui-loader-background").remove();
         $.mobile.loading("hide");
         $(".ui-loader").css("display", "none")
@@ -760,31 +849,31 @@ function TimeCounter() {
         return(new Date() - this.startDate) / 1000
     }
 }
-function utf8_encode(a) {
-    if (a === null || typeof a === "undefined") {
+function utf8_encode( a ) {
+    if ( a === null || typeof a === "undefined" ) {
         return""
     }
     var j = (a + "");
     var k = "", b, e, c = 0;
     b = e = 0;
     c = j.length;
-    for (var d = 0; d < c; d++) {
+    for ( var d = 0; d < c; d++ ) {
         var h = j.charCodeAt(d);
         var g = null;
-        if (h < 128) {
+        if ( h < 128 ) {
             e++
         } else {
-            if (h > 127 && h < 2048) {
+            if ( h > 127 && h < 2048 ) {
                 g = String.fromCharCode((h >> 6) | 192, (h & 63) | 128)
             } else {
-                if (h & 63488 != 55296) {
+                if ( h & 63488 != 55296 ) {
                     g = String.fromCharCode((h >> 12) | 224, ((h >> 6) & 63) | 128, (h & 63) | 128)
                 } else {
-                    if (h & 64512 != 55296) {
+                    if ( h & 64512 != 55296 ) {
                         throw new RangeError("Unmatched trail surrogate at " + d)
                     }
                     var f = j.charCodeAt(++d);
-                    if (f & 64512 != 56320) {
+                    if ( f & 64512 != 56320 ) {
                         throw new RangeError("Unmatched lead surrogate at " + (d - 1))
                     }
                     h = ((h & 1023) << 10) + (f & 1023) + 65536;
@@ -792,15 +881,15 @@ function utf8_encode(a) {
                 }
             }
         }
-        if (g !== null) {
-            if (e > b) {
+        if ( g !== null ) {
+            if ( e > b ) {
                 k += j.slice(b, e)
             }
             k += g;
             b = e = d + 1
         }
     }
-    if (e > b) {
+    if ( e > b ) {
         k += j.slice(b, c)
     }
     return k

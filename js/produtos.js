@@ -1,9 +1,9 @@
 $(document).on("pageinit", function() {
     produtos_consultar_ultimos();
     $("form").insere_mascara();
-    $("#bt_consultar_produtos").on("click", function(b) {
+    $("#bt_consultar_produtos").on("click", function( b ) {
         b.preventDefault();
-        if ($.trim($("#search").val()) != "") {
+        if ( $.trim($("#search").val()) != "" ) {
             var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + $("#search").val() + '%" OR cod_produto LIKE "%' + $("#search").val() + '%"';
             _produtos_consultar(a)
         } else {
@@ -15,16 +15,16 @@ function produtos_consultar_ultimos() {
     var a = "SELECT * FROM produtos ORDER BY data_hora_atualizacao DESC LIMIT 10";
     _produtos_consultar(a)
 }
-function _produtos_consultar(a) {
+function _produtos_consultar( a ) {
     $("#table-produtos tbody").html("");
-    db.transaction(function(b) {
-        b.executeSql(a, [], function(d, c) {
+    db.transaction(function( b ) {
+        b.executeSql(a, [ ], function( d, c ) {
             debug("SUCESSO", a);
             debug("TOTAL", c.rows.length);
-            if (c.rows.length == 0) {
+            if ( c.rows.length == 0 ) {
                 jAviso("Nenum registro localizado.")
             } else {
-                for (var e = 0; e < c.rows.length; e++) {
+                for ( var e = 0; e < c.rows.length; e++ ) {
                     var f = c.rows.item(e);
                     var g = "<tr>";
                     g += ' <th><b class="ui-table-cell-label">Produto</b>' + f.dsc_produto + "</th>";
@@ -37,7 +37,7 @@ function _produtos_consultar(a) {
                     $("#table-produtos tbody").append(g)
                 }
             }
-        }, function(d, c) {
+        }, function( d, c ) {
             debug("ERROR", c.message)
         })
     })
