@@ -7,7 +7,7 @@ $(document).on("pageinit", function() {
     $(".logout").click(function( a ) {
         a.preventDefault();
         _session.clear();
-        _constant.redirect("index.html")
+        _constant.redirect("login.html");
     });
     $(".limpar_banco_dados").click(function( a ) {
         a.preventDefault();

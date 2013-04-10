@@ -18,6 +18,4 @@ function getDeviceInfo() {
     $('#devPlatform').text(device.platform);
     $('#devUUID').text(device.uuid);
     $('#devVersion').text(device.version);
-    $('#devModel').text(device.model);
-    $('#devCordova').text(device.cordova);
 }

@@ -1,15 +1,15 @@
 $(document).on("pageinit", function() {
     if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
-        window.location.href = 'painel.html';
+        _constant.redirect('painel.html');
     }
     $("#bt_logar").click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
-            logar(this)
+            logar(this);
         }
     });
     $("form").insere_mascara();
-    $(".crm_mobile_versao").html("Versão:: " + _constant.version);
+    $(".crm_mobile_versao").html("Versão: " + _constant.version);
 });
 function logar( d ) {
     var b = $(d).closest("form").find("#usuario").val();
@@ -23,7 +23,7 @@ function logar( d ) {
                 debug("SUSSESO", "ID Usuário: " + f.rows.item(0).id_usuarios);
                 _session.set("id_usuarios", f.rows.item(0).id_usuarios);
                 _session.set("usuario", f.rows.item(0).usuario);
-                _constant.redirect("painel.html")
+                _constant.redirect("painel.html");
             } else {
                 insert_usuarios(b, a, d)
             }
@@ -34,7 +34,7 @@ function logar( d ) {
     })
 }
 function insert_usuarios( b, a, d ) {
-    var c = 'INSERT INTO usuarios (id_empresas, cod_usuario, dsc_usuario, usuario, nome, senha) VALUES (1, "123", "Lucas Pinheiro", "' + b + '", "Lucas Teste",  "' + md5(a) + '");';
+    var c = 'INSERT INTO usuarios (id_empresas, cod_usuario, dsc_usuario, usuario, nome, senha) VALUES (1, "123", "' + b + '", "' + b + '", "' + b + '",  "' + md5(a) + '",  "2");';
     db.transaction(function( e ) {
         e.executeSql(c, [ ], function( g, f ) {
             debug("SUCESSO", c);
@@ -46,4 +46,3 @@ function insert_usuarios( b, a, d ) {
         })
     })
 }
-;
