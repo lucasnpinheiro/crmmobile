@@ -26,7 +26,7 @@ $(document).on("pageinit", function() {
     $(".crm_mobile_versao").html("Versão: " + _constant.version);
 });
 function logar( d ) {
-    var b = $(d).closest("form").find("#usuario").val();
+    var b = $(d).closest("form").find("#usuario").val().toLowerCase();
     var a = $(d).closest("form").find("#senha").val();
     var c = 'SELECT * FROM usuarios WHERE usuario="' + b + '" AND  senha="' + md5(a) + '"';
     db.transaction(function( e ) {
