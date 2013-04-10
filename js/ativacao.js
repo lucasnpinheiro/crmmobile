@@ -1,11 +1,11 @@
 $(document).on('pageinit', function() {
     $('form').insere_mascara();
-    $('.bt_ativar').click(function( e ) {
+    $('.bt_ativar').click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
             var codigo_cliente = $('#codigo_cliente').val();
-            var uuid = _session.get('uuid');
-            var codigo_ativacao = Math.random()*10000000;
+            var uuid = $('#devUUID').text();
+            var codigo_ativacao = Math.random()*10000;
             solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao );
         }
     });
@@ -25,7 +25,6 @@ function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
     });
 }
 
-
 // handling document ready and phonegap deviceready
 window.addEventListener('load', function() {
     document.addEventListener('deviceready', onDeviceReady, false);
@@ -42,5 +41,4 @@ function getDeviceInfo() {
     $('#devPlatform').text(device.platform);
     $('#devUUID').text(device.uuid);
     $('#devVersion').text(device.version);
-    _session.set('uuid', device.uuid);
 }
