@@ -319,11 +319,11 @@ function date(k, h) {
     }
 })(jQuery);
 function jAviso(a) {
-    $.pnotify({title: "CRM Mobile Informa:", text: a, hide: true, sticker: false, history: false, icon: false, styling: "jqueryui"});
+    alert(a);
     debug("AVISO", a)
 }
 function jSucesso(a) {
-    $.pnotify({title: "CRM Mobile Informa:", text: a, hide: true, sticker: false, history: false, icon: false, styling: "jqueryui"});
+    alert(a);
     debug("SUCESSO", a)
 }
 function debug(a, b) {
