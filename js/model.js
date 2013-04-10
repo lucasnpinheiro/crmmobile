@@ -59,7 +59,7 @@ if ( db != null ) {
                 b.executeSql(c.inst, [ ], function( f, e ) {
                     debug("SUCESSO", c.inst);
                     if ( d == 1 ) {
-                        constant.redirect("atualizacoes_ativacao.html");
+                        _constant.redirect("atualizacoes_ativacao.html");
                     }
                 }, function( f, e ) {
                     debug("QUERY", c.inst);
