@@ -1,6 +1,7 @@
-var tcount = new TimeCounter();
 $(document).on("pageinit", function() {
+    var tcount = new TimeCounter();
     _sincronicacao.produtos.total();
+    $( ".selector" ).table( "refresh" );
     $(".reload").on("click", function() {
         var a = $(this).closest("tr").attr("id");
         switch ( a ) {
