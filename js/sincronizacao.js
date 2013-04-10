@@ -1,5 +1,5 @@
+var tcount = new TimeCounter();
 $(document).on("pageinit", function() {
-    var tcount = new TimeCounter();
     _sincronicacao.produtos.total();
     $( ".selector" ).table( "refresh" );
     $(".reload").on("click", function() {
