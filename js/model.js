@@ -1,10 +1,6 @@
 if ( db != null ) {
     function verificar_tabelas() {
         var a = [ {
-                tbl : "DROP TABLE IF EXISTS logs"
-            }, {
-                tbl : "DROP TABLE IF EXISTS equipamento"
-            }, {
                 tbl : "DROP TABLE IF EXISTS empresas"
             }, {
                 tbl : "DROP TABLE IF EXISTS equipamentos"
@@ -21,9 +17,7 @@ if ( db != null ) {
             }, {
                 tbl : "DROP TABLE IF EXISTS sqlite_sequence"
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS empresas ( id_empresas INTEGER PRIMARY KEY AUTOINCREMENT, dsc_hash VARCHAR(10), cpf_cnpj VARCHAR(14), dsc_empresa VARCHAR(50), data_hora_cadastro TEXT, data_hora_exclusao TEXT )"
-            }, {
-                tbl : "CREATE TABLE IF NOT EXISTS empresas_chaves ( id_empresas_chaves INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, dsc_chave VARCHAR(10) , id_equipamentos)"
+                tbl : "CREATE TABLE IF NOT EXISTS empresas ( id_empresas INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR, codigo_cliente VARCHAR, codigo_ativacao VARCHAR, cpf_cnpj VARCHAR(14), nome_empresa VARCHAR(50), data_hora_cadastro TEXT, data_hora_exclusao TEXT )"
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS equipamentos ( id_equipamentos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, imei VARCHAR(100) )"
             }, {
