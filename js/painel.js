@@ -14,7 +14,7 @@ $(document).on("pageinit", function() {
     });
     $(".limpar_banco_dados").click(function( a ) {
         a.preventDefault();
-        verificar_tabelas();
         _session.clear();
+        _configuracoes.drop_tabelas();
     });
 });
