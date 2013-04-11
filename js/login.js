@@ -2,7 +2,7 @@ $(document).on("pageinit", function() {
     if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
         _constant.redirect('painel.html');
     } else {
-        _configuracoes.verifica_chave();
+        _configuracoes.verifica_chave(false);
     }
 
     $("#bt_logar").click(function( a ) {

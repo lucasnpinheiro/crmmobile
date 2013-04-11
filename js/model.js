@@ -132,7 +132,7 @@ _configuracoes = {
                             _configuracoes.add_usuarios();
                         } else {
                             debug("ERROR", 'Verificando chaves.');
-                            _configuracoes.verifica_chave();
+                            _configuracoes.verifica_chave(true);
                         }
                     },
                     function( g, f ) {
@@ -142,7 +142,7 @@ _configuracoes = {
                     });
         });
     },
-    verifica_chave : function() {
+    verifica_chave : function( redirect ) {
         var c = 'SELECT codigo_cliente FROM empresas;';
         db.transaction(function( e ) {
             e.executeSql(c, [ ],
@@ -158,7 +158,9 @@ _configuracoes = {
                                 _constant.redirect("atualizacoes_ativacao.html");
                             } else {
                                 debug("SUCESSO", 'Redirecionando para login.');
-                                _constant.redirect("login.html");
+                                if ( redirect == true ) {
+                                    _constant.redirect("login.html");
+                                }
                             }
 
                         }
@@ -181,7 +183,7 @@ _configuracoes = {
                             debug("SUCESSO", 'Redirecionando para sincronização.');
                             _constant.redirect("atualizacoes_ativacao.html");
                         } else {
-                                _constant.redirect("painel.html");
+                            _constant.redirect("painel.html");
                         }
                     },
                     function( g, f ) {
