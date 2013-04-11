@@ -97,7 +97,7 @@ if ( db != null ) {
                 debug("TOTAL", f.rows.length);
                 if ( f.rows.length == 0 ) {
                     debug("SUCESSO", 'Criando usuário.');
-                    verificar_tabelas();
+                    definir_usuario_administradores();
                 } else {
                     debug("ERROR", 'Redirecionando.');
                     _constant.redirect("login.html");
