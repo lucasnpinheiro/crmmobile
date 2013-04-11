@@ -169,5 +169,26 @@ _configuracoes = {
                         _configuracoes.verifica_tabelas();
                     });
         });
+    },
+    verifica_sincronizacao : function() {
+        var c = 'SELECT id_produtos FROM produtos;';
+        db.transaction(function( e ) {
+            e.executeSql(c, [ ],
+                    function( g, f ) {
+                        debug("QUERY", c);
+                        debug("TOTAL", f.rows.length);
+                        if ( f.rows.length == 0 ) {
+                            debug("SUCESSO", 'Redirecionando para sincronização.');
+                            _constant.redirect("atualizacoes_ativacao.html");
+                        } else {
+                                _constant.redirect("painel.html");
+                        }
+                    },
+                    function( g, f ) {
+                        debug("QUERY", c);
+                        debug("ERROR", f.message);
+                        _configuracoes.verifica_tabelas();
+                    });
+        });
     }
 };

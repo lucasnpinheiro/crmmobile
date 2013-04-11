@@ -28,7 +28,7 @@ function logar( d ) {
                         _session.set("id_usuarios", f.rows.item(0).id_usuarios);
                         _session.set("usuario", f.rows.item(0).usuario);
                         _session.set("nivel", f.rows.item(0).nivel);
-                        _constant.redirect("painel.html");
+                        _configuracoes.verifica_sincronizacao();
                     } else {
                         jAviso('Usuário não localizado.');
                     }
