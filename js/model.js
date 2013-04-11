@@ -1,6 +1,7 @@
 _configuracoes = {
     tabelas : {
-        create : [ {
+        create : [
+            {
                 tbl : "CREATE TABLE IF NOT EXISTS empresas ( id_empresas INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR, codigo_cliente VARCHAR, codigo_ativacao VARCHAR, cpf_cnpj VARCHAR(14), nome_empresa VARCHAR(50), data_hora_cadastro TEXT, data_hora_exclusao TEXT )"
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS equipamentos ( id_equipamentos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, imei VARCHAR(100) )"
@@ -14,8 +15,10 @@ _configuracoes = {
                 tbl : "CREATE TABLE IF NOT EXISTS pedidos ( id_pedidos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, id_clientes INTEGER, id_equipamentos INTEGER, id_usuarios INTEGER, data_hora_cadastro TEXT , data_hora_finalizacao TEXT , data_hora_envio TEXT, data_hora_transmissao TEXT, data_hora_exclusao TEXT, observacao VARCHAR(255) )"
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS pedidos_itens ( id_pedidos_itens INTEGER PRIMARY KEY AUTOINCREMENT, id_pedidos INTEGER, id_produtos INTEGER, data_hora_cadastro TEXT , quantidade VARCHAR(45), valor_unitario VARCHAR(45), data_hora_exclusao TEXT )"
-            } ],
-        drop : [ {
+            }
+        ],
+        drop : [
+            {
                 tbl : "DROP TABLE IF EXISTS empresas"
             }, {
                 tbl : "DROP TABLE IF EXISTS equipamentos"
@@ -29,16 +32,16 @@ _configuracoes = {
                 tbl : "DROP TABLE IF EXISTS pedidos"
             }, {
                 tbl : "DROP TABLE IF EXISTS pedidos_itens"
-            }, {
-                tbl : "DROP TABLE IF EXISTS sqlite_sequence"
-            } ],
+            }
+        ],
         usuarios : [
             {
                 inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "124", "Administrador do sistema", "root", "Administrador do sistema", "' + md5('qazse') + '", "1");'
             },
             {
                 inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "123", "Tester do sistema", "demo", "Tester do sistema", "' + md5('demo') + '", "2");'
-            } ]
+            }
+        ]
     },
     drop_tabelas : function() {
         var total = _configuracoes.tabelas.drop.length - 1;
@@ -46,6 +49,7 @@ _configuracoes = {
             db.transaction(function( b ) {
                 b.executeSql(c.tbl, [ ],
                         function( f, e ) {
+                            jAviso(d);
                             debug("QUERY", c.tbl);
                             if ( total == d ) {
                                 _constant.redirect('index.html');
@@ -80,15 +84,15 @@ _configuracoes = {
         var total = _configuracoes.tabelas.usuarios.length - 1;
         $.each(_configuracoes.tabelas.usuarios, function( d, c ) {
             db.transaction(function( b ) {
-                b.executeSql(c.tbl, [ ],
+                b.executeSql(c.inst, [ ],
                         function( f, e ) {
-                            debug("QUERY", c.tbl);
+                            debug("QUERY", c.inst);
                             if ( total == d ) {
                                 _constant.redirect('atualizacoes_ativacao.html');
                             }
                         },
                         function( f, e ) {
-                            debug("QUERY", c.tbl);
+                            debug("QUERY", c.inst);
                             debug("ERROR", e.message);
                         });
             });
