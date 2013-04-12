@@ -22,7 +22,9 @@ input.obrigatorio{border-left:none}
 .ui-input-text.disabled{
     background-color: #bbb;
 }
-
+.ui-table {
+    font-size: 0.8em;
+}
 @media all and (min-width:450px) {
     div.hasDatepicker{
         width:63%;

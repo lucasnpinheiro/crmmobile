@@ -6,9 +6,9 @@ _configuracoes = {
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS equipamentos ( id_equipamentos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, imei VARCHAR(100) )"
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS clientes ( id_clientes INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_cliente VARCHAR(50), dsc_cliente VARCHAR(45), data_hora_atualizacao TEXT, data_hora_exclusao TEXT )"
+                tbl : "CREATE TABLE IF NOT EXISTS clientes ( id_clientes INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_cliente VARCHAR(50), dsc_cliente VARCHAR(45), data_hora_atualizacao TEXT, data_hora_exclusao TEXT, valor_devido REAL(10,2), situacao VARCHAR(1)  )"
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS produtos ( id_produtos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_produto VARCHAR(50), dsc_produto VARCHAR(100), estoque REAL (10,5) DEFAULT 0, desconto_maximo REAL (10,2) DEFAULT 0, data_hora_atualizacao TEXT, valor REAL (10,2) )"
+                tbl : "CREATE TABLE IF NOT EXISTS produtos ( id_produtos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_produto VARCHAR(50), dsc_produto VARCHAR(100), estoque REAL (10,5) DEFAULT 0, desconto_maximo REAL (10,2) DEFAULT 0, data_hora_atualizacao TEXT, valor REAL(10,2) )"
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS usuarios ( id_usuarios INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_usuario VARCHAR(50), dsc_usuario VARCHAR(50) , usuario VARCHAR(50), nome VARCHAR(50), senha VARCHAR(32), nivel INTEGER, data_hora_atualizacao TEXT, data_hora_exclusao TEXT )"
             }, {
