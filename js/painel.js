@@ -5,7 +5,8 @@ $(document).on("pageinit", function() {
             $('.painel_extra').show();
         }
     } else {
-        window.location.href = 'index.html';
+        _session.clear();
+        _configuracoes.drop_tabelas();
     }
     $(".logout").click(function( a ) {
         a.preventDefault();
