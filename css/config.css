@@ -32,3 +32,9 @@ input.obrigatorio{border-left:none}
         margin:0;
     }
 }
+
+@media (min-width: 35em){
+    .ui-table-reflow.ui-responsive {
+        display: inline-table;
+    }
+}
