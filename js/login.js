@@ -1,6 +1,8 @@
 $(document).on("pageinit", function() {
     if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
         _constant.redirect('painel.html');
+    } else {
+        _session.clear();
     }
 
     $("#bt_logar").click(function( a ) {
