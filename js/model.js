@@ -49,7 +49,6 @@ _configuracoes = {
             db.transaction(function( b ) {
                 b.executeSql(c.tbl, [ ],
                         function( f, e ) {
-                            jAviso(d);
                             debug("QUERY", c.tbl);
                             if ( total == d ) {
                                 _constant.redirect('index.html');
