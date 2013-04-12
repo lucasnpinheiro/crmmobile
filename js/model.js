@@ -169,7 +169,7 @@ _configuracoes = {
         });
     },
     verifica_sincronizacao : function() {
-        var c = 'SELECT id_produtos FROM produtos;';
+        var c = 'SELECT * FROM produtos;';
         db.transaction(function( e ) {
             e.executeSql(c, [ ],
                     function( g, f ) {
