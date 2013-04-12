@@ -1,8 +1,6 @@
 $(document).on("pageinit", function() {
     if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
         _constant.redirect('painel.html');
-    } else {
-        _configuracoes.verifica_chave(false);
     }
 
     $("#bt_logar").click(function( a ) {
@@ -28,7 +26,7 @@ function logar( d ) {
                         _session.set("id_usuarios", f.rows.item(0).id_usuarios);
                         _session.set("usuario", f.rows.item(0).usuario);
                         _session.set("nivel", f.rows.item(0).nivel);
-                        _configuracoes.verifica_sincronizacao();
+                        _configuracoes.verifica_chave();
                     } else {
                         jAviso('Usuário não localizado.');
                     }
