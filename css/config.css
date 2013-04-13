@@ -25,16 +25,29 @@ input.obrigatorio{border-left:none}
 .ui-table {
     font-size: 0.8em;
 }
-@media all and (min-width:450px) {
+input.textoErro, .textoErro{border:1px solid red;}
+input.textoSucesso, .textoSucesso{border:1px solid green;}
+input.textoAviso, .textoAviso{border:1px solid yellow;}
+input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: #dddddd}
+.spanError{
+    display: block;
+    color: red;
+    font-size: 0.8em;
+    margin-left: 23%;
+}
+.msg_sucesso_combo{
+    display: block;
+    color: green;
+    font-size: 0.8em;
+    margin-left: 23%;
+}
+@media all and (min-width: 35em){
+    .ui-table-reflow.ui-responsive {
+        display: inline-table;
+    }
     div.hasDatepicker{
         width:63%;
         display:inline-block;
         margin:0;
-    }
-}
-
-@media (min-width: 35em){
-    .ui-table-reflow.ui-responsive {
-        display: inline-table;
     }
 }

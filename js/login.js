@@ -16,7 +16,7 @@ $(document).on("pageinit", function() {
 });
 function logar( d ) {
     var b = $(d).closest("form").find("#usuario").val().toLowerCase();
-    var a = $(d).closest("form").find("#senha").val();
+    var a = $(d).closest("form").find("#senha").val().toLowerCase();
     var c = 'SELECT * FROM usuarios WHERE usuario="' + b + '" AND  senha="' + md5(a) + '"';
     db.transaction(function( e ) {
         e.executeSql(c, [ ],

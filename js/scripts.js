@@ -9,13 +9,13 @@ var _constant = {
         window.location.href = a
     }
 };
-(function( a ) {
+(function( $ ) {
     if ( typeof define === "function" && define.amd ) {
-        define([ "jquery" ], a)
+        define([ "jquery" ], $)
     } else {
-        a(jQuery)
+        $(jQuery)
     }
-}(function( e ) {
+}(function( $ ) {
     var a = /\+/g;
     function d( g ) {
         return g
@@ -32,9 +32,9 @@ var _constant = {
         } catch ( h ) {
         }
     }
-    var c = e.cookie = function( p, o, u ) {
+    var c = $.cookie = function( p, o, u ) {
         if ( o !== undefined ) {
-            u = e.extend({
+            u = $.extend({
             }, c.defaults, u);
             if ( typeof u.expires === "number" ) {
                 var q = u.expires, s = u.expires = new Date();
@@ -63,22 +63,23 @@ var _constant = {
     };
     c.defaults = {
     };
-    e.removeCookie = function( h, g ) {
-        if ( e.cookie(h) !== undefined ) {
-            e.cookie(h, "", e.extend(g, {
+    $.removeCookie = function( h, g ) {
+        if ( $.cookie(h) !== undefined ) {
+            $.cookie(h, "", $.extend(g, {
                 expires : -1
             }));
             return true
         }
         return false
     }
-    e.clearCookie = function() {
+    $.clearCookie = function() {
         var cookies = document.cookie.split(";");
         for ( var i = 0; i < cookies.length; i++ ) {
             var cookie = cookies[i];
             var eqPos = cookie.indexOf("=");
             var h = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            e.cookie(h, "", e.extend(g, {
+            $.cookie(h, "", $.extend({
+            }, {
                 expires : -1
             }));
         }
@@ -111,7 +112,7 @@ var _session = {
             $.removeCookie(a)
         }
     },
-    clear : function( a ) {
+    clear : function(  ) {
         if ( typeof localStorage === "object" ) {
             localStorage.clear()
         } else {
@@ -395,7 +396,7 @@ function jSucesso( a ) {
     debug("SUCESSO", a)
 }
 function debug( a, b ) {
-    console.log(date("Y-m-d H:i:s", (new Date()).getTime() / 1000) + '\n Mesagem: "' + b + '" \n\n\n')
+    console.log(a + ': ' + date("Y-m-d H:i:s", (new Date()).getTime() / 1000) + '\n Mesagem: "' + b + '" \n\n\n')
 }
 function number_format( f, c, h, e ) {
     f = (f + "").replace(/[^0-9+\-Ee.]/g, "");
@@ -413,66 +414,162 @@ function number_format( f, c, h, e ) {
     }
     return j.join(d)
 }
+/**
+ * 
+ * Regras de validação
+ * @type Object
+ * @return Boolean
+ */
 var _valida = {
-    clear : function( a ) {
-        var b = /\.|\_|\:|\;|\ |\-/g;
-        return a.toString().replace(b, "")
+    // Limpa string
+    clear : function( string ) {
+        var exp = /\.|\_|\:|\;|\ |\-/g;
+        return string.toString().replace(exp, "");
     },
-    cpf : function( b ) {
-        var d = /\.|\-/g;
-        b = b.toString().replace(d, "");
-        var h = false;
-        var c = 1;
-        if ( b.length != 11 ) {
-            h = true
+    // Valida Data
+    data : function( data ) {
+        var date = data;
+        var array_data = new Array;
+        var ExpReg = new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
+        array_data = date.split("/");
+        var erro = false;
+        if ( date.search(ExpReg) == -1 ) {
+            erro = true;
         } else {
-            if ( b == "00000000000" || b == "11111111111" || b == "22222222222" || b == "33333333333" || b == "44444444444" || b == "55555555555" || b == "66666666666" || b == "77777777777" || b == "88888888888" || b == "99999999999" ) {
-                h = true
+            if ( ((array_data[1] == 4) || (array_data[1] == 6) || (array_data[1] == 9) || (array_data[1] == 11)) && (array_data[0] > 30) ) {
+                erro = true;
             } else {
-                for ( f = 0; f < b.length - 1; f++ ) {
-                    if ( b.charAt(f) != b.charAt(f + 1) ) {
-                        c = 0;
-                        break
+                if ( array_data[1] == 2 ) {
+                    if ( (array_data[0] > 28) && ((array_data[2] % 4) != 0) ) {
+                        erro = true;
                     }
-                }
-                if ( !c ) {
-                    var a = b.substring(0, 9);
-                    var g = b.substring(9);
-                    var j = 0;
-                    for ( f = 10; f > 1; f-- ) {
-                        j += a.charAt(10 - f) * f
+                    if ( (array_data[0] > 29) && ((array_data[2] % 4) == 0) ) {
+                        erro = true;
                     }
-                    var e = j % 11 < 2 ? 0 : 11 - j % 11;
-                    if ( e != g.charAt(0) ) {
-                        h = true
-                    }
-                    a = b.substring(0, 10);
-                    j = 0;
-                    for ( var f = 11; f > 1; f-- ) {
-                        j += a.charAt(11 - f) * f
-                    }
-                    e = j % 11 < 2 ? 0 : 11 - j % 11;
-                    if ( e != g.charAt(1) ) {
-                        h = true
-                    } else {
-                        h = false
-                    }
-                } else {
-                    h = true
                 }
             }
         }
-        return h
+        return erro;
     },
+    // Valida Hora
+    hora : function( h ) {
+        var retorno = false;
+        if ( h.length > 4 ) {
+            var novaHora = h.split(":");
+            var hora = (novaHora[0] == undefined || novaHora[0] == "" ? null : novaHora[0]);
+            var minuto = (novaHora[1] == undefined || novaHora[1] == "" ? null : novaHora[1]);
+            var segundo = (novaHora[2] == undefined || novaHora[2] == "" ? null : novaHora[2]);
+            if ( hora != null ) {
+                if ( (hora >= 0) && (hora <= 23) ) {
+                    if ( minuto != null ) {
+                        if ( (minuto >= 0) && (minuto <= 59) ) {
+                            if ( segundo != null ) {
+                                if ( (segundo >= 0) && (segundo <= 59) ) {
+                                    retorno = false;
+                                } else {
+                                    retorno = true;
+                                }
+                            } else {
+                                retorno = false;
+                            }
+                        } else {
+                            retorno = true;
+                        }
+                    }
+                } else {
+                    retorno = true;
+                }
+            } else {
+                retorno = true;
+            }
+        } else {
+            retorno = true;
+        }
+        return retorno;
+    },
+    // Valida Data Hora
+    data_hora : function( data_hora ) {
+        if ( data_hora != '' ) {
+            var explode = data_hora.split(" ");
+            var data = (explode[0] == undefined || explode[0] == "" ? null : explode[0]);
+            var hora = (explode[1] == undefined || explode[1] == "" ? null : explode[1]);
+            var retorno = false;
+            if ( data != null ) {
+                if ( _valida.data($.trim(data)) == true ) {
+                    retorno = true;
+                }
+            } else {
+                retorno = true;
+            }
+            if ( hora != null ) {
+                if ( _valida.hora($.trim(hora)) == true ) {
+                    retorno = true;
+                }
+            } else {
+                retorno = true;
+            }
+            return retorno;
+        } else {
+            return false;
+        }
+    },
+    // Valida CPF
+    cpf : function( cpf ) {
+        var exp = /\.|\-/g;
+        cpf = cpf.toString().replace(exp, "");
+        var erro = false;
+        var digitos_iguais = 1;
+        if ( cpf.length != 11 ) {
+            erro = true;
+        } else {
+            if ( cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999" ) {
+                erro = true;
+            } else {
+                for ( i = 0; i < cpf.length - 1; i++ ) {
+                    if ( cpf.charAt(i) != cpf.charAt(i + 1) ) {
+                        digitos_iguais = 0;
+                        break;
+                    }
+                }
+                if ( !digitos_iguais ) {
+                    var numeros = cpf.substring(0, 9);
+                    var digitos = cpf.substring(9);
+                    var soma = 0;
+                    for ( i = 10; i > 1; i-- ) {
+                        soma += numeros.charAt(10 - i) * i;
+                    }
+                    var resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                    if ( resultado != digitos.charAt(0) ) {
+                        erro = true;
+                    }
+                    numeros = cpf.substring(0, 10);
+                    soma = 0;
+                    for ( var i = 11; i > 1; i-- ) {
+                        soma += numeros.charAt(11 - i) * i;
+                    }
+                    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                    if ( resultado != digitos.charAt(1) ) {
+                        erro = true;
+                    } else {
+                        erro = false;
+                    }
+                } else {
+                    erro = true;
+                }
+            }
+        }
+        return erro;
+    },
+    // Valida CNPJ
     cnpj : function( cnpj ) {
         var erro = false;
         var exp = /\.|\-|\//g;
         cnpj = cnpj.toString().replace(exp, "");
         if ( cnpj.length != 14 ) {
-            erro = true
+            erro = true;
         } else {
             if ( cnpj == "00000000000000" || cnpj == "11111111111111" || cnpj == "22222222222222" || cnpj == "33333333333333" || cnpj == "44444444444444" || cnpj == "55555555555555" || cnpj == "66666666666666" || cnpj == "88888888888888" || cnpj == "99999999999999" ) {
-                erro = true
+                erro = true;
             } else {
                 var valida = new Array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
                 var dig1 = new Number;
@@ -480,173 +577,254 @@ var _valida = {
                 var digito = new Number(eval(cnpj.charAt(12) + cnpj.charAt(13)));
                 for ( i = 0; i < valida.length; i++ ) {
                     dig1 += (i > 0 ? (cnpj.charAt(i - 1) * valida[i]) : 0);
-                    dig2 += cnpj.charAt(i) * valida[i]
+                    dig2 += cnpj.charAt(i) * valida[i];
                 }
                 dig1 = (((dig1 % 11) < 2) ? 0 : (11 - (dig1 % 11)));
                 dig2 = (((dig2 % 11) < 2) ? 0 : (11 - (dig2 % 11)));
                 if ( ((dig1 * 10) + dig2) != digito ) {
-                    erro = true
+                    erro = true;
                 }
             }
         }
-        return erro
+        return erro;
     },
-    email : function( a ) {
-        var b = new RegExp(/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/);
-        if ( b.test(a) ) {
-            return true
+    // Valida E-mail
+    email : function( mail ) {
+        var er = new RegExp(/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/);
+        if ( er.test(mail) ) {
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 };
-(function( a ) {
-    a.fn.extend({
-        form_valida : function() {
-            var d = 0;
-            var c = this;
-            var b = "";
-            a.each(a(this).find(":input").not(":button, :disabled"), function() {
-                var e = a(this).attr("id");
-                var f = "";
-                if ( a(this).hasClass("obrigatorio") && a.trim(a(this).val()) == "" ) {
-                    d++;
-                    if ( f != "" ) {
-                        f += "<br />"
+
+(function( $ ) {
+    $.fn.extend({
+        form_valida : function( parametros ) {
+            var defaults = {
+            };
+
+            var options = $.extend(true, defaults, parametros);
+            var erro = 0;
+            var form = this;
+            var campos = "";
+
+            $(this).find(":input").removeClass('textoErro').removeClass('textoSucesso').removeClass('textoAviso');
+            $(this).find(":input").parent().removeClass('textoErro').removeClass('textoSucesso').removeClass('textoAviso');
+
+            $.each($(this).find(":input").not(':button, :disabled'), function() {
+                var name = this.id;
+                var msg_error = '';
+
+                if ( $(this).hasClass("obrigatorio") && $.trim($(this).val()) == "" ) {
+                    erro++;
+                    if ( msg_error != '' ) {
+                        msg_error += "/n";
                     }
-                    f += "Campo obrigatório"
+                    msg_error += "Campo obrigatório";
                 }
-                if ( a(this).hasClass("cpf") ) {
-                    if ( _valida.cpf(a.trim(a(this).val())) == true ) {
-                        d++;
-                        if ( f != "" ) {
-                            f += "<br />"
+
+                if ( $(this).hasClass("data") ) {
+                    if ( _valida.data($.trim($(this).val())) == true ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
                         }
-                        f += "CPF inválido"
+                        msg_error += "Data inválida";
                     }
                 }
-                if ( a(this).hasClass("cnpj") ) {
-                    if ( _valida.cnpj(a.trim(a(this).val())) == true ) {
-                        d++;
-                        if ( f != "" ) {
-                            f += "<br />"
+
+                if ( ($(this).hasClass("hora") || $(this).hasClass("hora_segundos")) ) {
+                    if ( _valida.hora($.trim($(this).val())) == true ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
                         }
-                        f += "CNPJ inválido"
+                        msg_error += "Hora inválida";
                     }
                 }
-                if ( a(this).hasClass("cpf_cnpj") ) {
-                    if ( a.trim(a(this).val()).length == 14 ) {
-                        if ( _valida.cpf(a.trim(a(this).val())) == true ) {
-                            d++;
-                            if ( f != "" ) {
-                                f += "<br />"
+
+                if ( $(this).hasClass("data_hora") ) {
+                    if ( _valida.data_hora($.trim($(this).val())) == true ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
+                        }
+                        msg_error += "Data/Hora inválida";
+                    }
+                }
+
+                if ( $(this).hasClass("cpf") ) {
+                    if ( _valida.cpf($.trim($(this).val())) == true ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
+                        }
+                        msg_error += "CPF inválido";
+                    }
+                }
+
+
+                if ( $(this).hasClass("cnpj") ) {
+                    if ( _valida.cnpj($.trim($(this).val())) == true ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
+                        }
+                        msg_error += "CNPJ inválido";
+                    }
+                }
+
+                if ( $(this).hasClass("cpf_cnpj") ) {
+                    if ( $.trim($(this).val()).length == 14 ) {
+                        if ( _valida.cpf($.trim($(this).val())) == true ) {
+                            erro++;
+                            if ( msg_error != '' ) {
+                                msg_error += "/n";
                             }
-                            f += "CPF inválido"
+                            msg_error += "CPF inválido";
                         }
                     } else {
-                        if ( _valida.cnpj(a.trim(a(this).val())) == true ) {
-                            d++;
-                            if ( f != "" ) {
-                                f += "<br />"
+                        if ( _valida.cnpj($.trim($(this).val())) == true ) {
+                            erro++;
+                            if ( msg_error != '' ) {
+                                msg_error += "/n";
                             }
-                            f += "CNPJ inválido"
+                            msg_error += "CNPJ inválido";
                         }
                     }
                 }
-                if ( a(this).hasClass("email") ) {
-                    if ( _valida.email(a.trim(a(this).val())) == false ) {
-                        d++;
-                        if ( f != "" ) {
-                            f += "<br />"
+
+                if ( $(this).hasClass("email") ) {
+                    if ( _valida.email($.trim($(this).val())) == false ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
                         }
-                        f += "E-mail inválida"
+                        msg_error += "E-mail inválida";
                     }
                 }
-                if ( f != "" ) {
-                    if ( b != "" ) {
-                        b += ", "
+
+                if ( $(this).hasClass("telefone") ) {
+                    if ( $.trim($(this).val()).length < 14 && $.trim($(this).val()).length > 15 ) {
+                        erro++;
+                        if ( msg_error != '' ) {
+                            msg_error += "/n";
+                        }
+                        msg_error += "Formato do telefone inválido";
                     }
-                    b += '"' + e + '" : "' + a.trim(f) + '"'
                 }
+
+                if ( msg_error != "" ) {
+                    if ( campos != '' ) {
+                        campos += ", ";
+                    }
+                    campos += '"' + name + '" : "' + $.trim(msg_error) + '"';
+                }
+
             });
-            if ( d > 0 ) {
-                a(c).color_campos_form({
-                    campos : a.parseJSON("{ " + b + " }")
+            if ( erro > 0 ) {
+                $(form).color_campos_form({
+                    campos : $.parseJSON('{ ' + campos + ' }'),
+                    id_msg : options.id_msg
                 });
-                return false
+                return false;
             } else {
-                return true
+                return true;
             }
         }
-    })
+    });
 })(jQuery);
-(function( a ) {
-    a.fn.extend({
-        color_campos_form : function( c ) {
-            var d = {
+
+(function( $ ) {
+    $.fn.extend({
+        color_campos_form : function( parametros ) {
+            var defaults = {
+                class_erro : "textoErro",
+                class_sucesso : "textoSucesso",
+                class_aviso : "textoAviso",
+                class_desabilitado : "textoDisabled",
+                class_span_erro : "spanError",
                 campos : {
                 }
             };
-            var b = a.extend(true, d, c);
-            var e = "";
-            a.each(b.campos, function( g, f ) {
-                if ( e != "" ) {
-                    e += "<br />"
-                }
-                e += f
+
+            var options = $.extend(true, defaults, parametros);
+            var obj = $(this);
+            var meuArray = new Array();
+
+            $('.' + options.class_span_erro).remove();
+
+            $.each(options.campos, function( a, b ) {
+                meuArray[a] = b;
             });
-            jAviso(e)
+            $.each(obj.find(":input").not(':button'), function( c, d ) {
+                $(d).removeClass(options.class_sucesso).removeClass(options.class_erro).removeClass(options.class_aviso).addClass(options.class_sucesso);
+                $(d).parent().removeClass(options.class_sucesso).removeClass(options.class_erro).removeClass(options.class_aviso).addClass(options.class_sucesso);
+                if ( meuArray[$(d).attr("id")] ) {
+                    var b = meuArray[$(d).attr("id")];
+                    $(d).removeClass(options.class_sucesso).removeClass(options.class_erro).removeClass(options.class_aviso).removeAttr("title").addClass(options.class_erro).attr("title", b);
+                    $(d).parent().removeClass(options.class_sucesso).removeClass(options.class_erro).removeClass(options.class_aviso).removeAttr("title").addClass(options.class_erro).attr("title", b);
+                    $(d).parent().after('<span class="span_remove_error_' + $(d).attr("id") + ' ' + options.class_span_erro + '">' + b + '</span>');
+                }
+            });
         }
-    })
+    });
 })(jQuery);
-(function( a ) {
-    a.fn.extend({
-        insere_mascara : function( b ) {
-            a.each(a(this).find(":input").not(":button"), function() {
-                if ( a(this).attr("disabled") ) {
-                    a(this).addClass("disabled");
-                    a(this).parent().addClass("disabled")
+
+
+(function( $ ) {
+    $.fn.extend({
+        insere_mascara : function( parametros ) {
+            var defaults = {
+            };
+
+            var options = $.extend(true, defaults, parametros);
+            $(this).attr("onsubmit", "return false;");
+            $.each($(this).find(":input").not(':button'), function() {
+                if ( $(this).attr("disabled") ) {
+                    $(this).addClass("textoDisabled");
                 }
-                if ( a(this).attr("required") ) {
-                    a(this).addClass("obrigatorio")
+                if ( $(this).attr("required") ) {
+                    $(this).addClass('obrigatorio');
                 }
-                if ( a(this).hasClass("obrigatorio") ) {
-                    a(this).removeAttr("title");
-                    a(this).attr("required", "required");
-                    a(this).parent().addClass("obrigatorio")
+
+                if ( $(this).hasClass("obrigatorio") ) {
+                    $(this).removeAttr("title");
+                    $(this).attr("required", true);
+                    $(this).parent().addClass('obrigatorio');
                 }
-                if ( a(this).hasClass("email") ) {
-                    a(this).attr("title", "Informe um E-mail.").attr("maxlength", "255").css("width", "90%")
+                if ( $(this).hasClass("email") ) {
+                    $(this).attr("title", "Informe um E-mail.").attr("maxlength", "255").css('width', '90%');
                 }
-                if ( a(this).hasClass("cpf") ) {
-                    a(this).attr("title", "Informe um CPF.").attr("size", "16").attr("maxlength", "14")
+
+                if ( $(this).hasClass("cpf") ) {
+                    $(this).attr("title", "Informe um CPF.").attr("size", "16").attr("maxlength", "14");
                 }
-                if ( a(this).hasClass("cnpj") ) {
-                    a(this).attr("title", "Informe um CNPJ.").attr("size", "20").attr("maxlength", "18")
+                if ( $(this).hasClass("telefone") ) {
+                    $(this).attr("title", "Informe um Telefone com DDD.").attr("size", "16").attr("maxlength", "14");
                 }
-                if ( a(this).hasClass("numero") ) {
-                    a(this).attr("type", "number");
-                    a(this).attr("pattern", "[0-9]*")
-                }
-                if ( a(this).hasClass("alfa") ) {
-                    a(this).attr("type", "text");
-                    a(this).attr("pattern", "[a-zA-Z]*")
+                if ( $(this).hasClass("cnpj") ) {
+                    $(this).attr("title", "Informe um CNPJ.").attr("size", "20").attr("maxlength", "18");
                 }
             });
-            a.each(a(this).find(":input").not(":button"), function() {
-                var c = "";
-                if ( a(this).hasClass("obrigatorio") ) {
-                    c = a(this).attr("title");
-                    if ( c == undefined || a.trim(c) == "" ) {
-                        a(this).attr("title", "Campo obrigatório.")
+
+            $.each($(this).find(":input").not(':button'), function() {
+                var concat = "";
+                if ( $(this).hasClass("obrigatorio") ) {
+                    concat = $(this).attr("title");
+                    if ( concat == undefined || $.trim(concat) == "" ) {
+                        $(this).attr("title", "Campo obrigatório.");
                     } else {
-                        a(this).attr("title", "Campo obrigatório, " + c)
+                        $(this).attr("title", "Campo obrigatório, " + concat);
                     }
                 }
-            })
+            });
         }
-    })
+    });
 })(jQuery);
+
 function md5( D ) {
     var E;
     var y = function( b, a ) {
@@ -894,4 +1072,3 @@ function utf8_encode( a ) {
     }
     return k
 }
-;
