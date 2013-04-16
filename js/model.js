@@ -12,9 +12,9 @@ _configuracoes = {
             }, {
                 tbl : "CREATE TABLE IF NOT EXISTS usuarios ( id_usuarios INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_usuario VARCHAR(50), dsc_usuario VARCHAR(50) , usuario VARCHAR(50), nome VARCHAR(50), senha VARCHAR(32), nivel INTEGER, data_hora_atualizacao TEXT, data_hora_exclusao TEXT )"
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS pedidos ( id_pedidos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, id_clientes INTEGER, id_equipamentos INTEGER, id_usuarios INTEGER, data_hora_cadastro TEXT , data_hora_finalizacao TEXT , data_hora_envio TEXT, data_hora_transmissao TEXT, data_hora_exclusao TEXT, observacao VARCHAR(255) )"
+                tbl : "CREATE TABLE IF NOT EXISTS pedidos ( id_pedidos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, id_clientes INTEGER, id_equipamentos INTEGER, id_usuarios INTEGER, data_hora_cadastro TEXT, observacao VARCHAR(255), situacao_envio INT(1), situacao_pedido INT(1), valor_total REAL(10,2) )"
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS pedidos_itens ( id_pedidos_itens INTEGER PRIMARY KEY AUTOINCREMENT, id_pedidos INTEGER, id_produtos INTEGER, data_hora_cadastro TEXT , quantidade VARCHAR(45), valor_unitario VARCHAR(45), data_hora_exclusao TEXT )"
+                tbl : "CREATE TABLE IF NOT EXISTS pedidos_itens ( id_pedidos_itens INTEGER PRIMARY KEY AUTOINCREMENT, id_pedidos INTEGER, id_produtos INTEGER, data_hora_cadastro TEXT , quantidade REAL(10,3), valor_unitario REAL(10,2), valor_desconto REAL(10,2) )"
             }
         ],
         drop : [

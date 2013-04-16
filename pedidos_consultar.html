@@ -19,7 +19,7 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
-        <script type="text/javascript" src="js/jquery.datebox.min.js"></script>
+        <script src="js/jquery.datebox.min.js"></script>
         <script src="js/pedidos.js"></script>
     </head> 
     <body> 
@@ -37,7 +37,7 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     <li data-role="list-divider">Consulta de Pedidos</li>
                 </ul>
 
-                <form class="container_12">
+                <form id="frm_pedidos_consultar" name="frm_pedidos_consultar" class="container_12">
                     <div class="grid_2">
                         <input type="text" name="codigo_pedido" id="codigo_pedido" value="" placeholder="Código do pedido">
                     </div>
@@ -68,7 +68,7 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                         </select>
                     </div>
                     <div class="grid_1">
-                        <a href="#" data-role="button" data-iconpos="notext" data-theme="c" data-inline="true" data-icon="search">Consultar</a>
+                        <a href="#" data-role="button" data-iconpos="notext" data-theme="c" data-inline="true" data-icon="search" id="bt_consultar_pedidos">Consultar</a>
                     </div>
 
                 </form>

@@ -1072,3 +1072,9 @@ function utf8_encode( a ) {
     }
     return k
 }
+
+function convert_date( d, s ) {
+    s = (!s ? '-' : s);
+    var a = d.split('/');
+    return a[2] + s + a[1] + s + a[0];
+}
