@@ -1,0 +1,165 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>CRM Mobile</title> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
+        <link rel="stylesheet" href="css/jquery-mobile-fluid960.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css" />
+        <link rel="stylesheet" href="css/config.css" />
+        <script src="js/cordova.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="js/configs.js"></script>
+        <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.datebox.min.js"></script>
+        <script src="js/pedidos.js"></script>
+    </head> 
+    <body> 
+
+        <!-- PARTE 4 -->
+        <div id="novo_pedidos_resumo" data-role="page">
+
+            <div data-role="header" data-position="fixed">
+                <h1><image src="images/logo.png" title="S2I" /> Pedidos Mobile</h1>
+                <a href="painel.html" data-icon="home" class="ui-btn-right">Home</a>
+            </div><!-- /header -->
+
+            <div data-role="content" class="conteudo">
+
+                <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                    <li data-role="list-divider">Resumo Pedido</li>
+                </ul>
+                <div>
+                    <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                        <li data-role="list-divider">Dados do Cliente</li>
+                    </ul>
+
+                    <table data-role="table" id="table-resumo-pedidos-cliente" data-mode="reflow" class="ui-responsive table-stroke">
+                        <thead>
+                            <tr class="ui-bar-a">
+                                <th title="Forma de Pagamento">Código</th>
+                                <th data-priority="1" title="Data de vencimento">Nome</th>
+                                <th data-priority="2" title="Valor">CNPJ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>30875</th>
+                                <td>JJ Empreendimentos Mat Construção</td>
+                                <td>30.3332.6222/0001-21</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+                    <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                        <li data-role="list-divider">Itens do Pedido</li>
+                    </ul>
+
+                    <table data-role="table" id="table-resumo-pedidos-itens" data-mode="reflow" class="ui-responsive table-stroke">
+                        <thead>
+                            <tr class="ui-bar-a">
+                                <th title="Produto">Produto</th>
+                                <th data-priority="1" title="Código">Código</th>
+                                <th data-priority="2" title="Unidade">Unidade</th>
+                                <th data-priority="3" title="Desconto">Desconto</th>
+                                <th data-priority="4" title="Qtd.">Qtd.</th>
+                                <th data-priority="5" title="Valor">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Alicate</th>
+                                <td>3255</td>
+                                <td>CX</td>
+                                <td>10%</td>
+                                <td>5</td>
+                                <td>R$ 120,00</td>
+                            </tr>
+                            <tr>
+                                <th>Prego</th>
+                                <td>3256</td>
+                                <td>PCT</td>
+                                <td>3%</td>
+                                <td>12</td>
+                                <td>R$ 387,13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+                    <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                        <li data-role="list-divider">Formas de Pagamento</li>
+                    </ul>
+
+                    <table data-role="table" id="table-resumo-pedidos-forma-pagamento" data-mode="reflow" class="ui-responsive table-stroke">
+                        <thead>
+                            <tr class="ui-bar-a">
+                                <th title="Forma de Pagamento">Forma de pagamento</th>
+                                <th data-priority="1" title="Data de vencimento">Data vencimento</th>
+                                <th data-priority="2" title="Valor">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Dinheiro</th>
+                                <td>10/04/2013</td>
+                                <td>R$ 101,43</td>
+                            </tr>
+                            <tr>
+                                <th>Cheque</th>
+                                <td>10/05/2013</td>
+                                <td>R$ 101,43</td>
+                            </tr>
+                            <tr>
+                                <th>Cheque</th>
+                                <td>10/06/2013</td>
+                                <td>R$ 101,43</td>
+                            </tr>
+                            <tr>
+                                <th>Cheque</th>
+                                <td>10/07/2013</td>
+                                <td>R$ 101,43</td>
+                            </tr>
+                            <tr>
+                                <th>Cheque</th>
+                                <td>10/08/2013</td>
+                                <td>R$ 101,43</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+                    <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                        <li data-role="list-divider">Observações</li>
+                    </ul>
+
+                    <div>
+                        <textarea name="observacao" id="observacao" placeholder="Observação" style="height: 100px;"></textarea>
+                    </div>
+
+                    <div>
+                        <a href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Finalizar</a>
+                    </div>
+                </div>   
+            </div><!-- /content -->
+
+            <div data-role="footer" class="ui-bar" data-theme="a" data-position="fixed">
+                <div data-role="navbar" data-grid="c">
+                    <ul>
+                        <li><a href="pedidos_novo_01.html">Identificação do Cliente</a></li>
+                        <li><a href="pedidos_novo_02.html">Selecionar Itens do Pedido</a></li>
+                        <li><a href="pedidos_novo_03.html">Forma de Pagamento</a></li>
+                        <li><a href="pedidos_novo_04.html" class="ui-btn-active">Resumo Pedido</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /navbar -->
+
+        </div><!-- /page -->
+    </body>
+</html>

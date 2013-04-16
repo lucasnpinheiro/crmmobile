@@ -1,0 +1,174 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>CRM Mobile</title> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
+        <link rel="stylesheet" href="css/jquery-mobile-fluid960.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css" />
+        <link rel="stylesheet" href="css/config.css" />
+        <script src="js/cordova.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="js/configs.js"></script>
+        <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.datebox.min.js"></script>
+        <script src="js/pedidos.js"></script>
+    </head> 
+    <body> 
+
+        <!-- PARTE 3 -->
+        <div id="novo_pedidos_pagamento" data-role="page">
+
+            <div data-role="header" data-position="fixed">
+                <h1><image src="images/logo.png" title="S2I" /> Pedidos Mobile</h1>
+                <a href="painel.html" data-icon="home" class="ui-btn-right">Home</a>
+            </div><!-- /header -->
+
+            <div data-role="content" class="conteudo">
+
+                <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
+                    <li data-role="list-divider">Forma de Pagamento</li>
+                </ul>
+
+
+                <form id="frm_novo_pedido_parte_3" name="frm_novo_pedido_parte_3" class="container_12">
+                    <div class="grid_4">
+                        <select name="condicoes_pagamnento" id="condicoes_pagamnento" data-native-menu="false">
+                            <option>Condições de pagamento</option>
+                            <option value="1">Avista</option>
+                            <option value="2">Parcelado</option>
+                        </select>
+                    </div>
+                    <div class="grid_4">
+                        <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                            <option>Forma de pagamento</option>
+                            <option value="1">Dinheiro</option>
+                            <option value="2">Cheque</option>
+                            <option value="3">Boleto</option>
+                            <option value="4">Transferências Bancaria</option>
+                        </select>
+                    </div>
+                    <div class="grid_4">
+                        <input type="text" name="numero_parcelas" id="numero_parcelas" value="5" placeholder="Número de parcelas">
+                    </div>
+                </form>
+
+                <div class="clear"></div>
+
+                <table data-role="table" id="table-pagamentos-pedidos" data-mode="reflow" class="ui-responsive table-stroke">
+                    <thead>
+                        <tr class="ui-bar-a">
+                            <th title="Forma de Pagamento">Forma de pagamento</th>
+                            <th data-priority="1" title="Data de vencimento">Data vencimento</th>
+                            <th data-priority="2" title="Valor">Valor</th>
+                            <th data-priority="6" title="Ações">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <th>
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                    <option>Forma de pagamento</option>
+                                    <option value="1">Dinheiro</option>
+                                    <option value="2">Cheque</option>
+                                    <option value="3">Boleto</option>
+                                    <option value="4">Transferências Bancaria</option>
+                                </select>
+                            </th>
+                            <td><input type="text" name="data_vencimento[]" value="10/04/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
+                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td>
+                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                    <option>Forma de pagamento</option>
+                                    <option value="1">Dinheiro</option>
+                                    <option value="2">Cheque</option>
+                                    <option value="3">Boleto</option>
+                                    <option value="4">Transferências Bancaria</option>
+                                </select>
+                            </th>
+                            <td><input type="text" name="data_vencimento[]" value="10/05/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
+                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td>
+                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                    <option>Forma de pagamento</option>
+                                    <option value="1">Dinheiro</option>
+                                    <option value="2">Cheque</option>
+                                    <option value="3">Boleto</option>
+                                    <option value="4">Transferências Bancaria</option>
+                                </select>
+                            </th>
+                            <td><input type="text" name="data_vencimento[]" value="10/06/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
+                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td>
+                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                    <option>Forma de pagamento</option>
+                                    <option value="1">Dinheiro</option>
+                                    <option value="2">Cheque</option>
+                                    <option value="3">Boleto</option>
+                                    <option value="4">Transferências Bancaria</option>
+                                </select>
+                            </th>
+                            <td><input type="text" name="data_vencimento[]" value="10/07/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
+                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td>
+                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                    <option>Forma de pagamento</option>
+                                    <option value="1">Dinheiro</option>
+                                    <option value="2">Cheque</option>
+                                    <option value="3">Boleto</option>
+                                    <option value="4">Transferências Bancaria</option>
+                                </select>
+                            </th>
+                            <td><input type="text" name="data_vencimento[]" value="10/08/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
+                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td>
+                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div><!-- /content -->
+
+            <div data-role="footer" class="ui-bar" data-theme="a" data-position="fixed">
+                <div data-role="navbar" data-grid="c">
+                    <ul>
+                        <li><a href="pedidos_novo_01.html">Identificação do Cliente</a></li>
+                        <li><a href="pedidos_novo_02.html">Selecionar Itens do Pedido</a></li>
+                        <li><a href="pedidos_novo_03.html" class="ui-btn-active">Forma de Pagamento</a></li>
+                        <li><a href="pedidos_novo_04.html">Resumo Pedido</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /navbar -->
+        </div><!-- /page -->
+
+    </body>
+</html>
