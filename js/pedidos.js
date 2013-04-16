@@ -1,10 +1,10 @@
 $(document).on("pageinit", function() {
     _pedidos.ultimos();
-    $("form").insere_mascara();
     $("#bt_consultar_pedidos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.consulta(this);
     });
+    $("form").insere_mascara();
 });
 
 _pedidos = {
@@ -53,7 +53,9 @@ _pedidos = {
         _pedidos.consultar('SELECT p.*, c.dsc_cliente FROM pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes ' + and);
     },
     ultimos : function() {
-        _pedidos.consultar('SELECT p.*, c.dsc_cliente FROM pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes ORDER BY p.data_hora_cadastro DESC LIMIT 100');
+        if ( $("#table-consulta-pedidos").length > 0 ) {
+            _pedidos.consultar('SELECT p.*, c.dsc_cliente FROM pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes ORDER BY p.data_hora_cadastro DESC LIMIT 100');
+        }
     },
     consultar : function( a ) {
         $("#table-consulta-pedidos tbody").html("");
