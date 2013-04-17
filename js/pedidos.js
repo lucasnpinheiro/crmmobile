@@ -4,6 +4,21 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.consulta(this);
     });
+    $('#frm_novo_pedido_parte_1 :input').on('tap change', function() {
+        $(this).listview({
+            create : function( event, ui ) {
+                alert('event');
+                $.each(event, function( a, b ) {
+                    alert(a + ' === ' + b);
+                });
+                alert('ui');
+                $.each(ui, function( a, b ) {
+                    alert(a + ' === ' + b);
+                });
+            }
+        });
+    });
+
     $("form").insere_mascara();
 });
 
@@ -87,5 +102,8 @@ _pedidos = {
                         debug("ERROR", c.message);
                     });
         });
+    },
+    get_clientes : function() {
+
     }
 };
