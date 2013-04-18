@@ -4,7 +4,7 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.consulta(this);
     });
-    $('#frm_novo_pedido_parte_1 :input').on('tap change', function() {
+    $('#frm_novo_pedido_parte_1 :input').on('change', function() {
         $(this).listview({
             create : function( event, ui ) {
                 alert('event');

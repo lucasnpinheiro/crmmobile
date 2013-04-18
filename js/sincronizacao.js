@@ -19,7 +19,7 @@ $(document).on("pageinit", function() {
 });
 _sincronicacao = {
     produtos : {
-        qtdPaginacao : 25,
+        qtdPaginacao : 50,
         qtdAtual : 0,
         qtdMax : 0,
         sequencia : 0,
@@ -37,15 +37,15 @@ _sincronicacao = {
                         if ( b == c ) {
                             $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_1">Sincronizado</span>');
                             if ( _sincronicacao.produtos.qtdAtual < _sincronicacao.produtos.qtdMax ) {
-                                _sincronicacao.produtos.lista()
+                                _sincronicacao.produtos.lista();
                             } else {
-                                _sincronicacao.fim()
+                                _sincronicacao.fim();
                             }
                         }
                     }, function( h, i ) {
                         $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
                         debug("ERROR", i.message);
-                        _sincronicacao.fim()
+                        _sincronicacao.fim();
                     });
                 });
             });
@@ -67,10 +67,10 @@ _sincronicacao = {
                     _sincronicacao.produtos.qtdMax = a;
                     _sincronicacao.produtos.sequencia = 0;
                     _sincronicacao.produtos.qtdAtual = 0;
-                    _sincronicacao.produtos.lista()
+                    _sincronicacao.produtos.lista();
                 },
                 error : function( c, a, b ) {
-                    _sincronicacao.produtos.error(c, a, b)
+                    _sincronicacao.produtos.error(c, a, b);
                 }
             });
         },
@@ -80,7 +80,7 @@ _sincronicacao = {
                 dataType : "json",
                 type : "GET",
                 data : {
-                    inicio : _sincronicacao.produtos.sequencia + 1,
+                    inicio : _sincronicacao.produtos.sequencia,
                     qtde : _sincronicacao.produtos.qtdPaginacao
                 },
                 beforeSend : function() {
@@ -91,15 +91,15 @@ _sincronicacao = {
                     var b = a.length;
                     if ( b > 0 ) {
                         _sincronicacao.produtos.qtdAtual += b;
-                        _sincronicacao.produtos.insert(a)
+                        _sincronicacao.produtos.insert(a);
                     } else {
                         _sincronicacao.produtos.sequencia++;
                         $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
-                        _sincronicacao.fim()
+                        _sincronicacao.fim();
                     }
                 },
                 error : function( c, a, b ) {
-                    _sincronicacao.produtos.error(c, a, b)
+                    _sincronicacao.produtos.error(c, a, b);
                 }
             })
         },
@@ -108,25 +108,25 @@ _sincronicacao = {
             _sincronicacao.fim();
             var d = "";
             if ( c.status === 0 ) {
-                d = ("Não conectar.<br />Verifique Rede.")
+                d = ("Não conectar. \n Verifique Rede.");
             } else if ( c.status === 404 ) {
-                d = ("A página solicitada não foi encontrada. [404]")
+                d = ("A página solicitada não foi encontrada. [404]");
             } else if ( c.status === 500 ) {
-                d = ("Erro interno do servidor. [500]")
+                d = ("Erro interno do servidor. [500]");
             } else if ( a === "parsererror" ) {
-                d = ("Solicitado JSON análise falhou.")
+                d = ("Solicitado JSON análise falhou.");
             } else if ( a === "timeout" ) {
-                d = ("Erro de tempo limite.")
+                d = ("Erro de tempo limite.");
             } else if ( a === "abort" ) {
-                d = ("Pedido Ajax abortada.")
+                d = ("Pedido Ajax abortada.");
             } else {
-                d = ("Tipo do erro não detectado.<br />" + c.responseText)
+                d = ("Tipo do erro não detectado. /n " + c.responseText);
             }
-            jAviso(d)
+            jAviso(d);
         }
     },
     fim : function() {
         block(true);
-        jAviso("Tempo decorrido para a atualização da tabela de produtos " + tcount.stop() + " segundos.")
+        jAviso("Tempo decorrido para a atualização da tabela de produtos " + tcount.stop() + " segundos.");
     }
 };
