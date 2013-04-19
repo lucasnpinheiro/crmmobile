@@ -17,6 +17,13 @@ function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
     $.ajax({
         url : _situacoes.urls.ativacao,
         dataType : "json",
+        data : {
+            cod_cliente : codigo_cliente,
+            nome_dispositivo : $('#devName').text(),
+            plataforma : $('#devPlatform').text(),
+            versao_plataforma : $('#devVersion').text(),
+            uuid : uuid
+        },
         type : "POST",
         beforeSend : function() {
             block(false);

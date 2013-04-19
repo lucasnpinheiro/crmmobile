@@ -1088,3 +1088,98 @@ function convert_date( d, s ) {
     var a = d.split('/');
     return a[2] + s + a[1] + s + a[0];
 }
+
+(function( $ ) {
+    $.fn.send = function( options ) {
+        var form_2 = (!$(this).attr('form') ? $(this).closest('form') : '#' + $(this).attr('form'));
+        $(form_2).attr('onsubmit', false);
+        $(this).on('click', function( e ) {
+            e.preventDefault();
+            var settings = $.extend(true, {
+                type : 'POST',
+                dataType : 'json',
+                modal : false,
+                modal_options : {
+                    title : '',
+                    html : '',
+                    width : 500,
+                    height : 500
+                },
+                id_msg : '#msg',
+                success : function( result, form, obj ) {
+                },
+                error : function( result, form, obj ) {
+                },
+                extra : function( result, form, obj ) {
+                }
+            },
+            options);
+            var $this = this;
+            var form = (!$(this).attr('form') ? $(this).closest('form') : '#' + $(this).attr('form'));
+            settings.extra.call(null, {
+            }, form, $this);
+            if ( settings.modal == true ) {
+                $.modal({
+                    html : settings.modal_options.html,
+                    title : settings.modal_options.title,
+                    width : settings.modal_options.width,
+                    height : settings.modal_options.height,
+                    buttons : {
+                        'Não' : function() {
+                            $(this).dialog("close");
+                        },
+                        'Sim' : function() {
+                            $(this).dialog("close");
+                            _send();
+                        }
+                    }
+                });
+            } else {
+                _send();
+            }
+
+            function _send() {
+                if ( $(form).form_valida() == true ) {
+                    $.ajax({
+                        type : settings.type,
+                        data : $(form).serialize(),
+                        dataType : settings.dataType,
+                        url : $(form).attr('action'),
+                        beforeSend : function() {
+                            $(settings.id_msg).msg({
+                                css : 'aviso',
+                                descricao : 'Aguarde... Executando operação.'
+                            });
+                        },
+                        success : function( b ) {
+                            if ( settings.dataType == 'json' ) {
+                                var cssTipo = '';
+                                if ( b.cod == 999 ) {
+                                    cssTipo = 'sucesso';
+                                    $(form).find('#' + $(form).attr('id_hidden')).val(b.id);
+                                    $(form).find(':input').not(':button').removeClass('textoSucesso');
+                                    $(form).attr('not_save', 'S');
+                                } else {
+                                    cssTipo = 'erro';
+                                    $(form).color_campos_form({
+                                        campos : b.campos
+                                    });
+                                }
+                                $(settings.id_msg).msg({
+                                    css : cssTipo,
+                                    descricao : b.msg
+                                });
+                                settings.success.call(null, b, form, $this);
+                            } else {
+                                settings.success.call(null, b, form, $this);
+                            }
+                        }
+                    });
+                } else {
+                    settings.error.call(null, {
+                    }, form, $this);
+                }
+            }
+        });
+    }
+})(jQuery);
