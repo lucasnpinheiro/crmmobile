@@ -38,9 +38,9 @@ _sincronicacao = {
                         _sincronicacao.produtos.sequencia++;
                         $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
                         if ( b == c ) {
-                            $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_1">Sincronizado</span>');
                             if ( _sincronicacao.produtos.sequencia >= _sincronicacao.produtos.qtdMax ) {
                                 $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
+                                $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_1">Sincronizado</span>');
                                 _sincronicacao.fim();
                             }
                         }
