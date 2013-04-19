@@ -2,44 +2,44 @@ _configuracoes = {
     tabelas : {
         create : [
             {
-                tbl : "CREATE TABLE IF NOT EXISTS empresas ( id_empresas INTEGER PRIMARY KEY AUTOINCREMENT, uuid VARCHAR, codigo_cliente VARCHAR, codigo_ativacao VARCHAR, cpf_cnpj VARCHAR(14), nome_empresa VARCHAR(50), data_hora_cadastro TEXT, data_hora_exclusao TEXT )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "clientes" ( "id_clientes" INTEGER PRIMARY KEY AUTOINCREMENT,  "id_empresas" INTEGER,  "cod_cliente" VARCHAR(50),  "dsc_cliente" VARCHAR(45),  "data_hora_atualizacao" DATETIME,  "data_hora_exclusao" DATETIME,  "valor_devido" REAL(10, 2),  "situacao" INT(1) DEFAULT 1);'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS equipamentos ( id_equipamentos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, imei VARCHAR(100) )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "empresas" ( "id_empresas" INTEGER PRIMARY KEY AUTOINCREMENT, "uuid" VARCHAR(50), "codigo_cliente" VARCHAR(50), "codigo_ativacao" VARCHAR(50), "cpf_cnpj" VARCHAR(14), "nome_empresa" VARCHAR(50), "data_hora_cadastro" DATETIME, "data_hora_exclusao" DATETIME);'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS clientes ( id_clientes INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_cliente VARCHAR(50), dsc_cliente VARCHAR(45), data_hora_atualizacao TEXT, data_hora_exclusao TEXT, valor_devido REAL(10,2), situacao VARCHAR(1)  )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "pedidos" ( "id_pedidos" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "id_clientes" INTEGER, "id_equipamentos" INTEGER, "id_usuarios" INTEGER, "data_hora_cadastro" DATETIME, "numero_pedido" VARCHAR(50), "observacao" VARCHAR(255), "situacao_envio" INT(1) DEFAULT 1, "situacao_pedido" INT(1) DEFAULT 1, "valor_total" REAL(10,2));'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS produtos ( id_produtos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_produto VARCHAR(50), dsc_produto VARCHAR(100), estoque REAL (10,5) DEFAULT 0, desconto_maximo REAL (10,2) DEFAULT 0, data_hora_atualizacao TEXT, valor REAL(10,2) )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "pedidos_itens" ( "id_pedidos_itens" INTEGER PRIMARY KEY AUTOINCREMENT, "id_pedidos" INTEGER, "id_produtos" INTEGER, "data_hora_cadastro" DATETIME, "quantidade" REAL(10,3), "valor_unitario" REAL(10,2), "valor_desconto" REAL(10,2));'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS usuarios ( id_usuarios INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, cod_usuario VARCHAR(50), dsc_usuario VARCHAR(50) , usuario VARCHAR(50), nome VARCHAR(50), senha VARCHAR(32), nivel INTEGER, data_hora_atualizacao TEXT, data_hora_exclusao TEXT )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "pedidos_pagamentos" ( "id_pedidos_pagamentos" INTEGER PRIMARY KEY AUTOINCREMENT, "id_pedidos" INTEGER, "data_vencimento" DATE, "forma_pagamento" INTEGER, "valor_parcela" REAL(10, 2));'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS pedidos ( id_pedidos INTEGER PRIMARY KEY AUTOINCREMENT, id_empresas INTEGER, id_clientes INTEGER, id_equipamentos INTEGER, id_usuarios INTEGER, data_hora_cadastro TEXT, observacao VARCHAR(255), situacao_envio INT(1), situacao_pedido INT(1), valor_total REAL(10,2) )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "produtos" ( "id_produtos" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "cod_produto" VARCHAR(25), "dsc_produto" VARCHAR(100), "estoque" REAL(10, 3) DEFAULT 0, "valor" REAL(10,2), "desconto_maximo" REAL (10,2) DEFAULT 0, "data_hora_atualizacao" DATETIME);'
             }, {
-                tbl : "CREATE TABLE IF NOT EXISTS pedidos_itens ( id_pedidos_itens INTEGER PRIMARY KEY AUTOINCREMENT, id_pedidos INTEGER, id_produtos INTEGER, data_hora_cadastro TEXT , quantidade REAL(10,3), valor_unitario REAL(10,2), valor_desconto REAL(10,2) )"
+                tbl : 'CREATE TABLE IF NOT EXISTS "usuarios" ( "id_usuarios" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "cod_usuario" VARCHAR(25), "dsc_usuario" VARCHAR(100), "usuario" VARCHAR(50), "nome" VARCHAR(100), "senha" VARCHAR(32), "nivel" INTEGER(1) DEFAULT 2, "data_hora_atualizacao" DATETIME, "data_hora_exclusao" DATETIME); CREATE UNIQUE INDEX "id_usuario" ON "usuarios" ("usuario" ASC);'
             }
         ],
         drop : [
             {
-                tbl : "DROP TABLE IF EXISTS empresas"
-            }, {
-                tbl : "DROP TABLE IF EXISTS equipamentos"
-            }, {
                 tbl : "DROP TABLE IF EXISTS clientes"
             }, {
-                tbl : "DROP TABLE IF EXISTS produtos"
-            }, {
-                tbl : "DROP TABLE IF EXISTS usuarios"
+                tbl : "DROP TABLE IF EXISTS empresas"
             }, {
                 tbl : "DROP TABLE IF EXISTS pedidos"
             }, {
                 tbl : "DROP TABLE IF EXISTS pedidos_itens"
+            }, {
+                tbl : "DROP TABLE IF EXISTS pedidos_pagamentos"
+            }, {
+                tbl : "DROP TABLE IF EXISTS produtos"
+            }, {
+                tbl : "DROP TABLE IF EXISTS usuarios"
             }
         ],
         usuarios : [
             {
-                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "124", "Administrador do sistema", "root", "Administrador do sistema", "' + md5('qazse') + '", "1");'
+                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel", "data_hora_atualizacao") VALUES ("1", "124", "Administrador do sistema", "root", "Administrador do sistema", "' + md5('qazse') + '", "1","' + date('Y-m-d H:i:s') + '");'
             },
             {
-                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel") VALUES ("1", "123", "Tester do sistema", "demo", "Tester do sistema", "' + md5('demo') + '", "2");'
+                inst : 'INSERT INTO usuarios ("id_empresas", "cod_usuario", "dsc_usuario", "usuario", "nome", "senha", "nivel", "data_hora_atualizacao") VALUES ("1", "124", "Teste do sistema", "demo", "Teste do sistema", "' + md5('demo') + '", "2","' + date('Y-m-d H:i:s') + '");'
             }
         ]
     },

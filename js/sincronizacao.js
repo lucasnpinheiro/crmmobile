@@ -1,7 +1,7 @@
 var tcount = new TimeCounter();
 $(document).on("pageinit", function() {
     _sincronicacao.produtos.total();
-    $( ".selector" ).table( "refresh" );
+    $(".selector").table("refresh");
     $(".reload").on("click", function() {
         var a = $(this).closest("tr").attr("id");
         switch ( a ) {
@@ -19,15 +19,18 @@ $(document).on("pageinit", function() {
 });
 _sincronicacao = {
     produtos : {
-        qtdPaginacao : 50,
+        qtdPaginacao : 75,
         qtdAtual : 0,
         qtdMax : 0,
         sequencia : 0,
         insert : function( a ) {
+            if ( _sincronicacao.produtos.qtdAtual < _sincronicacao.produtos.qtdMax ) {
+                _sincronicacao.produtos.lista();
+            }
             var b = 0;
             var c = a.length;
             $.each(a, function( e, d ) {
-                var f = 'INSERT OR REPLACE INTO produtos (id_produtos, cod_produto, dsc_produto, desconto_maximo, data_hora_atualizacao, estoque, valor, id_empresas) VALUES ("' + d.id_produtos + '","' + d.cod_produto + '","' + d.dsc_produto + '","' + d.desconto_maximo + '","' + date("Y-m-d H:i:s") + '","' + d.estoque + '",' + d.valor + ',"' + d.id_empresas + '");';
+                var f = 'INSERT OR REPLACE INTO produtos (id_produtos, id_empresas, cod_produto, dsc_produto, estoque, valor, desconto_maximo, data_hora_atualizacao) VALUES ("' + d.id_produtos + '","' + d.id_empresas + '","' + d.cod_produto + '","' + d.dsc_produto + '","' + d.estoque + '",' + d.valor + ',"' + d.desconto_maximo + '","' + date("Y-m-d H:i:s") + '");';
                 debug("QUERY", f);
                 db.transaction(function( g ) {
                     g.executeSql(f, [ ], function() {
@@ -36,9 +39,8 @@ _sincronicacao = {
                         $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
                         if ( b == c ) {
                             $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_1">Sincronizado</span>');
-                            if ( _sincronicacao.produtos.qtdAtual < _sincronicacao.produtos.qtdMax ) {
-                                _sincronicacao.produtos.lista();
-                            } else {
+                            if ( _sincronicacao.produtos.qtdAtual >= _sincronicacao.produtos.qtdMax ) {
+                                $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
                                 _sincronicacao.fim();
                             }
                         }
@@ -49,7 +51,8 @@ _sincronicacao = {
                     });
                 });
             });
-        },
+        }
+        ,
         total : function() {
             $.ajax({
                 url : _situacoes.urls.produtos_total,
@@ -89,14 +92,8 @@ _sincronicacao = {
                 },
                 success : function( a ) {
                     var b = a.length;
-                    if ( b > 0 ) {
-                        _sincronicacao.produtos.qtdAtual += b;
-                        _sincronicacao.produtos.insert(a);
-                    } else {
-                        _sincronicacao.produtos.sequencia++;
-                        $("#tr_produtos td:eq(1)").html('<b class="ui-table-cell-label">Total sincronizado</b> ' + _sincronicacao.produtos.sequencia);
-                        _sincronicacao.fim();
-                    }
+                    _sincronicacao.produtos.qtdAtual += b;
+                    _sincronicacao.produtos.insert(a);
                 },
                 error : function( c, a, b ) {
                     _sincronicacao.produtos.error(c, a, b);
