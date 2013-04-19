@@ -179,7 +179,7 @@ _configuracoes = {
                             debug("SUCESSO", 'Redirecionando para sincronização.');
                             _constant.redirect("atualizacoes_sincronizacao.html");
                         } else {
-                            if ( _session.get("usuario") != "" && _session.get("usuario") != undefined && _session.get("usuario") != null ) {
+                            if ( _session.get("usuario") != null ) {
                                 _constant.redirect("painel.html");
                             } else {
                                 _session.clear();

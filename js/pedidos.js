@@ -1,4 +1,10 @@
 $(document).on("pageinit", function() {
+    if ( $("#frm_novo_pedido_parte_1").length > 0 ) {
+        if ( _session.get('cod_cliente') != null ) {
+            jAviso('Cliente não informado.');
+            _constant.redirect("clientes_consultar.html");
+        }
+    }
     _pedidos.ultimos();
     $("#bt_consultar_pedidos").on("click", function( b ) {
         b.preventDefault();

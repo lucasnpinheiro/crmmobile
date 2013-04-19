@@ -88,11 +88,21 @@ var _constant = {
 }));
 var _session = {
     get : function( a ) {
+        var r = null;
         if ( typeof localStorage === "object" ) {
-            return localStorage.getItem(a)
+            if ( localStorage.getItem(a) != '' && localStorage.getItem(a) != undefined && localStorage.getItem(a) != null ) {
+                r = localStorage.getItem(a);
+            } else {
+                r = null;
+            }
         } else {
-            return $.cookie(a)
+            if ( $.cookie(a) != '' && $.cookie(a) != undefined && $.cookie(a) != null ) {
+                r = $.cookie(a);
+            } else {
+                r = null;
+            }
         }
+        return r;
     },
     set : function( a, b ) {
         if ( typeof localStorage === "object" ) {

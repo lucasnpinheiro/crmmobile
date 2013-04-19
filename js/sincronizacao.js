@@ -83,7 +83,7 @@ _sincronicacao = {
                 dataType : "json",
                 type : "GET",
                 data : {
-                    inicio : _sincronicacao.produtos.sequencia,
+                    inicio : _sincronicacao.produtos.qtdAtual,
                     qtde : _sincronicacao.produtos.qtdPaginacao
                 },
                 beforeSend : function() {

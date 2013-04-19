@@ -4,7 +4,7 @@ $(document).on("pageinit", function() {
     $("#bt_consultar_produtos").on("click", function( b ) {
         b.preventDefault();
         if ( $.trim($("#search").val()) != "" ) {
-            var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + $("#search").val() + '%" OR cod_produto LIKE "%' + $("#search").val() + '%"';
+            var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + $("#search").val() + '%" OR cod_produto LIKE "%' + $("#search").val() + '%" ORDER BY data_hora_atualizacao DESC LIMIT 100';
             _produtos.consultar(a);
         } else {
             jAviso("Informe o nome produto ou código do produto.");
