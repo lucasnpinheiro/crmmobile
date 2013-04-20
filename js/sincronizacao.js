@@ -103,23 +103,7 @@ _sincronicacao = {
         error : function( c, a, b ) {
             $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
             _sincronicacao.fim();
-            var d = "";
-            if ( c.status === 0 ) {
-                d = ("Não conectar. \n Verifique Rede.");
-            } else if ( c.status === 404 ) {
-                d = ("A página solicitada não foi encontrada. [404]");
-            } else if ( c.status === 500 ) {
-                d = ("Erro interno do servidor. [500]");
-            } else if ( a === "parsererror" ) {
-                d = ("Solicitado JSON análise falhou.");
-            } else if ( a === "timeout" ) {
-                d = ("Erro de tempo limite.");
-            } else if ( a === "abort" ) {
-                d = ("Pedido Ajax abortada.");
-            } else {
-                d = ("Tipo do erro não detectado. /n " + c.responseText);
-            }
-            jAviso(d);
+            
         }
     },
     fim : function() {

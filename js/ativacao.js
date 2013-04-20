@@ -14,9 +14,8 @@ $(document).on('pageinit', function() {
 
 function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
 
-    $.ajax({
+    $.send({
         url : _situacoes.urls.ativacao,
-        dataType : "json",
         data : {
             cod_cliente : codigo_cliente,
             nome_dispositivo : $('#devName').text(),
