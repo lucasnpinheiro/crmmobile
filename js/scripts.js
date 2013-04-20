@@ -1097,8 +1097,8 @@ function convert_date( d, s ) {
             dataType : 'json',
             data : {
                 cod_ativacao : _session.get("cod_ativacao"),
-                cod_usuario : _session.get("cod_usuario")
-                //tipo_conexao : navigator.connection.type
+                cod_usuario : _session.get("cod_usuario"),
+                tipo_conexao : _session.get('connection_type')
             },
             beforeSend : function( result, settings ) {
             },

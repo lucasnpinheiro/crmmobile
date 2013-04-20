@@ -19,7 +19,7 @@ $(document).on("pageinit", function() {
 });
 _sincronicacao = {
     produtos : {
-        qtdPaginacao : 75,
+        qtdPaginacao : 25,
         qtdAtual : 0,
         qtdMax : 0,
         sequencia : 0,
@@ -70,8 +70,8 @@ _sincronicacao = {
                     _sincronicacao.produtos.qtdAtual = 0;
                     _sincronicacao.produtos.lista();
                 },
-                error : function( c, a, b ) {
-                    _sincronicacao.produtos.error(c, a, b);
+                error : function() {
+                    _sincronicacao.produtos.error();
                 }
             });
         },
@@ -91,12 +91,12 @@ _sincronicacao = {
                     _sincronicacao.produtos.qtdAtual += b;
                     _sincronicacao.produtos.insert(a);
                 },
-                error : function( c, a, b ) {
-                    _sincronicacao.produtos.error(c, a, b);
+                error : function() {
+                    _sincronicacao.produtos.error();
                 }
             })
         },
-        error : function( c, a, b ) {
+        error : function() {
             $("#tr_produtos td:eq(3)").html('<b class="ui-table-cell-label">Situação</b> <span class="situacoes_sincronizacao_2">Error</span>');
             _sincronicacao.fim();
             
