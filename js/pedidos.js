@@ -1,31 +1,24 @@
 $(document).on("pageinit", function() {
-    if ( $("#frm_novo_pedido_parte_1").html() != null ) {
-        alert('aaaa');
-        if ( _session.get('cod_cliente') != null ) {
+    if ( $("#frm_novo_pedido_parte_1").length > 0 ) {
+        if ( _session.get('cod_cliente') == null ) {
             jAviso('Cliente não informado.');
             _constant.redirect("clientes_consultar.html");
         }
     }
+    _pedidos.get_produtos();
     _pedidos.ultimos();
     $("#bt_consultar_pedidos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.consulta(this);
     });
-    $('#frm_novo_pedido_parte_1 :input').on('change', function() {
-        $(this).listview({
-            create : function( event, ui ) {
-                alert('event');
-                $.each(event, function( a, b ) {
-                    alert(a + ' === ' + b);
-                });
-                alert('ui');
-                $.each(ui, function( a, b ) {
-                    alert(a + ' === ' + b);
-                });
-            }
-        });
+    $(".select_produtos").on("click", function( b ) {
+        b.preventDefault();
+        _pedidos.select_produtos($(this).attr('cod_produto'));
+        $('.ui-listview-filter').find(':input').val('');
+        $('#autocomplete').html('');
+        $ul.listview("refresh");
+        $ul.trigger("updatelayout");
     });
-
     $("form").insere_mascara();
 });
 
@@ -110,7 +103,63 @@ _pedidos = {
                     });
         });
     },
-    get_clientes : function() {
-
+    get_produtos : function() {
+        $("#autocomplete").on("listviewbeforefilter", function( e, data ) {
+            var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+            $ul.html("");
+            if ( value && value.length > 1 ) {
+                $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+                $ul.listview("refresh");
+                var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + value + '%" OR cod_produto LIKE "%' + value + '%" ORDER BY data_hora_atualizacao DESC LIMIT 100';
+                db.transaction(function( b ) {
+                    b.executeSql(a, [ ],
+                            function( d, c ) {
+                                debug("QUERY", a);
+                                debug("TOTAL", c.rows.length);
+                                if ( c.rows.length == 0 ) {
+                                    jAviso("Nenum registro localizado.");
+                                } else {
+                                    for ( var e = 0; e < c.rows.length; e++ ) {
+                                        var f = c.rows.item(e);
+                                        html += '<li cod_produto="' + f.cod_produto + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + ' | R$ ' + number_format(f.valor, 2, ",", ".") + '</li>';
+                                    }
+                                    $ul.html(html);
+                                    $ul.listview("refresh");
+                                    $ul.trigger("updatelayout");
+                                }
+                            },
+                            function( d, c ) {
+                                debug("QUERY", a);
+                                debug("ERROR", c.message);
+                            });
+                });
+            }
+        });
+    },
+    select_produtos : function( cod_produto ) {
+        var a = 'SELECT * FROM produtos WHERE cod_produto = "' + cod_produto + '"';
+        db.transaction(function( b ) {
+            b.executeSql(a, [ ],
+                    function( d, c ) {
+                        debug("QUERY", a);
+                        debug("TOTAL", c.rows.length);
+                        var f = c.rows.item(0);
+                        $('#frm_novo_pedido_parte_2 #codigo_produto').val(f.codigo_produto);
+                        $('#frm_novo_pedido_parte_2 #nome_produto').val(f.nome_produto);
+                        $('#frm_novo_pedido_parte_2 #valor_produto').val(f.valor_produto);
+                        $('#frm_novo_pedido_parte_2 #estoque_produto').val(f.estoque_produto);
+                        $('#frm_novo_pedido_parte_2 #desconto_maximo_produto').val(f.desconto_maximo_produto);
+                        $('#frm_novo_pedido_parte_2 #unidade_produto').val(f.unidade_produto);
+                        $('#frm_novo_pedido_parte_2 #desconto_produto').val('');
+                        $('#frm_novo_pedido_parte_2 #quantidade_produto').val('');
+                    },
+                    function( d, c ) {
+                        debug("QUERY", a);
+                        debug("ERROR", c.message);
+                    });
+        });
     }
 };

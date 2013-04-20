@@ -31,26 +31,18 @@
                     <li data-role="list-divider">Identificação do cliente</li>
                 </ul>
 
-                <form id="frm_novo_pedido_parte_1" name="frm_novo_pedido_parte_1" class="container_12">
-                    <div class="grid_3">
-                        <input type="text" name="codigo_cliente" id="codigo_cliente" value="" placeholder="Código do cliente">
-                    </div>
-                    <div class="grid_9">
-                        <input type="text" name="nome_cliente" id="nome_cliente" value="" placeholder="Nome do cliente">
-                    </div>
-                    <div class="grid_5">
-                        <input disabled="disabled" type="text" name="cnpj_cliente" id="cnpj_cliente" value="" placeholder="CNPJ do cliente">
-                    </div>
-                    <div class="grid_5">
-                        <input disabled="disabled" type="text" name="data_cadastro_cliente" id="data_cadastro_cliente" value="" placeholder="Data cadastro do cliente">
-                    </div>
-                    <div class="grid_2">
-                        <a href="#" data-role="button" data-iconpos="notext" data-theme="c" data-inline="true" data-icon="search" id="bt_consultar_produtos">Consultar</a>
-                    </div>
-                    <div class="grid_12">
-                        <div><strong>Valores devidos: <span style="color:red;">R$ 575,00</span></strong></div>
-                    </div>
-                </form>
+                <ul data-role="listview" data-divider-theme="d">
+                    <li data-role="list-divider">Cliente</li>
+                    <li>Código: <strong id="clente_codigo"></strong></li>
+                    <li>Nome: <strong id="clente_nome"></strong></li>
+                    <li>CPF/CNPJ: <strong id="cliente_cpf_cnpj"></strong></li>
+                    <li>Logradouro: <strong id="cliente_logradouro"></strong></li>
+                    <li>Data ultima atualização: <strong id="cliente_data_atualizacao"></strong></li>
+                    <li data-role="list-divider">Débitos</li>
+                    <li>Débitos em atraso: <strong id="cliente_debitos"></strong></li>
+                    <li data-role="list-divider" class="pedidos_alteriores">Pedidos alteriores</li>
+                    <li><span id="pedido_ultimo_data">Data: </span> <strong id="pedido_ultimo_valor">Valor R$:</strong></li>
+                </ul>
 
                 <div class="clear"></div>
 

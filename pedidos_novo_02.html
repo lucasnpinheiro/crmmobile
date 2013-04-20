@@ -30,12 +30,12 @@
                 <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
                     <li data-role="list-divider">Selecionar Itens do Pedido</li>
                 </ul>
-
+                
+                <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Código do produto" data-filter-theme="d"></ul>
+                
                 <form id="frm_novo_pedido_parte_2" name="frm_novo_pedido_parte_2" class="container_12">
-                    <div class="grid_3">
-                        <input type="text" name="codigo_produto" id="codigo_produto" value="" placeholder="Código do produto">
-                    </div>
-                    <div class="grid_6">
+                    <div class="grid_9">
+                        <input type="hidden" name="codigo_produto" id="codigo_produto" value="">
                         <input type="text" name="nome_produto" id="nome_produto" value="" placeholder="Descrição do produto">
                     </div>
                     <div class="grid_3">
