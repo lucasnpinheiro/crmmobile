@@ -14,7 +14,7 @@ _configuracoes = {
             }, {
                 tbl : 'CREATE TABLE IF NOT EXISTS "produtos" ( "id_produtos" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "cod_produto" VARCHAR(25), "dsc_produto" VARCHAR(100), "estoque" REAL(10, 3) DEFAULT 0, "valor" REAL(10,2), "desconto_maximo" REAL (10,2) DEFAULT 0, "data_hora_atualizacao" DATETIME);'
             }, {
-                tbl : 'CREATE TABLE IF NOT EXISTS "usuarios" ( "id_usuarios" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "cod_usuario" VARCHAR(25), "dsc_usuario" VARCHAR(100), "usuario" VARCHAR(50), "nome" VARCHAR(100), "senha" VARCHAR(32), "nivel" INTEGER(1) DEFAULT 2, "data_hora_atualizacao" DATETIME, "data_hora_exclusao" DATETIME); CREATE UNIQUE INDEX "id_usuario" ON "usuarios" ("usuario" ASC);'
+                tbl : 'CREATE TABLE IF NOT EXISTS "usuarios" ( "id_usuarios" INTEGER PRIMARY KEY AUTOINCREMENT, "id_empresas" INTEGER, "cod_usuario" VARCHAR(25), "dsc_usuario" VARCHAR(100), "usuario" VARCHAR(50), "nome" VARCHAR(100), "senha" VARCHAR(32), "nivel" INTEGER(1) DEFAULT 2, "data_hora_atualizacao" DATETIME, "data_hora_exclusao" DATETIME);'
             }
         ],
         drop : [

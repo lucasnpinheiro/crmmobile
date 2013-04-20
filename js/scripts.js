@@ -1097,8 +1097,8 @@ function convert_date( d, s ) {
             dataType : 'json',
             data : {
                 cod_ativacao : _session.get("cod_ativacao"),
-                cod_usuario : _session.get("cod_usuario"),
-                tipo_conexao : navigator.connection.type
+                cod_usuario : _session.get("cod_usuario")
+                //tipo_conexao : navigator.connection.type
             },
             beforeSend : function( result, settings ) {
             },
@@ -1114,16 +1114,17 @@ function convert_date( d, s ) {
                     data : settings.data,
                     dataType : settings.dataType,
                     url : settings.url,
+                    crossDomain  : true,
                     beforeSend : function() {
                         settings.beforeSend.call(null, {
-                        }, $this);
+                        }, settings);
                     },
                     success : function( b ) {
                         if ( b.cod_retorno == 999 ) {
                             jAviso(b.mensagem);
-                            settings.error.call(null, b, $this);
+                            settings.error.call(null, b, settings);
                         } else {
-                            settings.success.call(null, b, $this);
+                            settings.success.call(null, b, settings);
                         }
                     },
                     error : function( c, a) {
@@ -1144,16 +1145,14 @@ function convert_date( d, s ) {
                             d = ("Tipo do erro não detectado. /n " + c.responseText);
                         }
                         jAviso(d);
-                        settings.error.call(null, {}, $this);
+                        settings.error.call(null, {}, settings);
                     }
                 });
             }
         },
         options);
-        var $this = this;
         settings.extra.call(null, {
-        }, $this);
-        settings.execute.call(null, {
-        }, $this);
+        }, settings);
+        settings.execute.call(null, settings);
     }
 })(jQuery);

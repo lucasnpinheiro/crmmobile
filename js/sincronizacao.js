@@ -54,10 +54,8 @@ _sincronicacao = {
         }
         ,
         total : function() {
-            $.ajax({
+            $.send({
                 url : _situacoes.urls.produtos_total,
-                dataType : "html",
-                type : "GET",
                 beforeSend : function() {
                     tcount.start();
                     block(false);
@@ -78,10 +76,8 @@ _sincronicacao = {
             });
         },
         lista : function() {
-            $.ajax({
+            $.send({
                 url : _situacoes.urls.produtos_lista,
-                dataType : "json",
-                type : "GET",
                 data : {
                     inicio : _sincronicacao.produtos.qtdAtual,
                     qtde : _sincronicacao.produtos.qtdPaginacao
