@@ -1,5 +1,6 @@
 $(document).on("pageinit", function() {
-    if ( $("#frm_novo_pedido_parte_1").length > 0 ) {
+    if ( $("#frm_novo_pedido_parte_1").html() != null ) {
+        alert('aaaa');
         if ( _session.get('cod_cliente') != null ) {
             jAviso('Cliente não informado.');
             _constant.redirect("clientes_consultar.html");
