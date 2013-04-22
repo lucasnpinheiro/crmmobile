@@ -1,7 +1,7 @@
 $(document).on("pageinit", function() {
-    $(".crm_mobile_versao").html("Versão: " + _constant.version);
     block(false);
     document.addEventListener("deviceready", onDeviceReady, false);
+    $(".crm_mobile_versao").html("Versão: " + _constant.version + " | Conexão: " + _session.get('connection_type'));
     _configuracoes.verifica_tabelas();
 });
 function onDeviceReady() {
