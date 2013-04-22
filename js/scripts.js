@@ -398,12 +398,12 @@ function date( k, h ) {
     }
 })(jQuery);
 function jAviso( a ) {
-    msg(a);
-    debug("AVISO", a)
+    msg(a, 'error');
+    debug("AVISO", a);
 }
 function jSucesso( a ) {
-    msg(a);
-    debug("SUCESSO", a)
+    msg(a, 'aviso');
+    debug("SUCESSO", a);
 }
 function debug( a, b ) {
     console.log(a + ': ' + date("Y-m-d H:i:s", (new Date()).getTime() / 1000) + '\n Mesagem: "' + b + '" \n\n\n')
@@ -1132,13 +1132,13 @@ function convert_date( d, s ) {
                         if ( c.status === 0 ) {
                             d = ("Não conectar. \n Verifique Rede.");
                         } else if ( c.status === 404 ) {
-                            d = ("A página solicitada não foi encontrada. [404]");
+                            d = ("A url:'"+settings.url + "' solicitada não foi encontrada. [404]");
                         } else if ( c.status === 500 ) {
-                            d = ("Erro interno do servidor. [500]");
+                            d = ("A url:'"+settings.url + "' solicitada contém um error interno no servidor. [500]");
                         } else if ( a === "parsererror" ) {
-                            d = ("Solicitado JSON análise falhou.");
+                            d = ("Solicitado de análise do JSON falhou.");
                         } else if ( a === "timeout" ) {
-                            d = ("Erro de tempo limite.");
+                            d = ("Erro. Tempo limite excedeu.");
                         } else if ( a === "abort" ) {
                             d = ("Pedido Ajax abortada.");
                         } else {
@@ -1158,17 +1158,17 @@ function convert_date( d, s ) {
     }
 })(jQuery);
 
-function msg( a ) {
+function msg( a, c ) {
     $('div.conteudo .msg_sistema').fadeOut("slow");
     if ( $('div.conteudo .msg_sistema').length == 0 ) {
         $('div.conteudo').prepend('<div class="msg_sistema"></div>');
     }
-    $('div.conteudo .msg_sistema').html(a).css({
+    $('div.conteudo .msg_sistema').html(a).addClass('msg_'+c).css({
         'margin' : '1em 0',
-        'background-color' : 'yellow',
         'padding' : '5px',
         'text-align' : 'center',
         'font-size' : '0.9em',
         'font-weight' : 'bold'
-    }).fadeIn("slow");;
+    }).fadeIn("slow");
+    ;
 }

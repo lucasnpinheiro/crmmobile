@@ -1,7 +1,9 @@
 $(document).on("pageinit", function() {
     if ( _session.get("usuario") != null ) {
         $(".crm_mobile_atutenticacao").html("Usuário: " + _session.get("usuario") + " | Conexão: " + _session.get("connection_type"));
-        _configuracoes.get_chave();
+        if ( _session.get('codigo_ativacao') == null ) {
+            _configuracoes.get_chave();
+        }
         if ( _session.get('nivel') == 1 ) {
             $('.painel_extra').show();
         }
