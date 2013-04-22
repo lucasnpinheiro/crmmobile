@@ -141,6 +141,29 @@ _configuracoes = {
                     });
         });
     },
+    get_chave : function( ) {
+        var c = 'SELECT * FROM empresas;';
+        db.transaction(function( e ) {
+            e.executeSql(c, [ ],
+                    function( g, f ) {
+                        debug("QUERY", c);
+                        debug("TOTAL", f.rows.length);
+                        if ( f.rows.length == 0 ) {
+                            debug("SUCESSO", 'Redirecionando para registro de chaves.');
+                            _constant.redirect("atualizacoes_ativacao.html");
+                        } else {
+                            $.each(f.rows.item(0), function( z, x ) {
+                                _session.set(z, x);
+                            });
+                        }
+                    },
+                    function( g, f ) {
+                        debug("QUERY", c);
+                        debug("ERROR", f.message);
+                        _configuracoes.verifica_tabelas();
+                    });
+        });
+    },
     verifica_chave : function( ) {
         var c = 'SELECT codigo_cliente, codigo_ativacao FROM empresas;';
         db.transaction(function( e ) {

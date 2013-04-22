@@ -1159,6 +1159,7 @@ function convert_date( d, s ) {
 })(jQuery);
 
 function msg( a ) {
+    $('div.conteudo .msg_sistema').fadeOut("slow");
     if ( $('div.conteudo .msg_sistema').length == 0 ) {
         $('div.conteudo').prepend('<div class="msg_sistema"></div>');
     }
@@ -1169,5 +1170,5 @@ function msg( a ) {
         'text-align' : 'center',
         'font-size' : '0.9em',
         'font-weight' : 'bold'
-    });
+    }).fadeIn("slow");;
 }
