@@ -352,12 +352,13 @@ _sincronicacao = {
         if ( (_sincronicacao.produtos.qtdAtual == _sincronicacao.produtos.qtdMax) &&
                 (_sincronicacao.clientes.qtdAtual == _sincronicacao.clientes.qtdMax) &&
                 (_sincronicacao.usuarios.qtdAtual == _sincronicacao.usuarios.qtdMax) &&
-                (_sincronicacao.pedidos.qtdAtual == _sincronicacao.pedidos.qtdMax) )
+                (_sincronicacao.pedidos.qtdAtual == _sincronicacao.pedidos.qtdMax) ) {
             block(true);
+        }
         _sincronicacao.atualiza_table();
     },
     atualiza_table : function() {
+        $('.ui-table-cell-label').remove();
         $('table').table("refresh");
-        $('table').trigger("tablecreate");
     }
 };

@@ -398,11 +398,11 @@ function date( k, h ) {
     }
 })(jQuery);
 function jAviso( a ) {
-    alert(a);
+    msg(a);
     debug("AVISO", a)
 }
 function jSucesso( a ) {
-    alert(a);
+    msg(a);
     debug("SUCESSO", a)
 }
 function debug( a, b ) {
@@ -1114,7 +1114,7 @@ function convert_date( d, s ) {
                     data : settings.data,
                     dataType : settings.dataType,
                     url : settings.url,
-                    crossDomain  : true,
+                    crossDomain : true,
                     beforeSend : function() {
                         settings.beforeSend.call(null, {
                         }, settings);
@@ -1127,7 +1127,7 @@ function convert_date( d, s ) {
                             settings.success.call(null, b, settings);
                         }
                     },
-                    error : function( c, a) {
+                    error : function( c, a ) {
                         var d = "";
                         if ( c.status === 0 ) {
                             d = ("Não conectar. \n Verifique Rede.");
@@ -1145,7 +1145,8 @@ function convert_date( d, s ) {
                             d = ("Tipo do erro não detectado. /n " + c.responseText);
                         }
                         jAviso(d);
-                        settings.error.call(null, {}, settings);
+                        settings.error.call(null, {
+                        }, settings);
                     }
                 });
             }
@@ -1156,3 +1157,17 @@ function convert_date( d, s ) {
         settings.execute.call(null, settings);
     }
 })(jQuery);
+
+function msg( a ) {
+    if ( $('div.conteudo .msg_sistema').length == 0 ) {
+        $('div.conteudo').prepend('<div class="msg_sistema"></div>');
+    }
+    $('div.conteudo .msg_sistema').html(a).css({
+        'margin' : '1em 0',
+        'background-color' : 'yellow',
+        'padding' : '5px',
+        'text-align' : 'center',
+        'font-size' : '0.9em',
+        'font-weight' : 'bold'
+    });
+}

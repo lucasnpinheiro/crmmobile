@@ -142,12 +142,13 @@ _configuracoes = {
         });
     },
     verifica_chave : function( ) {
-        var c = 'SELECT codigo_cliente FROM empresas;';
+        var c = 'SELECT codigo_cliente, codigo_ativacao FROM empresas;';
         db.transaction(function( e ) {
             e.executeSql(c, [ ],
                     function( g, f ) {
                         debug("QUERY", c);
                         debug("TOTAL", f.rows.length);
+                        _session.set("cod_ativacao", f.rows.item(0).codigo_ativacao);
                         if ( f.rows.length == 0 ) {
                             debug("SUCESSO", 'Redirecionando para registro de chaves.');
                             _constant.redirect("atualizacoes_ativacao.html");

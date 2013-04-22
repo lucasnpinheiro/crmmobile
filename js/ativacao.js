@@ -6,7 +6,7 @@ $(document).on('pageinit', function() {
             var codigo_cliente = $('#codigo_cliente').val();
             var uuid = $('#devUUID').text();
             uuid = (uuid == '' ? '123456' : uuid);
-            var codigo_ativacao = Math.random() * 10000;
+            var codigo_ativacao = Math.ceil(Math.random() * 1000000000);
             solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao);
         }
     });

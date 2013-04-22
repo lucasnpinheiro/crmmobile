@@ -2,7 +2,13 @@ var _situacoes = {
     urls : {
         ativacao : "http://s2i.com.br:8084/WsCrmMobile/ativar",
         produtos_total : "http://s2i.com.br:8084/WsCrmMobile/produtos/registros/",
-        produtos_lista : "http://s2i.com.br:8084/WsCrmMobile/produtos"
+        produtos_lista : "http://s2i.com.br:8084/WsCrmMobile/produtos",
+        clientes_total : "http://s2i.com.br:8084/WsCrmMobile/clientes/registros/",
+        clientes_lista : "http://s2i.com.br:8084/WsCrmMobile/clientes",
+        usuarios_total : "http://s2i.com.br:8084/WsCrmMobile/usuarios/registros/",
+        usuarios_lista : "http://s2i.com.br:8084/WsCrmMobile/usuarios",
+        pedidos_total : "http://s2i.com.br:8084/WsCrmMobile/pedidos/registros/",
+        pedidos_lista : "http://s2i.com.br:8084/WsCrmMobile/pedidos"
     },
     clientes : {
         1 : '<span class="situacoes_clietes_1">Ativo</span>',
