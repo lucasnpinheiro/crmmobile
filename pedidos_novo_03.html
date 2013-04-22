@@ -6,15 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
         <link rel="stylesheet" href="css/jquery-mobile-fluid960.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.10.2.custom.min.css" />
         <link rel="stylesheet" href="css/config.css" />
         <script src="js/cordova.js"></script>
         <script src="js/jquery.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
-        <script src="js/jquery.datebox.min.js"></script>
+        <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
         <script src="js/pedidos.js"></script>
+        <script>
+            $(function() {
+                $(".data").datepicker();
+            });
+        </script>
     </head> 
     <body> 
 
@@ -35,14 +40,14 @@
 
                 <form id="frm_novo_pedido_parte_3" name="frm_novo_pedido_parte_3" class="container_12">
                     <div class="grid_4">
-                        <select name="condicoes_pagamnento" id="condicoes_pagamnento" data-native-menu="false">
+                        <select name="condicoes_pagamnento" id="condicoes_pagamnento" data-mini="true" data-native-menu="false">
                             <option>Condições de pagamento</option>
                             <option value="1">Avista</option>
                             <option value="2">Parcelado</option>
                         </select>
                     </div>
                     <div class="grid_4">
-                        <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                        <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                             <option>Forma de pagamento</option>
                             <option value="1">Dinheiro</option>
                             <option value="2">Cheque</option>
@@ -51,7 +56,7 @@
                         </select>
                     </div>
                     <div class="grid_4">
-                        <input type="text" name="numero_parcelas" id="numero_parcelas" value="5" placeholder="Número de parcelas">
+                        <input type="text" data-mini="true" name="numero_parcelas" id="numero_parcelas" value="5" placeholder="Número de parcelas">
                     </div>
                 </form>
 
@@ -70,7 +75,7 @@
 
                         <tr>
                             <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                                     <option>Forma de pagamento</option>
                                     <option value="1">Dinheiro</option>
                                     <option value="2">Cheque</option>
@@ -78,8 +83,8 @@
                                     <option value="4">Transferências Bancaria</option>
                                 </select>
                             </th>
-                            <td><input type="text" name="data_vencimento[]" value="10/04/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
-                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/04/2013" class="data"></td>
+                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
                             <td>
                                 <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
                             </td>
@@ -87,7 +92,7 @@
 
                         <tr>
                             <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                                     <option>Forma de pagamento</option>
                                     <option value="1">Dinheiro</option>
                                     <option value="2">Cheque</option>
@@ -95,8 +100,8 @@
                                     <option value="4">Transferências Bancaria</option>
                                 </select>
                             </th>
-                            <td><input type="text" name="data_vencimento[]" value="10/05/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
-                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/05/2013" class="data"></td>
+                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
                             <td>
                                 <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
                             </td>
@@ -104,7 +109,7 @@
 
                         <tr>
                             <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                                     <option>Forma de pagamento</option>
                                     <option value="1">Dinheiro</option>
                                     <option value="2">Cheque</option>
@@ -112,8 +117,8 @@
                                     <option value="4">Transferências Bancaria</option>
                                 </select>
                             </th>
-                            <td><input type="text" name="data_vencimento[]" value="10/06/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
-                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/06/2013" class="data"></td>
+                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
                             <td>
                                 <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
                             </td>
@@ -121,7 +126,7 @@
 
                         <tr>
                             <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                                     <option>Forma de pagamento</option>
                                     <option value="1">Dinheiro</option>
                                     <option value="2">Cheque</option>
@@ -129,8 +134,8 @@
                                     <option value="4">Transferências Bancaria</option>
                                 </select>
                             </th>
-                            <td><input type="text" name="data_vencimento[]" value="10/07/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
-                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/07/2013" class="data"></td>
+                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
                             <td>
                                 <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
                             </td>
@@ -138,7 +143,7 @@
 
                         <tr>
                             <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-native-menu="false">
+                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
                                     <option>Forma de pagamento</option>
                                     <option value="1">Dinheiro</option>
                                     <option value="2">Cheque</option>
@@ -146,8 +151,8 @@
                                     <option value="4">Transferências Bancaria</option>
                                 </select>
                             </th>
-                            <td><input type="text" name="data_vencimento[]" value="10/08/2013" class="data" data-role="datebox" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}'></td>
-                            <td><input type="text" name="valor_parcela[]" value="R$ 101,43"></td>
+                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/08/2013" class="data"></td>
+                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
                             <td>
                                 <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
                             </td>

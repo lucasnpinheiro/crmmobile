@@ -1,3 +1,4 @@
+var tcount = new TimeCounter();
 $(document).on("pageinit", function() {
     _sincronicacao.inicializa();
     $(".selector").table("refresh");
@@ -5,15 +6,23 @@ $(document).on("pageinit", function() {
         var a = $(this).closest("tr").attr("id");
         switch ( a ) {
             case"tr_produtos":
+                block(false);
+                tcount.start();
                 _sincronicacao.produtos.total();
                 break;
             case"tr_clientes":
+                block(false);
+                tcount.start();
                 _sincronicacao.clientes.total();
                 break;
             case"tr_usuarios":
+                block(false);
+                tcount.start();
                 _sincronicacao.usuarios.total();
                 break;
             case"tr_pedidos":
+                block(false);
+                tcount.start();
                 _sincronicacao.pedidos.total();
                 break
         }
@@ -342,6 +351,7 @@ _sincronicacao = {
     },
     inicializa : function() {
         block(false);
+        tcount.start();
         _sincronicacao.produtos.total();
         _sincronicacao.clientes.total();
         _sincronicacao.usuarios.total();
@@ -354,6 +364,7 @@ _sincronicacao = {
                 (_sincronicacao.usuarios.qtdAtual == _sincronicacao.usuarios.qtdMax) &&
                 (_sincronicacao.pedidos.qtdAtual == _sincronicacao.pedidos.qtdMax) ) {
             block(true);
+            jSucesso('Tempo total da sincronização em segundos: (' + tcount.stop() + ').');
         }
         _sincronicacao.atualiza_table();
     },

@@ -12,15 +12,20 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
         <link rel="stylesheet" href="css/jquery-mobile-fluid960.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.10.2.custom.min.css" />
         <link rel="stylesheet" href="css/config.css" />
         <script src="js/cordova.js"></script>
         <script src="js/jquery.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
-        <script src="js/jquery.datebox.min.js"></script>
+        <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
         <script src="js/pedidos.js"></script>
+        <script>
+            $(function() {
+                $(".data").datepicker();
+            });
+        </script>
     </head> 
     <body> 
 
@@ -39,16 +44,16 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
 
                 <form id="frm_pedidos_consultar" name="frm_pedidos_consultar" class="container_12">
                     <div class="grid_2">
-                        <input type="text" name="codigo_pedido" id="codigo_pedido" value="" placeholder="Código do pedido">
+                        <input data-mini="true" type="text" name="codigo_pedido" id="codigo_pedido" value="" placeholder="Código do pedido">
                     </div>
                     <div class="grid_10">
-                        <input type="text" name="cliente" id="cliente" value="" placeholder="Cliente">
+                        <input data-mini="true" type="text" name="cliente" id="cliente" value="" placeholder="Cliente">
                     </div>
                     <div class="grid_3">
-                        <input type="date" data-role="datebox" id="data" name="data" data-options='{"mode":"datebox", "useNewStyle":true, "useFocus":true, "enablePopup": true, "centerHoriz": true, "centerVert": true}' />
+                        <input data-mini="true" type="text" class="data" id="data" name="data" />
                     </div>
                     <div class="grid_4">
-                        <select name="situacao_envio" id="situacao_envio" data-native-menu="false">
+                        <select data-mini="true" name="situacao_envio" id="situacao_envio" data-native-menu="false">
                             <option>Envio situação</option>
                             <option value="1">Sincronizado</option>
                             <option value="2">Error</option>
@@ -58,7 +63,7 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                         </select>
                     </div>
                     <div class="grid_4">
-                        <select name="situacao_pedido" id="situacao_pedido" data-native-menu="false">
+                        <select data-mini="true" name="situacao_pedido" id="situacao_pedido" data-native-menu="false">
                             <option>Pedido situação</option>
                             <option value="1">Aguardando</option>
                             <option value="2">Enviado</option>
@@ -72,9 +77,9 @@ More info: http://jquerymobile.com/demos/1.1.0/docs/about/getting-started.html
                     </div>
 
                 </form>
-                
+
                 <div class="clear"></div>
-                
+
                 <table data-role="table" id="table-consulta-pedidos" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>
                         <tr class="ui-bar-a">

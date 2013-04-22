@@ -51,6 +51,10 @@ input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: 
     .ui-table-reflow.ui-responsive {
         display: inline-table;
     }
+    div.ui-input-text{
+        width: 60%;
+        display: inline-block;
+    }
     div.hasDatepicker{
         width:63%;
         display:inline-block;

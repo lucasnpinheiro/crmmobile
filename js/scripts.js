@@ -1031,11 +1031,11 @@ function TimeCounter() {
     this.startDate = null;
     this.ellapsedTime = null;
     this.start = function() {
-        this.startDate = new Date()
+        this.startDate = new Date();
     };
     this.stop = function() {
-        return(new Date() - this.startDate) / 1000
-    }
+        return(new Date() - this.startDate) / 1000;
+    };
 }
 function utf8_encode( a ) {
     if ( a === null || typeof a === "undefined" ) {
