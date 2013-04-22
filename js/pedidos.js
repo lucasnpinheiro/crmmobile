@@ -23,6 +23,10 @@ $(document).on("pageinit", function() {
 });
 
 _pedidos = {
+    total : 0,
+    qtd_itens : 0,
+    qtd_volume : 0,
+    qtd_parcelas : 0,
     consulta : function( obj ) {
         var form = $(obj).closest('form').find(':input');
         var and = '';
