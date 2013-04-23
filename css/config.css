@@ -47,7 +47,7 @@ input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: 
     font-size: 0.8em;
     margin-left: 23%;
 }
-@media only all{
+@media all and (min-width: 36em){
     .ui-table-reflow.ui-responsive {
         display: inline-table;
     }
