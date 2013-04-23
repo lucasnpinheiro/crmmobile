@@ -51,13 +51,13 @@ input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: 
     display: inline-table;
 }
 @media screen and (min-width: 20em){
-    div.ui-input-text, div.ui-select{
+    table div.ui-input-text, table div.ui-select{
         width: 60%;
         display: inline-block;
     }
 }
 @media screen and (min-width: 30em){
-    div.ui-input-text, div.ui-select{
+    table div.ui-input-text, table div.ui-select{
         width: 60%;
         display: inline-block;
     }
