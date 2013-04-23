@@ -166,5 +166,85 @@ _pedidos = {
             $('#frm_novo_pedido_parte_2').find('#quantidade_produto').focus();
         }
         );
+    },
+    add_produtos : function() {
+        if ( _session.get('id_pedidos') != null ) {
+            var g = "<tr>";
+            g += '<th>' + $('#frm_novo_pedido_parte_2').find('#dsc_produto_produto').val() + '</th>';
+            g += '<td>' + $('#frm_novo_pedido_parte_2').find('#cod_produto').val() + '</td>';
+            g += '<td>' + $('#frm_novo_pedido_parte_2').find('#unidade_produto').val() + '</td>';
+            g += '<td><input type="text" data-mini="true" name="desconto_produto_unitario" id="desconto_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#desconto_produto').val() + '" placeholder="Desconto"></td>';
+            g += '<td><input type="text" data-mini="true" name="quatidade_produto_unitario" id="quatidade_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#quatidade_produto').val() + '" placeholder="Desconto"></td>';
+            g += '<td><input type="text" data-mini="true" name="valor_produto_unitario" id="valor_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#valor_produto').val() + '" placeholder="Desconto"></td>';
+            g += '<td><a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true" class="select_produtos">Remover</a></td>';
+            g += "</tr>";
+            $("#table-itens-pedidos tbody").append(g);
+            $("#table-itens-pedidos").table("refresh");
+
+            db2.select(
+                    'pedidos_itens',
+                    'id_pedidos_itens',
+                    {
+                        where : {
+                            id_pedidos : _session.get('id_pedidos'),
+                            id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos').val()
+                        }
+                    },
+            function( f ) {
+                if ( f.rows.length != 0 ) {
+                    db2.update(
+                            'pedidos_itens',
+                            {
+                                data_hora_cadastro : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
+                                quantidade : $('#frm_novo_pedido_parte_2').find('#quantidade_produto').val(),
+                                valor_unitario : $('#frm_novo_pedido_parte_2').find('#valor_produto').val(),
+                                valor_desconto : $('#frm_novo_pedido_parte_2').find('#desconto_produto').val()
+                            },
+                    {
+                        id_pedidos : _session.get('id_pedidos'),
+                        id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
+                    },
+                            function( f ) {
+                                $('#frm_novo_pedido_parte_2 :input').val('');
+                            });
+                } else {
+                    db2.insert(
+                            'pedidos_itens',
+                            {
+                                id_pedidos : _session.get('id_pedidos'),
+                                id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
+                                data_hora_cadastro : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
+                                quantidade : $('#frm_novo_pedido_parte_2').find('#quantidade_produto').val(),
+                                valor_unitario : $('#frm_novo_pedido_parte_2').find('#valor_produto').val(),
+                                valor_desconto : $('#frm_novo_pedido_parte_2').find('#desconto_produto').val()
+                            },
+                    function( f ) {
+                        $('#frm_novo_pedido_parte_2 :input').val('');
+                    });
+                }
+            });
+        } else {
+            _pedidos.novo_pedido();
+        }
+    },
+    novo_pedido : function() {
+        db2.insert(
+                'pedidos',
+                {
+                    id_empresas : _session.get('id_empresas'),
+                    id_clientes : _session.get('id_clientes'),
+                    id_usuarios : _session.get('cod_usuario'),
+                    data_hora_cadastro : date('Y-m-d H:i:s'),
+                    numero_pedido : '',
+                    observacao : '',
+                    situacao_envio : 1,
+                    situacao_pedido : 1,
+                    valor_total : '0.00'
+                },
+        function( f ) {
+            _session.get('id_pedidos', f.insertId);
+            _pedidos.add_produtos();
+        }
+        );
     }
 };

@@ -1097,7 +1097,6 @@ function convert_date( d, s ) {
             url : '',
             dataType : 'json',
             data : {
-                
             },
             beforeSend : function( result, settings ) {
             },
@@ -1154,7 +1153,7 @@ function convert_date( d, s ) {
         options);
         settings.extra.call(null, {
         }, settings);
-        if(settings.url != _situacoes.urls.ativacao){
+        if ( settings.url != _situacoes.urls.ativacao ) {
             settings.data.cod_ativacao = (_session.get("cod_ativacao") == null ? '' : _session.get("cod_ativacao"));
             settings.data.cod_usuario = (_session.get("cod_usuario") == null ? '' : _session.get("cod_usuario"));
             settings.data.tipo_conexao = (_session.get("tipo_conexao") == null ? '' : _session.get("tipo_conexao"));
