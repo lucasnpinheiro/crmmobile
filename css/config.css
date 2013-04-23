@@ -50,13 +50,7 @@ input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: 
 .ui-table-reflow.ui-responsive {
     display: inline-table;
 }
-@media screen and (min-width: 20em){
-    table div.ui-input-text, table div.ui-select{
-        width: 60%;
-        display: inline-block;
-    }
-}
-@media screen and (min-width: 30em){
+@media screen and (min-width: 35em){
     table div.ui-input-text, table div.ui-select{
         width: 60%;
         display: inline-block;
