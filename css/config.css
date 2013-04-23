@@ -47,10 +47,11 @@ input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: 
     font-size: 0.8em;
     margin-left: 23%;
 }
-.ui-table-reflow.ui-responsive {
-    display: inline-table;
-}
-@media screen and (min-width: 35em){
+@media all and (min-width: 35em){
+    .ui-table-reflow.ui-responsive {
+        display: inline-table;
+    }
+
     table div.ui-input-text, table div.ui-select{
         width: 60%;
         display: inline-block;
