@@ -11,10 +11,7 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.consulta(this);
     });
-    $("#autocomplete ul li").on("click", function( b ) {
-        b.preventDefault();
-        _pedidos.select_produtos($(this).attr('cod_produto'));
-    });
+
     $(".select_produtos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.select_produtos($(this).attr('cod_produto'));
@@ -132,11 +129,16 @@ _pedidos = {
                                 } else {
                                     for ( var e = 0; e < c.rows.length; e++ ) {
                                         var f = c.rows.item(e);
-                                        html += '<li cod_produto="' + f.cod_produto + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + '</li>';
+                                        html += '<li id_produtos="' + f.id_produtos + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + '</li>';
                                     }
                                     $ul.html(html);
                                     $ul.listview("refresh");
                                     $ul.trigger("updatelayout");
+                                    $(".select_produtos").on("click", function( b ) {
+                                        b.preventDefault();
+                                        _pedidos.select_produtos($(this).attr('id_produtos'));
+                                        $(".select_produtos").remove();
+                                    });
                                 }
                             },
                             function( d, c ) {
@@ -147,26 +149,23 @@ _pedidos = {
             }
         });
     },
-    select_produtos : function( cod_produto ) {
-        var a = 'SELECT * FROM produtos WHERE cod_produto = "' + cod_produto + '"';
-        db.transaction(function( b ) {
-            b.executeSql(a, [ ],
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("TOTAL", c.rows.length);
-                        var f = c.rows.item(0);
-                        $('#frm_novo_pedido_parte_2 #codigo_produto').val(f.codigo_produto);
-                        $('#frm_novo_pedido_parte_2 #valor_produto').val(f.valor_produto);
-                        $('#frm_novo_pedido_parte_2 #estoque_produto').val(f.estoque_produto);
-                        $('#frm_novo_pedido_parte_2 #desconto_maximo_produto').val(f.desconto_maximo_produto);
-                        $('#frm_novo_pedido_parte_2 #unidade_produto').val(f.unidade_produto);
-                        $('#frm_novo_pedido_parte_2 #desconto_produto').val('');
-                        $('#frm_novo_pedido_parte_2 #quantidade_produto').val('');
-                    },
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("ERROR", c.message);
-                    });
-        });
+    select_produtos : function( id_produtos ) {
+        db2.select(
+                'produtos',
+                '*',
+                {
+                    where : {
+                        id_produtos : id_produtos
+                    }
+                },
+        function( f ) {
+            debug("TOTAL", c.rows.length);
+            var f = c.rows.item(0);
+            $.each(f, function( z, x ) {
+                $('#frm_novo_pedido_parte_2').find('#' + z + '_produto').val(x);
+            });
+            $('#frm_novo_pedido_parte_2').find('#quantidade_produto').focus();
+        }
+        );
     }
 };

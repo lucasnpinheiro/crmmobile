@@ -33,7 +33,7 @@ _sincronicacao = {
         qtdPaginacao : 100,
         qtdAtual : 1,
         qtdMax : 0,
-        sequencia : 0,
+        sequencia : 1,
         concluido : false,
         insert : function( a ) {
             if ( _sincronicacao.produtos.qtdAtual < _sincronicacao.produtos.qtdMax ) {
@@ -83,7 +83,7 @@ _sincronicacao = {
                     $("#tr_produtos td:eq(2)").html(a);
                     $("#tr_produtos td:eq(0)").html(date("d/m/Y H:i:s"));
                     _sincronicacao.produtos.qtdMax = a;
-                    _sincronicacao.produtos.sequencia = 0;
+                    _sincronicacao.produtos.sequencia = 1;
                     _sincronicacao.produtos.qtdAtual = 1;
                     _sincronicacao.produtos.concluido = false;
                     _sincronicacao.produtos.lista();
