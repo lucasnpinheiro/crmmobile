@@ -313,7 +313,7 @@ _sincronicacao = {
                 success : function( a ) {
                     $("#tr_produtos td:eq(2)").html(a);
                     $("#tr_produtos td:eq(0)").html(date("d/m/Y H:i:s"));
-                    _sincronicacao.produtos.qtdMax = a;
+                    _sincronicacao.produtos.qtdMax = parseInt(a, 10) - 1;
                     _sincronicacao.produtos.sequencia = 0;
                     _sincronicacao.produtos.qtdAtual = 0;
                     _sincronicacao.produtos.lista();
