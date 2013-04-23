@@ -1,4 +1,5 @@
 $(document).on("pageinit", function() {
+    document.addEventListener("deviceready", onDeviceReady, false);
     if ( _session.get("usuario") != null ) {
         _constant.redirect('painel.html');
     } else {
@@ -42,3 +43,11 @@ function logar( d ) {
     });
 }
 
+function onDeviceReady() {
+    checkConnection();
+}
+function checkConnection() {
+    var networkState = navigator.connection.type;
+    _session.set('connection_type', networkState);
+    $(".crm_mobile_versao").html("Versão: " + _constant.version + " | Conexão: " + _session.get('connection_type'));
+}

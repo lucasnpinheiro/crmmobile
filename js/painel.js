@@ -1,4 +1,6 @@
 $(document).on("pageinit", function() {
+    alert($(document).width());
+    alert($(window).width());
     if ( _session.get("usuario") != null ) {
         $(".crm_mobile_atutenticacao").html("Usuário: " + _session.get("usuario") + " | Conexão: " + _session.get("connection_type"));
         if ( _session.get('codigo_ativacao') == null ) {
