@@ -159,9 +159,8 @@ _pedidos = {
                     }
                 },
         function( f ) {
-            debug("TOTAL", c.rows.length);
-            var f = c.rows.item(0);
-            $.each(f, function( z, x ) {
+            debug("TOTAL", f.rows.length);
+            $.each(f.rows.item(0), function( z, x ) {
                 $('#frm_novo_pedido_parte_2').find('#' + z + '_produto').val(x);
             });
             $('#frm_novo_pedido_parte_2').find('#quantidade_produto').focus();
