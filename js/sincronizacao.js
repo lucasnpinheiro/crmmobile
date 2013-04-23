@@ -33,7 +33,7 @@ _sincronicacao = {
         qtdPaginacao : 100,
         qtdAtual : 1,
         qtdMax : 0,
-        sequencia : 0,
+        sequencia : 1,
         insert : function( a ) {
             if ( _sincronicacao.pedidos.qtdAtual < _sincronicacao.pedidos.qtdMax ) {
                 _sincronicacao.pedidos.lista();
@@ -72,7 +72,7 @@ _sincronicacao = {
                     $("#tr_pedidos td:eq(2)").html(a);
                     $("#tr_pedidos td:eq(0)").html(date("d/m/Y H:i:s"));
                     _sincronicacao.pedidos.qtdMax = a;
-                    _sincronicacao.pedidos.sequencia = 0;
+                    _sincronicacao.pedidos.sequencia = 1;
                     _sincronicacao.pedidos.qtdAtual = 0;
                     _sincronicacao.pedidos.lista();
                     _sincronicacao.atualiza_table();
@@ -113,7 +113,7 @@ _sincronicacao = {
         qtdPaginacao : 100,
         qtdAtual : 1,
         qtdMax : 0,
-        sequencia : 0,
+        sequencia : 1,
         insert : function( a ) {
             if ( _sincronicacao.usuarios.qtdAtual < _sincronicacao.usuarios.qtdMax ) {
                 _sincronicacao.usuarios.lista();
@@ -152,7 +152,7 @@ _sincronicacao = {
                     $("#tr_usuarios td:eq(2)").html(a);
                     $("#tr_usuarios td:eq(0)").html(date("d/m/Y H:i:s"));
                     _sincronicacao.usuarios.qtdMax = a;
-                    _sincronicacao.usuarios.sequencia = 0;
+                    _sincronicacao.usuarios.sequencia = 1;
                     _sincronicacao.usuarios.qtdAtual = 0;
                     _sincronicacao.usuarios.lista();
                     _sincronicacao.atualiza_table();
@@ -193,7 +193,7 @@ _sincronicacao = {
         qtdPaginacao : 100,
         qtdAtual : 1,
         qtdMax : 0,
-        sequencia : 0,
+        sequencia : 1,
         insert : function( a ) {
             if ( _sincronicacao.clientes.qtdAtual < _sincronicacao.clientes.qtdMax ) {
                 _sincronicacao.clientes.lista();
@@ -232,7 +232,7 @@ _sincronicacao = {
                     $("#tr_clientes td:eq(2)").html(a);
                     $("#tr_clientes td:eq(0)").html(date("d/m/Y H:i:s"));
                     _sincronicacao.clientes.qtdMax = a;
-                    _sincronicacao.clientes.sequencia = 0;
+                    _sincronicacao.clientes.sequencia = 1;
                     _sincronicacao.clientes.qtdAtual = 0;
                     _sincronicacao.clientes.lista();
                     _sincronicacao.atualiza_table();
@@ -273,7 +273,7 @@ _sincronicacao = {
         qtdPaginacao : 100,
         qtdAtual : 1,
         qtdMax : 0,
-        sequencia : 0,
+        sequencia : 1,
         insert : function( a ) {
             if ( _sincronicacao.produtos.qtdAtual < _sincronicacao.produtos.qtdMax ) {
                 _sincronicacao.produtos.lista();
@@ -314,7 +314,7 @@ _sincronicacao = {
                     $("#tr_produtos td:eq(2)").html(a);
                     $("#tr_produtos td:eq(0)").html(date("d/m/Y H:i:s"));
                     _sincronicacao.produtos.qtdMax = a;
-                    _sincronicacao.produtos.sequencia = 0;
+                    _sincronicacao.produtos.sequencia = 1;
                     _sincronicacao.produtos.qtdAtual = 0;
                     _sincronicacao.produtos.lista();
                     _sincronicacao.atualiza_table();
