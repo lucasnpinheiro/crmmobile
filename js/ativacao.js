@@ -19,9 +19,9 @@ function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
         crypt : true,
         data : {
             cod_cliente : codigo_cliente,
-            nome_dispositivo : $('#devName').text(),
-            plataforma : $('#devPlatform').text(),
-            versao_plataforma : $('#devVersion').text(),
+            nome_dispositivo : $('#devName').text() || 'SGH-T849',
+            plataforma : $('#devPlatform').text() || 'Android',
+            versao_plataforma : $('#devVersion').text() || '2.2',
             uuid : uuid
         },
         beforeSend : function() {
@@ -31,30 +31,33 @@ function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
             if ( a.cod_retorno == 999 ) {
                 jSucesso(a.mensagem);
             } else {
-                insert_solicitar_ativacao( codigo_cliente, uuid, cod_ativacao )
+                insert_solicitar_ativacao(codigo_cliente, uuid, a.dscChave, a.idEmpresas.documento, a.idEmpresas.dscEmpresa);
             }
             jSucesso(a.cod_retorno);
         },
         error : function( c, a, b ) {
             block(true);
-            insert_solicitar_ativacao( codigo_cliente, uuid, cod_ativacao )
+            
         }
     });
 }
 
-function insert_solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
-    var c = 'INSERT INTO empresas ("uuid", "codigo_cliente", "cod_ativacao", "cpf_cnpj", "nome_empresa", "data_hora_cadastro") VALUES ("' + uuid + '", "' + codigo_cliente + '", "' + cod_ativacao + '", "15382516000115", "S2I MOBILE - Teste", "' + date('Y-m-d H:i:s') + '");';
-    db.transaction(function( e ) {
-        e.executeSql(c, [ ], function( g, f ) {
-            debug("SUCESSO", c);
-            jSucesso('Ativação realizada com sucesso.');
-            _constant.redirect("login.html");
-        }, function( g, f ) {
-            jAviso('Problemas na ativação tentar novamente.');
-            debug("ERROR", c);
-            debug("ERROR", f.message);
-        });
-    });
+function insert_solicitar_ativacao( codigo_cliente, uuid, cod_ativacao, cpf_cnpj, nome_empresa ) {
+    db2.replace(
+            'empresas',
+            {
+                uuid : uuid,
+                codigo_cliente : codigo_cliente,
+                cod_ativacao : cod_ativacao,
+                cpf_cnpj : cpf_cnpj,
+                nome_empresa : nome_empresa,
+                data_hora_cadastro : date('Y-m-d H:i:s')
+            },
+    function(  ) {
+        jSucesso('Ativação realizada com sucesso.');
+        _constant.redirect("login.html");
+    }
+    );
 }
 
 // handling document ready and phonegap deviceready

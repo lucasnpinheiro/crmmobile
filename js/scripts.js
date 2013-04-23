@@ -1034,7 +1034,7 @@ function TimeCounter() {
         this.startDate = new Date();
     };
     this.stop = function() {
-        return(new Date() - this.startDate) / 1000;
+        return Math.ceil((new Date() - this.startDate) / 1000);
     };
 }
 function utf8_encode( a ) {
@@ -1097,9 +1097,7 @@ function convert_date( d, s ) {
             url : '',
             dataType : 'json',
             data : {
-                /*cod_ativacao : (_session.get("cod_ativacao") == null ? '' : _session.get("cod_ativacao")),
-                cod_usuario : (_session.get("cod_usuario") == null ? '' : _session.get("cod_usuario")),
-                tipo_conexao : (_session.get("tipo_conexao") == null ? '' : _session.get("tipo_conexao"))*/
+                
             },
             beforeSend : function( result, settings ) {
             },
@@ -1113,7 +1111,6 @@ function convert_date( d, s ) {
                 $.ajax({
                     type : settings.type,
                     data : (settings.crypt == true ? json_encode(settings.data) : settings.data),
-                    //data : '{"plataforma":"android","uuid":"112233445566778899","cod_cliente":"112233445566778899","nome_dispositivo":"disp teste","versao_plataforma":"99"}',
                     dataType : settings.dataType,
                     url : settings.url,
                     contentType : 'application/json',

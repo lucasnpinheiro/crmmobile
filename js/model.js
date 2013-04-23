@@ -22,8 +22,7 @@ _configuracoes = {
                     cod_ativacao : 'VARCHAR(50)',
                     cpf_cnpj : 'VARCHAR(14)',
                     nome_empresa : 'VARCHAR(50)',
-                    data_hora_cadastro : 'DATETIME',
-                    data_hora_exclusao : 'DATETIME'
+                    data_hora_cadastro : 'DATETIME'
                 }
             }, {
                 name : 'pedidos',
