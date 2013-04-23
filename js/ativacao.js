@@ -31,13 +31,12 @@ function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
             if ( a.cod_retorno == 999 ) {
                 jSucesso(a.mensagem);
             } else {
-                insert_solicitar_ativacao(codigo_cliente, uuid, a.dscChave, a.idEmpresas.documento, a.idEmpresas.dscEmpresa);
+                insert_solicitar_ativacao(codigo_cliente, uuid, a.dados.dscChave, a.dados.idEmpresas.documento, a.dados.idEmpresas.dscEmpresa);
             }
             jSucesso(a.cod_retorno);
         },
-        error : function( c, a, b ) {
+        error : function(  ) {
             block(true);
-            
         }
     });
 }
