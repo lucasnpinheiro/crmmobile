@@ -1132,9 +1132,9 @@ function convert_date( d, s ) {
                         if ( c.status === 0 ) {
                             d = ("Não conectar. \n Verifique Rede.");
                         } else if ( c.status === 404 ) {
-                            d = ("A url:'"+settings.url + "' solicitada não foi encontrada. [404]");
+                            d = ("A url:'" + settings.url + "' solicitada não foi encontrada. [404]");
                         } else if ( c.status === 500 ) {
-                            d = ("A url:'"+settings.url + "' solicitada contém um error interno no servidor. [500]");
+                            d = ("A url:'" + settings.url + "' solicitada contém um error interno no servidor. [500]");
                         } else if ( a === "parsererror" ) {
                             d = ("Solicitado de análise do JSON falhou.");
                         } else if ( a === "timeout" ) {
@@ -1163,7 +1163,7 @@ function msg( a, c ) {
     if ( $('div.conteudo .msg_sistema').length == 0 ) {
         $('div.conteudo').prepend('<div class="msg_sistema"></div>');
     }
-    $('div.conteudo .msg_sistema').html(a).addClass('msg_'+c).css({
+    $('div.conteudo .msg_sistema').html(a).addClass('msg_' + c).css({
         'margin' : '1em 0',
         'padding' : '5px',
         'text-align' : 'center',
@@ -1171,4 +1171,272 @@ function msg( a, c ) {
         'font-weight' : 'bold'
     }).fadeIn("slow");
     ;
+}
+
+function SQLite( cfg ) {
+    if ( typeof window.openDatabase === 'undefined' ) {
+        return;
+    }
+
+    function log( str ) {
+        if ( typeof console !== 'undefined' ) {
+            console.log(str);
+        }
+    }
+
+    function isNumber( val ) {
+        switch ( typeof val ) {
+            case 'number':
+                return true;
+            case 'string':
+                return (/^\d+$/).test(val);
+            case 'object':
+                return false;
+        }
+    }
+
+    // Default Handlers
+    function nullDataHandler( results ) {
+    }
+
+    function errorHandler( error, query ) {
+        debug("QUERY", query);
+        debug('Oops. ' + error.message + ' (Code ' + error.code + ')');
+    }
+
+    var config = cfg || {
+    }, db;
+
+    config.shortName = config.shortName || 'mydatabase';
+    config.version = config.version || '';
+    config.displayName = config.displayName || 'My SQLite Database';
+    config.maxSize = 65536;
+    config.defaultErrorHandler = config.defaultErrorHandler || errorHandler;
+    config.defaultDataHandler = config.defaultDataHandler || nullDataHandler;
+
+    try {
+        db = openDatabase(config.shortName, config.version, config.displayName, config.maxSize);
+    } catch ( e ) {
+        if ( e === 2 ) {
+            log("Invalid database version.");
+        } else {
+            log("Unknown error " + e + ".");
+        }
+
+        return;
+    }
+
+    function execute( query, v, d, e ) {
+        var values = v || [ ],
+                dH = d || config.defaultDataHandler,
+                eH = e || config.defaultErrorHandler;
+
+        if ( !query || query === '' ) {
+            return;
+        }
+
+        function err( t, error ) {
+            eH(error, query);
+        }
+
+        function data( t, result ) {
+            dH(result, query);
+        }
+
+        db.transaction(
+                function( transaction ) {
+                    transaction.executeSql(query, values, data, err);
+                    debug("QUERY", query);
+                }
+        );
+    }
+
+    function buildConditions( conditions ) {
+        var results = [ ], values = [ ], x;
+
+        if ( typeof conditions === 'string' ) {
+            results.push(conditions);
+        } else if ( typeof conditions === 'number' ) {
+            results.push("id=?");
+            values.push(conditions);
+        } else if ( typeof conditions === 'object' ) {
+            for ( x in conditions ) {
+                if ( conditions.hasOwnProperty(x) ) {
+                    if ( isNumber(x) ) {
+                        results.push(conditions[x]);
+                    } else {
+                        results.push(x + '=?');
+                        values.push(conditions[x]);
+                    }
+                }
+            }
+        }
+
+        if ( results.length > 0 ) {
+            results = " WHERE " + results.join(' AND ');
+        } else {
+            results = '';
+        }
+
+        return [ results, values ];
+    }
+
+    function createTableSQL( name, cols ) {
+        var c = '';
+        if ( typeof cols == 'object' ) {
+            $.each(cols, function( a, b ) {
+                if ( c != '' ) {
+                    c += ', ';
+                }
+                c += a + ' ' + b;
+            })
+        } else {
+            c = cols;
+        }
+        var query = "CREATE TABLE IF NOT EXISTS " + name + "(" + c + ");";
+
+        return [ query, [ ] ];
+    }
+
+    function dropTableSQL( name ) {
+        var query = "DROP TABLE IF EXISTS " + name + ";";
+
+        return [ query, [ ] ];
+    }
+
+    function insertSQL( table, map ) {
+        var query = "INSERT INTO " + table + " (#k#) VALUES(#v#);", keys = [ ], holders = [ ], values = [ ], x;
+
+        for ( x in map ) {
+            if ( map.hasOwnProperty(x) ) {
+                keys.push(x);
+                holders.push('?');
+                values.push(map[x]);
+            }
+        }
+
+        query = query.replace("#k#", keys.join(','));
+        query = query.replace("#v#", holders.join(','));
+
+        return [ query, values ];
+    }
+
+    function replaceSQL( table, map ) {
+        var query = "INSERT OR REPLACE INTO " + table + " (#k#) VALUES(#v#);", keys = [ ], holders = [ ], values = [ ], x;
+
+        for ( x in map ) {
+            if ( map.hasOwnProperty(x) ) {
+                keys.push(x);
+                holders.push('?');
+                values.push(map[x]);
+            }
+        }
+
+        query = query.replace("#k#", keys.join(','));
+        query = query.replace("#v#", holders.join(','));
+
+        return [ query, values ];
+    }
+
+    function updateSQL( table, map, conditions ) {
+        var query = "UPDATE " + table + " SET #k##m#", keys = [ ], values = [ ], x;
+
+        for ( x in map ) {
+            if ( map.hasOwnProperty(x) ) {
+                keys.push(x + '=?');
+                values.push(map[x]);
+            }
+        }
+
+        conditions = buildConditions(conditions);
+
+        values = values.concat(conditions[1]);
+
+        query = query.replace("#k#", keys.join(','));
+        query = query.replace("#m#", conditions[0]);
+
+        return [ query, values ];
+    }
+
+    function selectSQL( table, columns, conditions, options ) {
+        var query = 'SELECT #col# FROM ' + table + '#cond#', values = [ ];
+
+        if ( typeof columns === 'undefined' ) {
+            columns = '*';
+        } else if ( typeof columns === 'object' ) {
+            columns.join(',');
+        }
+
+        conditions = buildConditions(conditions);
+
+        values = values.concat(conditions[1]);
+
+        query = query.replace("#col#", columns);
+        query = query.replace('#cond#', conditions[0]);
+
+        if ( options ) {
+            if ( options.limit ) {
+                query = query + ' LIMIT ?';
+                values.push(options.limit);
+            }
+            if ( options.order ) {
+                query = query + ' ORDER BY ?';
+                values.push(options.order);
+            }
+            if ( options.offset ) {
+                query = query + ' OFFSET ?';
+                values.push(options.offset);
+            }
+        }
+
+        query = query + ';';
+
+        return [ query, values ];
+    }
+
+    function destroySQL( table, conditions ) {
+        var query = 'DELETE FROM ' + table + '#c#;';
+
+        conditions = buildConditions(conditions);
+
+        query = query.replace('#c#', conditions[0]);
+
+        return [ query, conditions[1] ];
+    }
+
+    return {
+        database : db,
+        createTable : function( name, cols, data, error ) {
+            var sql = createTableSQL(name, cols);
+            execute(sql[0], sql[1], data, error);
+        },
+        dropTable : function( name, data, error ) {
+            var sql = dropTableSQL(name);
+            execute(sql[0], sql[1], data, error);
+        },
+        insert : function( table, map, data, error ) {
+            var sql = insertSQL(table, map);
+            execute(sql[0], sql[1], data, error);
+        },
+        replace : function( table, map, data, error ) {
+            var sql = replaceSQL(table, map);
+            execute(sql[0], sql[1], data, error);
+        },
+        update : function( table, map, conditions, data, error ) {
+            var sql = updateSQL(table, map, conditions);
+            execute(sql[0], sql[1], data, error);
+        },
+        select : function( table, columns, conditions, data, error ) {
+            conditions.where = conditions.where || {
+            };
+            conditions.options = conditions.options || {
+            };
+            var sql = selectSQL(table, columns, conditions.where, conditions.options);
+            execute(sql[0], sql[1], data, error);
+        },
+        destroy : function( table, conditions, data, error ) {
+            var sql = destroySQL(table, conditions);
+            execute(sql[0], sql[1], data, error);
+        }
+    };
 }

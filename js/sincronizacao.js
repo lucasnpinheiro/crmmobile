@@ -302,6 +302,8 @@ _sincronicacao = {
         ,
         total : function() {
             $.send({
+                type : 'GET',
+                dataType : 'html',
                 url : _situacoes.urls.produtos_total,
                 beforeSend : function() {
                     $("#tr_produtos td:eq(1)").html('0');

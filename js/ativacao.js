@@ -49,7 +49,7 @@ function insert_solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao) {
         e.executeSql(c, [ ], function( g, f ) {
             debug("SUCESSO", c);
             jSucesso('Ativação realizada com sucesso.');
-            _constant.redirect("login.html");
+            //_constant.redirect("login.html");
         }, function( g, f ) {
             jAviso('Problemas na ativação tentar novamente.');
             debug("ERROR", c);

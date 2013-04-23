@@ -11,6 +11,10 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.consulta(this);
     });
+    $("#autocomplete ul li").on("click", function( b ) {
+        b.preventDefault();
+        _pedidos.select_produtos($(this).attr('cod_produto'));
+    });
     $(".select_produtos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.select_produtos($(this).attr('cod_produto'));
@@ -128,7 +132,7 @@ _pedidos = {
                                 } else {
                                     for ( var e = 0; e < c.rows.length; e++ ) {
                                         var f = c.rows.item(e);
-                                        html += '<li cod_produto="' + f.cod_produto + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + ' | R$ ' + number_format(f.valor, 2, ",", ".") + '</li>';
+                                        html += '<li cod_produto="' + f.cod_produto + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + '</li>';
                                     }
                                     $ul.html(html);
                                     $ul.listview("refresh");
@@ -152,7 +156,6 @@ _pedidos = {
                         debug("TOTAL", c.rows.length);
                         var f = c.rows.item(0);
                         $('#frm_novo_pedido_parte_2 #codigo_produto').val(f.codigo_produto);
-                        $('#frm_novo_pedido_parte_2 #nome_produto').val(f.nome_produto);
                         $('#frm_novo_pedido_parte_2 #valor_produto').val(f.valor_produto);
                         $('#frm_novo_pedido_parte_2 #estoque_produto').val(f.estoque_produto);
                         $('#frm_novo_pedido_parte_2 #desconto_maximo_produto').val(f.desconto_maximo_produto);

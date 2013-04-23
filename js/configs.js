@@ -41,6 +41,11 @@ var _situacoes = {
 var db = null;
 if ( window.openDatabase ) {
     var db = window.openDatabase("crm_mobile", "", "CRM MOBILE", 5 * 1000 * 1000);
+    var db2 = SQLite({
+        shortName : 'crm_mobile',
+        displayName : "CRM MOBILE",
+        maxSize : (5 * 1000 * 1000)
+    });
 } else {
     jAviso("Navegador sem suporte ao banco de dados SqLite.")
 }
