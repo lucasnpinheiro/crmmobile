@@ -1114,6 +1114,7 @@ function convert_date( d, s ) {
                     data : settings.data,
                     dataType : settings.dataType,
                     url : settings.url,
+                    contentType : 'application/json',
                     crossDomain : true,
                     beforeSend : function() {
                         settings.beforeSend.call(null, {

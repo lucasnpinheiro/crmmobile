@@ -326,9 +326,11 @@ _sincronicacao = {
         },
         lista : function() {
             $.send({
+                type : 'GET',
+                //dataType : 'html',
                 url : _situacoes.urls.produtos_lista,
                 data : {
-                    inicio : _sincronicacao.produtos.qtdAtual,
+                    inicio : _sincronicacao.produtos.qtdAtual + 1,
                     qtde : _sincronicacao.produtos.qtdPaginacao
                 },
                 beforeSend : function() {
@@ -355,16 +357,20 @@ _sincronicacao = {
         block(false);
         tcount.start();
         _sincronicacao.produtos.total();
-        _sincronicacao.clientes.total();
-        _sincronicacao.usuarios.total();
-        _sincronicacao.pedidos.total();
-        _sincronicacao.atualiza_table();
+        //_sincronicacao.clientes.total();
+        //_sincronicacao.usuarios.total();
+        //_sincronicacao.pedidos.total();
+        //_sincronicacao.atualiza_table();
     },
     fim : function() {
-        if ( (_sincronicacao.produtos.qtdAtual == _sincronicacao.produtos.qtdMax) &&
-                (_sincronicacao.clientes.qtdAtual == _sincronicacao.clientes.qtdMax) &&
-                (_sincronicacao.usuarios.qtdAtual == _sincronicacao.usuarios.qtdMax) &&
-                (_sincronicacao.pedidos.qtdAtual == _sincronicacao.pedidos.qtdMax) ) {
+        /*if ( (_sincronicacao.produtos.qtdAtual == _sincronicacao.produtos.qtdMax) &&
+         (_sincronicacao.clientes.qtdAtual == _sincronicacao.clientes.qtdMax) &&
+         (_sincronicacao.usuarios.qtdAtual == _sincronicacao.usuarios.qtdMax) &&
+         (_sincronicacao.pedidos.qtdAtual == _sincronicacao.pedidos.qtdMax) ) {
+         block(true);
+         jSucesso('Tempo total da sincronização em segundos: (' + tcount.stop() + ').');
+         }*/
+        if ( _sincronicacao.produtos.qtdAtual == _sincronicacao.produtos.qtdMax ) {
             block(true);
             jSucesso('Tempo total da sincronização em segundos: (' + tcount.stop() + ').');
         }

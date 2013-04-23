@@ -6,16 +6,17 @@ $(document).on('pageinit', function() {
             var codigo_cliente = $('#codigo_cliente').val();
             var uuid = $('#devUUID').text();
             uuid = (uuid == '' ? '123456' : uuid);
-            var codigo_ativacao = Math.ceil(Math.random() * 1000000000);
-            solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao);
+            var cod_ativacao = Math.ceil(Math.random() * 1000000000);
+            solicitar_ativacao(codigo_cliente, uuid, cod_ativacao);
         }
     });
 });
 
-function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
+function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
 
     $.send({
         url : _situacoes.urls.ativacao,
+        type : 'POST',
         data : {
             cod_cliente : codigo_cliente,
             nome_dispositivo : $('#devName').text(),
@@ -32,19 +33,19 @@ function solicitar_ativacao( codigo_cliente, uuid, codigo_ativacao ) {
             $.each(a.dados, function( b, c ) {
                 jAviso(b + ' === ' + c);
             });
-            insert_solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao);
+            insert_solicitar_ativacao(codigo_cliente, uuid, cod_ativacao);
         },
         error : function( c, a, b ) {
             block(true);
-            insert_solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao)
+            insert_solicitar_ativacao(codigo_cliente, uuid, cod_ativacao)
         }
     });
 
 
 }
 
-function insert_solicitar_ativacao(codigo_cliente, uuid, codigo_ativacao) {
-    var c = 'INSERT INTO empresas ("uuid", "codigo_cliente", "codigo_ativacao", "cpf_cnpj", "nome_empresa", "data_hora_cadastro") VALUES ("' + uuid + '", "' + codigo_cliente + '", "' + codigo_ativacao + '", "15382516000115", "S2I MOBILE - Teste", "' + date('Y-m-d H:i:s') + '");';
+function insert_solicitar_ativacao(codigo_cliente, uuid, cod_ativacao) {
+    var c = 'INSERT INTO empresas ("uuid", "codigo_cliente", "cod_ativacao", "cpf_cnpj", "nome_empresa", "data_hora_cadastro") VALUES ("' + uuid + '", "' + codigo_cliente + '", "' + cod_ativacao + '", "15382516000115", "S2I MOBILE - Teste", "' + date('Y-m-d H:i:s') + '");';
     db.transaction(function( e ) {
         e.executeSql(c, [ ], function( g, f ) {
             debug("SUCESSO", c);

@@ -19,7 +19,7 @@ _configuracoes = {
                     id_empresas : 'INTEGER PRIMARY KEY AUTOINCREMENT',
                     uuid : 'VARCHAR(50)',
                     codigo_cliente : 'VARCHAR(50)',
-                    codigo_ativacao : 'VARCHAR(50)',
+                    cod_ativacao : 'VARCHAR(50)',
                     cpf_cnpj : 'VARCHAR(14)',
                     nome_empresa : 'VARCHAR(50)',
                     data_hora_cadastro : 'DATETIME',
@@ -244,7 +244,7 @@ _configuracoes = {
                 },
                 function( f ) {
                     debug("TOTAL", f.rows.length);
-                    _session.set("cod_ativacao", f.rows.item(0).codigo_ativacao);
+                    _session.set("cod_ativacao", f.rows.item(0).cod_ativacao);
                     if ( f.rows.length == 0 ) {
                         debug("SUCESSO", 'Redirecionando para registro de chaves.');
                         _constant.redirect("atualizacoes_ativacao.html");
