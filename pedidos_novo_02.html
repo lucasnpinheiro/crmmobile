@@ -12,7 +12,28 @@
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.maskMoney.js"></script>
         <script src="js/pedidos.js"></script>
+        <script>
+            $(function() {
+                function moeda() {
+                    $(".moeda").maskMoney({
+                        symbol : '',
+                        thousands : '.',
+                        decimal : ',',
+                        symbolStay : false
+                    });
+                    $(".qtd").maskMoney({
+                        symbol : '',
+                        precision : 3,
+                        thousands : '.',
+                        decimal : ',',
+                        symbolStay : false
+                    });
+                }
+                moeda();
+            });
+        </script>
     </head> 
     <body> 
 
@@ -28,9 +49,9 @@
                 <ul data-role="listview" data-inset="true" data-divider-theme="d"  data-corners="false">
                     <li data-role="list-divider">Selecionar Itens do Pedido</li>
                 </ul>
-                
+
                 <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Código do produto" data-filter-theme="d"></ul>
-                
+
                 <form id="frm_novo_pedido_parte_2" name="frm_novo_pedido_parte_2" class="container_12">
                     <input type="hidden" name="codigo_produto" id="codigo_produto" value="">
                     <div class="clear"></div>
@@ -47,10 +68,10 @@
                         <input disabled="disabled" data-mini="true"  type="text" name="unidade_produto" id="unidade_produto" value="" placeholder="Unidade do produto">
                     </div>
                     <div class="grid_4">
-                        <input type="text" data-mini="true" name="quantidade_produto" id="quantidade_produto" value="" placeholder="Quantidade">
+                        <input type="text" data-mini="true" name="quantidade_produto" id="quantidade_produto" value="" placeholder="Quantidade" class="qtd">
                     </div>
                     <div class="grid_4">
-                        <input type="text" data-mini="true" name="desconto_produto" id="desconto_produto" value="" placeholder="Desconto">
+                        <input type="text" data-mini="true" name="desconto_produto" id="desconto_produto" value="" placeholder="Desconto" class="moeda">
                     </div>
                     <div class="grid_2">
                         <a href="#" data-role="button" data-mini="true"  data-iconpos="notext" data-theme="c" data-inline="true" data-icon="plus" id="bt_adicionar_produtos">Adicionar</a>

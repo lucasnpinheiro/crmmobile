@@ -29,6 +29,10 @@ input.textoErro, .textoErro{border:1px solid red;}
 input.textoSucesso, .textoSucesso{border:1px solid green;}
 input.textoAviso, .textoAviso{border:1px solid yellow;}
 input.textoDisabled, .textoDisabled{border:1px solid #cccccc; background-color: #dddddd}
+input[disabled], input[disabled=disabled]{
+    color: #000;
+    font-weight: bold;
+}
 .spanError{
     display: block;
     color: red;
