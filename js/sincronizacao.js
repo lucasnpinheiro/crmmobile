@@ -30,8 +30,8 @@ $(document).on("pageinit", function() {
 });
 _sincronicacao = {
     pedidos : {
-        qtdPaginacao : 25,
-        qtdAtual : 0,
+        qtdPaginacao : 100,
+        qtdAtual : 1,
         qtdMax : 0,
         sequencia : 0,
         insert : function( a ) {
@@ -110,8 +110,8 @@ _sincronicacao = {
         }
     },
     usuarios : {
-        qtdPaginacao : 25,
-        qtdAtual : 0,
+        qtdPaginacao : 100,
+        qtdAtual : 1,
         qtdMax : 0,
         sequencia : 0,
         insert : function( a ) {
@@ -190,8 +190,8 @@ _sincronicacao = {
         }
     },
     clientes : {
-        qtdPaginacao : 25,
-        qtdAtual : 0,
+        qtdPaginacao : 100,
+        qtdAtual : 1,
         qtdMax : 0,
         sequencia : 0,
         insert : function( a ) {
@@ -270,8 +270,8 @@ _sincronicacao = {
         }
     },
     produtos : {
-        qtdPaginacao : 25,
-        qtdAtual : 0,
+        qtdPaginacao : 100,
+        qtdAtual : 1,
         qtdMax : 0,
         sequencia : 0,
         insert : function( a ) {
@@ -313,7 +313,7 @@ _sincronicacao = {
                 success : function( a ) {
                     $("#tr_produtos td:eq(2)").html(a);
                     $("#tr_produtos td:eq(0)").html(date("d/m/Y H:i:s"));
-                    _sincronicacao.produtos.qtdMax = parseInt(a, 10) - 1;
+                    _sincronicacao.produtos.qtdMax = a;
                     _sincronicacao.produtos.sequencia = 0;
                     _sincronicacao.produtos.qtdAtual = 0;
                     _sincronicacao.produtos.lista();
@@ -330,7 +330,7 @@ _sincronicacao = {
                 //dataType : 'html',
                 url : _situacoes.urls.produtos_lista,
                 data : {
-                    inicio : _sincronicacao.produtos.qtdAtual + 1,
+                    inicio : _sincronicacao.produtos.qtdAtual,
                     qtde : _sincronicacao.produtos.qtdPaginacao
                 },
                 beforeSend : function() {

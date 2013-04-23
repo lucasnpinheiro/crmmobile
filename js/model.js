@@ -244,11 +244,11 @@ _configuracoes = {
                 },
                 function( f ) {
                     debug("TOTAL", f.rows.length);
-                    _session.set("cod_ativacao", f.rows.item(0).cod_ativacao);
                     if ( f.rows.length == 0 ) {
                         debug("SUCESSO", 'Redirecionando para registro de chaves.');
                         _constant.redirect("atualizacoes_ativacao.html");
                     } else {
+                        _session.set("cod_ativacao", f.rows.item(0).cod_ativacao);
                         if ( f.rows.item(0).codigo_cliente == '' ) {
                             debug("SUCESSO", 'Redirecionando para registro de chaves.');
                             _constant.redirect("atualizacoes_ativacao.html");
