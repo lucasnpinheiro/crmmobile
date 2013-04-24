@@ -6,8 +6,17 @@ _configuracoes = {
                 cols : {
                     id_clientes : 'INTEGER PRIMARY KEY AUTOINCREMENT',
                     id_empresas : 'INTEGER',
-                    cod_cliente : 'VARCHAR(50)',
+                    cod_cliente : 'INTEGER',
                     dsc_cliente : 'VARCHAR(45)',
+                    cpf_cnpj : 'VARCHAR(14)',
+                    endereco : 'VARCHAR(100)',
+                    numero : 'VARCHAR(8)',
+                    complemento : 'VARCHAR(30)',
+                    bairro : 'VARCHAR(50)',
+                    cidade : 'VARCHAR(50)',
+                    estado : 'VARCHAR(2)',
+                    telefone : 'VARCHAR(30)',
+                    email : 'VARCHAR(100)',
                     data_hora_atualizacao : 'DATETIME',
                     data_hora_exclusao : 'DATETIME',
                     valor_devido : 'REAL(10, 2)',
@@ -65,6 +74,7 @@ _configuracoes = {
                     id_empresas : 'INTEGER',
                     cod_produto : 'VARCHAR(25)',
                     dsc_produto : 'VARCHAR(100)',
+                    unidade : 'VARCHAR(15)',
                     estoque : 'REAL(10, 3) DEFAULT 0',
                     valor : 'REAL(10,2)',
                     desconto_maximo : 'REAL (10,2) DEFAULT 0',
@@ -128,6 +138,28 @@ _configuracoes = {
                     data_hora_atualizacao : date('Y-m-d H:i:s')
                 }
             }
+        ],
+        clientes : [
+            {
+                inst : {
+                    id_empresas : '1',
+                    cod_cliente : '1',
+                    dsc_cliente : 'Cliente 1',
+                    data_hora_atualizacao : date('Y-m-d H:i:s'),
+                    valor_devido : '0.00',
+                    situacao : '1'
+                }
+            },
+            {
+                inst : {
+                    id_empresas : '1',
+                    cod_cliente : '2',
+                    dsc_cliente : 'Cliente 2',
+                    data_hora_atualizacao : date('Y-m-d H:i:s'),
+                    valor_devido : '145.47',
+                    situacao : '1'
+                }
+            }
         ]
     },
     drop_tabelas : function() {
@@ -154,18 +186,34 @@ _configuracoes = {
         });
     },
     add_usuarios : function() {
-        var total = _configuracoes.tabelas.usuarios.length - 1;
-        $.each(_configuracoes.tabelas.usuarios, function( d, c ) {
+        var totais = parseInt(_configuracoes.tabelas.clientes.length) + parseInt(_configuracoes.tabelas.usuarios.length);
+        var total = 0;
+        $.each(_configuracoes.tabelas.clientes, function( d, c ) {
             db2.replace(
-                    'usuarios',
+                    'clientes',
                     c.inst,
-                    function( f ) {
-                        if ( total == d ) {
+                    function( ) {
+                        total++;
+                        if ( total == totais ) {
                             _constant.redirect('atualizacoes_ativacao.html');
                         }
                     }
             );
         });
+
+        $.each(_configuracoes.tabelas.usuarios, function( e, g ) {
+            db2.replace(
+                    'usuarios',
+                    g.inst,
+                    function( ) {
+                        total++;
+                        if ( total == totais ) {
+                            _constant.redirect('atualizacoes_ativacao.html');
+                        }
+                    }
+            );
+        });
+
     },
     verifica_tabelas : function() {
         db2.select(

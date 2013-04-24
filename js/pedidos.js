@@ -1,15 +1,12 @@
 $(document).on("pageinit", function() {
-    if ( $("#frm_novo_pedido_parte_1").length > 0 ) {
-        if ( _session.get('cod_cliente') == null ) {
-            jAviso('Cliente não informado.');
-            _constant.redirect("clientes_consultar.html");
-        }
-    }
-    _pedidos.get_produtos();
-    _pedidos.ultimos();
     $("#bt_consultar_pedidos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.consulta(this);
+    });
+
+    $("#bt_adicionar_produtos").on("click", function( b ) {
+        b.preventDefault();
+        _pedidos.add_produtos();
     });
 
     $(".select_produtos").on("click", function( b ) {
@@ -29,83 +26,105 @@ _pedidos = {
     qtd_volume : 0,
     qtd_parcelas : 0,
     consulta : function( obj ) {
-        var form = $(obj).closest('form').find(':input');
-        var and = '';
-        $.each(form, function() {
+        var and = {
+        };
+        $(obj).closest('form').find(':input').each(function() {
             switch ( this.name ) {
                 case 'codigo_pedido':
                     if ( $.trim($(this).val()) != '' ) {
-                        and += (and == '' ? ' WHERE ' : ' AND ');
-                        and += ' p.id_pedidos = "' + $(this).val() + '" ';
+                        and['p.id_pedidos'] = $(this).val();
                     }
                     break;
 
                 case 'cliente':
                     if ( $.trim($(this).val()) != '' ) {
-                        and += (and == '' ? ' WHERE ' : ' AND ');
-                        and += ' c.dsc_cliente LIKE "%' + $(this).val() + '%"';
+                        and['c.dsc_cliente LIKE "%'] = $(this).val() + '%"';
                     }
                     break;
 
                 case 'data':
                     if ( $.trim($(this).val()) != '' ) {
-                        and += (and == '' ? ' WHERE ' : ' AND ');
-                        and += ' date(p.data_hora_cadastro) = "' + convert_date($(this).val()) + '"';
+                        and['date(p.data_hora_cadastro)'] = convert_date($(this).val());
                     }
                     break;
 
                 case 'situacao_envio':
                     if ( $.isNumeric($(this).val()) ) {
-                        and += (and == '' ? ' WHERE ' : ' AND ');
-                        and += ' p.situacao_envio = "' + $(this).val() + '"';
+                        and['p.situacao_envio'] = $(this).val();
                     }
                     break;
 
                 case 'situacao_pedido':
                     if ( $.isNumeric($(this).val()) ) {
-                        and += (and == '' ? ' WHERE ' : ' AND ');
-                        and += ' p.situacao_pedido = "' + $(this).val() + '"';
+                        and['p.situacao_pedido'] = $(this).val();
                     }
                     break;
             }
         });
-        and += ' ORDER BY p.data_hora_cadastro DESC LIMIT 100';
-        _pedidos.consultar('SELECT p.*, c.dsc_cliente FROM pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes ' + and);
+        _pedidos.consultar({
+            where : and,
+            options : {
+                limit : 100,
+                order : 'p.data_hora_cadastro DESC'
+            }
+        });
     },
     ultimos : function() {
-        if ( $("#table-consulta-pedidos").length > 0 ) {
-            _pedidos.consultar('SELECT p.*, c.dsc_cliente FROM pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes ORDER BY p.data_hora_cadastro DESC LIMIT 100');
-        }
+        _pedidos.consultar({
+            options : {
+                limit : 100,
+                order : 'p.data_hora_cadastro DESC'
+            }
+        });
     },
-    consultar : function( a ) {
+    consultar : function( condicoes ) {
         $("#table-consulta-pedidos tbody").html("");
-        db.transaction(function( b ) {
-            b.executeSql(a, [ ],
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("TOTAL", c.rows.length);
-                        if ( c.rows.length == 0 ) {
-                            jAviso("Nenum registro localizado.");
-                        } else {
-                            for ( var e = 0; e < c.rows.length; e++ ) {
-                                var f = c.rows.item(e);
-                                var g = "<tr>";
-                                g += ' <th>' + f.dsc_cliente + "</th>";
-                                g += ' <td>' + f.id_pedidos + "</td>";
-                                g += ' <td>' + f.valor_total + "</td>";
-                                g += ' <td>' + f.data_hora_cadastro + "</td>";
-                                g += ' <td>' + f.situacao_pedido + "</td>";
-                                g += ' <td><a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Detalhes</a></td>';
-                                g += "</tr>";
-                                $("#table-consulta-pedidos tbody").append(g);
-                            }
-                            $("#table-consulta-pedidos").table("refresh");
-                        }
-                    },
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("ERROR", c.message);
-                    });
+        db2.select(
+                'pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes',
+                'p.*, c.dsc_cliente',
+                condicoes,
+                function( f ) {
+                    debug("TOTAL", f.rows.length);
+                    if ( f.rows.length == 0 ) {
+                        jAviso("Nenum registro localizado.");
+                    } else {
+                        $.each(f.rows.item, function( k, v ) {
+                            var g = "<tr>";
+                            g += ' <th>' + v.dsc_cliente + "</th>";
+                            g += ' <td>' + v.id_pedidos + "</td>";
+                            g += ' <td>' + v.valor_total + "</td>";
+                            g += ' <td>' + v.data_hora_cadastro + "</td>";
+                            g += ' <td>' + v.situacao_pedido + "</td>";
+                            g += ' <td><a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Detalhes</a></td>';
+                            g += "</tr>";
+                            $("#table-consulta-pedidos tbody").append(g);
+                        });
+                        _pedidos.atualiza_table();
+                    }
+                });
+    },
+    get_cliente : function() {
+        db2.select(
+                'clientes',
+                '*',
+                {
+                    where : {
+                        cod_cliente : _session.get('cod_cliente')
+                    }
+                },
+        function( f ) {
+            debug("TOTAL", f.rows.length);
+            $.each(f.rows.item(0), function( z, x ) {
+                if ( z == 'data_hora_atualizacao' ) {
+                    x = date("d/m/Y H:i:s", new Date(x));
+                } else if ( z == 'valor_devido' ) {
+                    x = number_format(x, 2, ",", ".");
+                } else if ( z == 'situacao' ) {
+                    x = _situacoes.clientes[v.situacao]
+                }
+                $('#' + z).html(x);
+            });
+            _pedidos.atualiza_table();
         });
     },
     get_produtos : function() {
@@ -164,23 +183,24 @@ _pedidos = {
                 $('#frm_novo_pedido_parte_2').find('#' + z + '_produto').val(x);
             });
             $('#frm_novo_pedido_parte_2').find('#quantidade_produto').focus();
-        }
-        );
+        });
+    },
+    _add_produtos_table : function( quantidade ) {
+        var g = "<tr>";
+        g += '<th>' + $('#frm_novo_pedido_parte_2').find('#dsc_produto_produto').val() + '</th>';
+        g += '<td>' + $('#frm_novo_pedido_parte_2').find('#cod_produto_produto').val() + '</td>';
+        g += '<td>' + $('#frm_novo_pedido_parte_2').find('#unidade_produto').val() + '</td>';
+        g += '<td>' + $('#frm_novo_pedido_parte_2').find('#desconto_produto').val() + '</td>';
+        g += '<td>' + quantidade + '</td>';
+        g += '<td>' + $('#frm_novo_pedido_parte_2').find('#valor_produto').val() + '</td>';
+        g += '<td><a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true" class="select_produtos">Remover</a></td>';
+        g += "</tr>";
+        $("#table-itens-pedidos tbody").append(g);
+        _pedidos.atualiza_table();
+        $('#frm_novo_pedido_parte_2 :input').val('');
     },
     add_produtos : function() {
         if ( _session.get('id_pedidos') != null ) {
-            var g = "<tr>";
-            g += '<th>' + $('#frm_novo_pedido_parte_2').find('#dsc_produto_produto').val() + '</th>';
-            g += '<td>' + $('#frm_novo_pedido_parte_2').find('#cod_produto').val() + '</td>';
-            g += '<td>' + $('#frm_novo_pedido_parte_2').find('#unidade_produto').val() + '</td>';
-            g += '<td><input type="text" data-mini="true" name="desconto_produto_unitario" id="desconto_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#desconto_produto').val() + '" placeholder="Desconto"></td>';
-            g += '<td><input type="text" data-mini="true" name="quatidade_produto_unitario" id="quatidade_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#quatidade_produto').val() + '" placeholder="Desconto"></td>';
-            g += '<td><input type="text" data-mini="true" name="valor_produto_unitario" id="valor_produto_unitario" value="' + $('#frm_novo_pedido_parte_2').find('#valor_produto').val() + '" placeholder="Desconto"></td>';
-            g += '<td><a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true" class="select_produtos">Remover</a></td>';
-            g += "</tr>";
-            $("#table-itens-pedidos tbody").append(g);
-            $("#table-itens-pedidos").table("refresh");
-
             db2.select(
                     'pedidos_itens',
                     'id_pedidos_itens',
@@ -195,31 +215,31 @@ _pedidos = {
                     db2.update(
                             'pedidos_itens',
                             {
-                                data_hora_cadastro : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
-                                quantidade : $('#frm_novo_pedido_parte_2').find('#quantidade_produto').val(),
+                                data_hora_cadastro : date('Y-m-d H:i:s'),
+                                quantidade : parseFloat(f.rows.item(0).quantidade) + convert_moeda($('#frm_novo_pedido_parte_2').find('#quantidade_produto').val() || '1,000'),
                                 valor_unitario : $('#frm_novo_pedido_parte_2').find('#valor_produto').val(),
-                                valor_desconto : $('#frm_novo_pedido_parte_2').find('#desconto_produto').val()
+                                valor_desconto : convert_moeda($('#frm_novo_pedido_parte_2').find('#desconto_produto').val() || '0,00')
                             },
                     {
                         id_pedidos : _session.get('id_pedidos'),
-                        id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
+                        id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos_produto').val()
                     },
-                            function( f ) {
-                                $('#frm_novo_pedido_parte_2 :input').val('');
-                            });
+                    function( ) {
+                        _pedidos._add_produtos_table(parseFloat(f.rows.item(0).quantidade) + convert_moeda($('#frm_novo_pedido_parte_2').find('#quantidade_produto').val() || '1,000'));
+                    });
                 } else {
                     db2.insert(
                             'pedidos_itens',
                             {
                                 id_pedidos : _session.get('id_pedidos'),
-                                id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
-                                data_hora_cadastro : $('#frm_novo_pedido_parte_2').find('#id_produtos').val(),
-                                quantidade : $('#frm_novo_pedido_parte_2').find('#quantidade_produto').val(),
+                                id_produtos : $('#frm_novo_pedido_parte_2').find('#id_produtos_produto').val(),
+                                data_hora_cadastro : date('Y-m-d H:i:s'),
+                                quantidade : convert_moeda($('#frm_novo_pedido_parte_2').find('#quantidade_produto').val() || '1,000'),
                                 valor_unitario : $('#frm_novo_pedido_parte_2').find('#valor_produto').val(),
-                                valor_desconto : $('#frm_novo_pedido_parte_2').find('#desconto_produto').val()
+                                valor_desconto : convert_moeda($('#frm_novo_pedido_parte_2').find('#desconto_produto').val() || '0,00')
                             },
-                    function( f ) {
-                        $('#frm_novo_pedido_parte_2 :input').val('');
+                    function( ) {
+                        _pedidos._add_produtos_table(convert_moeda($('#frm_novo_pedido_parte_2').find('#quantidade_produto').val() || '1,000'));
                     });
                 }
             });
@@ -242,9 +262,21 @@ _pedidos = {
                     valor_total : '0.00'
                 },
         function( f ) {
-            _session.get('id_pedidos', f.insertId);
+            _session.set('id_pedidos', f.insertId);
             _pedidos.add_produtos();
         }
         );
+    },
+    atualiza_table : function() {
+        $('.ui-table-cell-label').remove();
+        $("table :input").textinput({
+            mini : true
+        });
+        $('table').table("refresh");
+        $("table a").buttonMarkup({
+            inline : true,
+            iconpos : "notext",
+            theme : "c"
+        });
     }
 };

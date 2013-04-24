@@ -1088,6 +1088,11 @@ function convert_date( d, s ) {
     var a = d.split('/');
     return a[2] + s + a[1] + s + a[0];
 }
+function convert_moeda( d ) {
+    d = d.replace(/\./g,'');
+    d = d.replace(/\,/g,'.');
+    return parseFloat(d);
+}
 
 (function( $ ) {
     $.send = function( options ) {
@@ -1379,13 +1384,13 @@ function SQLite( cfg ) {
         query = query.replace('#cond#', conditions[0]);
 
         if ( options ) {
-            if ( options.limit ) {
-                query = query + ' LIMIT ?';
-                values.push(options.limit);
-            }
             if ( options.order ) {
                 query = query + ' ORDER BY ?';
                 values.push(options.order);
+            }
+            if ( options.limit ) {
+                query = query + ' LIMIT ?';
+                values.push(options.limit);
             }
             if ( options.offset ) {
                 query = query + ' OFFSET ?';

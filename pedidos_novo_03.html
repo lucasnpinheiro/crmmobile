@@ -16,7 +16,11 @@
         <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
         <script src="js/pedidos.js"></script>
         <script>
-            $(function() {
+            $(document).on("pageinit", function() {
+                if ( _session.get('cod_cliente') == null ) {
+                    jAviso('Cliente não informado.');
+                    _constant.redirect("clientes_consultar.html");
+                }
                 $(".data").datepicker();
             });
         </script>

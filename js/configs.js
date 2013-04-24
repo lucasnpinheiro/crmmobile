@@ -11,11 +11,11 @@ var _situacoes = {
         pedidos_lista : "http://s2i.com.br:8084/WsCrmMobile/pedidos"
     },
     clientes : {
-        1 : '<span class="situacoes_clietes_1">Ativo</span>',
-        2 : '<span class="situacoes_clietes_2">Inativo</span>',
-        3 : '<span class="situacoes_clietes_3">Bloqueado</span>',
-        4 : '<span class="situacoes_clietes_4">Bloqueado pagamento</span>',
-        5 : '<span class="situacoes_clietes_5">Cancelado</span>'
+        1 : '<span class="situacoes_clientes_1">Ativo</span>',
+        2 : '<span class="situacoes_clientes_2">Inativo</span>',
+        3 : '<span class="situacoes_clientes_3">Bloqueado</span>',
+        4 : '<span class="situacoes_clientes_4">Bloqueado pagamento</span>',
+        5 : '<span class="situacoes_clientes_5">Cancelado</span>'
     },
     sincronizacao : {
         1 : '<span class="situacoes_sincronizacao_1">Sincronizado</span>',
@@ -32,10 +32,10 @@ var _situacoes = {
         5 : '<span class="situacoes_pedido_5">Aberto</span>'
     },
     produtos : {
-        1 : '<span class="situacoes_protutos_1">{0}</span>',
-        2 : '<span class="situacoes_protutos_2">{0}</span>',
-        min : '<span class="situacoes_protutos_3">{0}</span>',
-        max : '<span class="situacoes_protutos_4">{0}</span>'
+        1 : '<span class="situacoes_produtos_1">{0}</span>',
+        2 : '<span class="situacoes_produtos_2">{0}</span>',
+        min : '<span class="situacoes_produtos_3">{0}</span>',
+        max : '<span class="situacoes_produtos_4">{0}</span>'
     }
 };
 var db = null;

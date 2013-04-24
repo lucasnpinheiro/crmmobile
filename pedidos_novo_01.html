@@ -15,6 +15,15 @@
         <script src="js/jquery.mobile.min.js"></script>
         <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
         <script src="js/pedidos.js"></script>
+        <script>
+            $(document).on("pageinit", function() {
+                if ( _session.get('cod_cliente') == null ) {
+                    jAviso('Cliente não informado.');
+                    _constant.redirect("clientes_consultar.html");
+                }
+                _pedidos.get_cliente();
+            });
+        </script>
     </head> 
     <body> 
 
@@ -31,18 +40,28 @@
                     <li data-role="list-divider">Identificação do cliente</li>
                 </ul>
 
-                <ul data-role="listview" data-divider-theme="d">
-                    <li data-role="list-divider">Cliente</li>
-                    <li>Código: <strong id="clente_codigo"></strong></li>
-                    <li>Nome: <strong id="clente_nome"></strong></li>
-                    <li>CPF/CNPJ: <strong id="cliente_cpf_cnpj"></strong></li>
-                    <li>Logradouro: <strong id="cliente_logradouro"></strong></li>
-                    <li>Data ultima atualização: <strong id="cliente_data_atualizacao"></strong></li>
-                    <li data-role="list-divider">Débitos</li>
-                    <li>Débitos em atraso: <strong id="cliente_debitos"></strong></li>
-                    <li data-role="list-divider" class="pedidos_alteriores">Pedidos alteriores</li>
-                    <li><span id="pedido_ultimo_data">Data: </span> <strong id="pedido_ultimo_valor">Valor R$:</strong></li>
-                </ul>
+                <table data-role="table" data-mode="reflow" class="table-stroke">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>CPF/CNPJ</th>
+                            <th>Logradouro</th>
+                            <th>Data ultima atualização</th>
+                            <th>Débitos em atraso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th><strong id="cod_cliente"></strong></th>
+                            <td><strong id="dsc_cliente"></strong></td>
+                            <td><strong id="cpf_cnpj"></strong></td>
+                            <td><strong id="logradouro"></strong></td>
+                            <td><strong id="data_hora_atualizacao"></strong></td>
+                            <td><strong id="valor_devido"></strong></td>
+                        </tr>
+                    </tbody>
+                </table>               
 
                 <div class="clear"></div>
 

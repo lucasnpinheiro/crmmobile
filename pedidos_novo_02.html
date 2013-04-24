@@ -15,7 +15,12 @@
         <script src="js/jquery.maskMoney.js"></script>
         <script src="js/pedidos.js"></script>
         <script>
-            $(function() {
+            $(document).on("pageinit", function() {
+                if ( _session.get('cod_cliente') == null ) {
+                    jAviso('Cliente não informado.');
+                    _constant.redirect("clientes_consultar.html");
+                }
+                 _pedidos.get_produtos();
                 function moeda() {
                     $(".moeda").maskMoney({
                         symbol : '',
@@ -95,39 +100,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>Alicate</th>
-                            <td>3255</td>
-                            <td>CX</td>
-                            <td><input type="text" data-mini="true" name="desconto_produto_unitario" id="desconto_produto_unitario" value="10%" placeholder="Desconto"></td>
-                            <td><input type="text" data-mini="true" name="quatidade_produto_unitario" id="quatidade_produto_unitario" value="5" placeholder="Quantidade"></td>
-                            <td><input type="text" data-mini="true" name="valor_produto_unitario" id="valor_produto_unitario" value="R$ 120,00" placeholder="Valor"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Prego</th>
-                            <td>3256</td>
-                            <td>PCT</td>
-                            <td><input type="text" data-mini="true" name="desconto_produto_unitario" id="desconto_produto_unitario" value="3%" placeholder="Desconto"></td>
-                            <td><input type="text" data-mini="true" name="quatidade_produto_unitario" id="quatidade_produto_unitario" value="12" placeholder="Quantidade"></td>
-                            <td><input type="text" data-mini="true" name="valor_produto_unitario" id="valor_produto_unitario" value="R$ 387,13" placeholder="Valor"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
+                        
                     </tbody>
                 </table>
 
             </div><!-- /content -->
 
             <div data-role="footer" class="ui-bar" data-theme="a" data-position="fixed">
-                <div data-role="navbar" data-grid="b" data-theme="d" class="ui-body-d ui-body">
+                <div data-role="navbar" data-grid="b" data-theme="d" class="ui-body-d ui-body" style="font-size: 0.8em;">
                     <ul>
-                        <li>Total de produtos: <span id="total_produtos_pedido">2</span></li>
-                        <li>Total de itens: <span id="total_produtos_itens_pedido">17</span></li>
-                        <li>Valor Total: R$ <span id="valor_total_pedido">507,13</span></li>
+                        <li>Total de produtos: <br /> <span id="total_produtos_pedido">0</span></li>
+                        <li>Total de itens: <br /> <span id="total_produtos_itens_pedido">0</span></li>
+                        <li>Valor Total: <br /> R$ <span id="valor_total_pedido">0,00</span></li>
                     </ul>
                 </div><!-- /navbar -->
                 <div data-role="navbar" data-grid="c">

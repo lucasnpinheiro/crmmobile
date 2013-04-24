@@ -4,8 +4,7 @@ $(document).on("pageinit", function() {
     $("#bt_consultar_produtos").on("click", function( b ) {
         b.preventDefault();
         if ( $.trim($("#search").val()) != "" ) {
-            var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + $("#search").val() + '%" OR cod_produto LIKE "%' + $("#search").val() + '%" ORDER BY data_hora_atualizacao DESC LIMIT 100';
-            _produtos.consultar(a);
+            _produtos.consultar('dsc_produto LIKE "%' + $("#search").val() + '%" OR cod_produto LIKE "%' + $("#search").val() + '%"');
         } else {
             jAviso("Informe o nome produto ou código do produto.");
         }
@@ -14,38 +13,46 @@ $(document).on("pageinit", function() {
 
 _produtos = {
     ultimos : function() {
-        var a = "SELECT * FROM produtos ORDER BY data_hora_atualizacao DESC LIMIT 10";
-        _produtos.consultar(a);
+        _produtos.consultar('');
     },
     consultar : function( a ) {
+        block(false);
         $("#table-produtos tbody").html("");
-        db.transaction(function( b ) {
-            b.executeSql(a, [ ],
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("TOTAL", c.rows.length);
-                        if ( c.rows.length == 0 ) {
-                            jAviso("Nenum registro localizado.");
-                        } else {
-                            for ( var e = 0; e < c.rows.length; e++ ) {
-                                var f = c.rows.item(e);
-                                var g = "<tr>";
-                                g += ' <th>' + f.dsc_produto + "</th>";
-                                g += ' <td>' + f.cod_produto + "</td>";
-                                g += ' <td>Não informado</td>';
-                                g += ' <td><span class="situacoes_protutos_1">' + f.estoque + "</span></td>";
-                                g += ' <td><span class="situacoes_produtos_3">R$ ' + number_format(f.valor, 2, ",", ".") + ' </span> | <span class="situacoes_produtos_4">R$ ' + number_format(f.desconto_maximo, 2, ",", ".") + "</span></td>";
-                                g += ' <td>' + date("d/m/Y H:i:s", new Date(f.data_hora_atualizacao)) + "</td>";
-                                g += "</tr>";
-                                $("#table-produtos tbody").append(g);
-                            }
-                            $("#table-produtos").table( "refresh" );
-                        }
-                    },
-                    function( d, c ) {
-                        debug("QUERY", a);
-                        debug("ERROR", c.message);
-                    });
+
+        db2.select(
+                'produtos',
+                '*',
+                {
+                    where : a,
+                    options : {
+                        limit : 100,
+                        order : 'data_hora_atualizacao'
+                    }
+                },
+        function( f ) {
+            debug("TOTAL", f.rows.length);
+            if ( f.rows.length == 0 ) {
+                jAviso("Nenum registro localizado.");
+            } else {
+                for ( var e = 0; e < f.rows.length; e++ ) {
+                    var v = f.rows.item(e);
+                    var g = "<tr>";
+                    g += ' <th>' + v.dsc_produto + "</th>";
+                    g += ' <td>' + v.cod_produto + "</td>";
+                    g += ' <td>Não informado</td>';
+                    g += ' <td><span class="situacoes_protutos_1">' + v.estoque + "</span></td>";
+                    g += ' <td><span class="situacoes_produtos_3">R$ ' + number_format(v.valor, 2, ",", ".") + ' </span> | <span class="situacoes_produtos_4">R$ ' + number_format(v.desconto_maximo, 2, ",", ".") + "</span></td>";
+                    g += ' <td>' + date("d/m/Y H:i:s", new Date(v.data_hora_atualizacao)) + "</td>";
+                    g += "</tr>";
+                    $("#table-produtos tbody").append(g);
+                }
+                _produtos.atualiza_table();
+            }
+            block(true);
         });
+    },
+    atualiza_table : function() {
+        $('.ui-table-cell-label').remove();
+        $('#table-produtos').table("refresh");
     }
 };
