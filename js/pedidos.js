@@ -17,7 +17,7 @@ $(document).on("pageinit", function() {
         $ul.listview("refresh");
         $ul.trigger("updatelayout");
     });
-    $("form").insere_mascara();
+    $("form, table").insere_mascara();
 });
 _produtos = {
 };
@@ -53,7 +53,7 @@ _pedidos.all = function( obj ) {
 
             case 'cliente':
                 if ( $.trim($(this).val()) != '' ) {
-                    and['c.dsc_cliente LIKE "%'] = $(this).val() + '%"';
+                    and['c.dsc_cliente LIKE'] =  $(this).val();
                 }
                 break;
 
@@ -99,7 +99,7 @@ _pedidos.ultimos = function() {
 _pedidos.consultar = function( condicoes ) {
     $("#table-consulta-pedidos tbody").html("");
     db2.select(
-            'pedidos as p LEFT JOIN clientes as c on c.id_clientes = p.id_clientes',
+            'pedidos as p LEFT JOIN clientes as c on c.cod_cliente = p.id_clientes',
             'p.*, c.dsc_cliente',
             condicoes,
             function( f ) {
@@ -294,7 +294,7 @@ _pedidos.novo = function() {
             'pedidos',
             {
                 id_empresas : _session.get('id_empresas'),
-                id_clientes : _session.get('id_clientes'),
+                id_clientes : _session.get('cod_cliente'),
                 id_usuarios : _session.get('cod_usuario'),
                 data_hora_cadastro : date('Y-m-d H:i:s'),
                 numero_pedido : '',
