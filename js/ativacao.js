@@ -3,8 +3,12 @@ $(document).on('pageinit', function() {
     $('.bt_ativar').click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
-            var uuid = $('#devUUID').text();
-            if ( uuid == '' ) {
+            _ativacao.campos.uuid = $('#devUUID').text();
+            _ativacao.campos.modelo = $('#devName').text();
+            _ativacao.campos.plataforma = $('#devPlatform').text();
+            _ativacao.campos.versao = $('#devVersion').text();
+
+            if ( _ativacao.campos.uuid == '' ) {
                 _ativacao.campos.codigo_cliente = $('#codigo_cliente').val();
                 _ativacao.campos.modelo = navigator.appCodeName;
                 _ativacao.campos.plataforma = navigator.platform;
@@ -104,11 +108,6 @@ function onDeviceReady() {
 
 // get device info
 function getDeviceInfo() {
-    _ativacao.campos.uuid = device.uuid;
-    _ativacao.campos.modelo = device.name;
-    _ativacao.campos.plataforma = device.platform;
-    _ativacao.campos.versao = device.version;
-
     $('#devName').text(device.name);
     $('#devPlatform').text(device.platform);
     $('#devUUID').text(device.uuid);
