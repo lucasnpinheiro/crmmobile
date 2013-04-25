@@ -1,5 +1,6 @@
 $(document).on("pageinit", function() {
     block(false);
+    _session.clear();
     document.addEventListener("deviceready", onDeviceReady, false);
     _configuracoes.verifica_tabelas();
 });

@@ -42,6 +42,7 @@ _pedidos = {
 // consulta pedido por filtro
 _pedidos.all = function( obj ) {
     var and = {
+        id_empresas : _session.get('id_empresas')
     };
     $(obj).closest('form').find(':input').each(function() {
         switch ( this.name ) {
@@ -53,7 +54,7 @@ _pedidos.all = function( obj ) {
 
             case 'cliente':
                 if ( $.trim($(this).val()) != '' ) {
-                    and['c.dsc_cliente LIKE'] =  $(this).val();
+                    and['c.dsc_cliente LIKE'] = $(this).val();
                 }
                 break;
 
@@ -97,29 +98,38 @@ _pedidos.ultimos = function() {
 
 // consulta pedidos e popula na view
 _pedidos.consultar = function( condicoes ) {
+    block(false);
     $("#table-consulta-pedidos tbody").html("");
     db2.select(
             'pedidos as p LEFT JOIN clientes as c on c.cod_cliente = p.id_clientes',
-            'p.*, c.dsc_cliente',
+            'p.*, c.dsc_cliente, c.cod_cliente',
             condicoes,
             function( f ) {
                 debug("TOTAL", f.rows.length);
                 if ( f.rows.length == 0 ) {
                     jAviso("Nenum registro localizado.");
                 } else {
-                    $.each(f.rows.item, function( k, v ) {
-                        var g = "<tr>";
-                        g += ' <th>' + v.dsc_cliente + "</th>";
-                        g += ' <td>' + v.id_pedidos + "</td>";
-                        g += ' <td>' + v.valor_total + "</td>";
-                        g += ' <td>' + v.data_hora_cadastro + "</td>";
+                    for ( var e = 0; e < f.rows.length; e++ ) {
+                        var v = f.rows.item(e);
+                        var g = '<tr cod_cliente="' + v.cod_cliente + '">';
+                        g += ' <th>' + v.dsc_cliente + '</th>';
+                        g += ' <td>' + v.numero_pedido + '</td>';
+                        g += ' <td>' + v.valor_total + '</td>';
+                        g += ' <td>' + v.data_hora_cadastro + '</td>';
                         g += ' <td>' + v.situacao_pedido + "</td>";
-                        g += ' <td><a href="#" data-role="button" data-icon="bars" data-iconpos="notext" data-theme="c" data-inline="true">Detalhes</a></td>';
-                        g += "</tr>";
+                        g += ' <td> <a href="#" data-role="button" data-icon="bars" data-theme="c" data-inline="true" class="bt_cliente_novo_pedido">Novo Pedido</a> </td>';
+                        g += '</tr>';
                         $("#table-consulta-pedidos tbody").append(g);
-                    });
+                    }
                     atualiza_table();
+                    $(".bt_cliente_novo_pedido").click(function( b ) {
+                        b.preventDefault();
+                        var cod_cliente = $(this).closest('tr').attr('cod_cliente');
+                        _session.set("cod_cliente", cod_cliente);
+                        _constant.redirect("pedidos_novo_01.html");
+                    });
                 }
+                block(true);
             });
 }
 
@@ -205,6 +215,7 @@ _pedidos.add_all = function() {
             'pi.*, p.dsc_produto, p.cod_produto, p.unidade',
             {
                 where : {
+                    id_empresas : _session.get('id_empresas'),
                     id_pedidos : _session.get('id_pedidos')
                 }
             },
@@ -250,6 +261,19 @@ _pedidos.update_totais = function() {
         $('#total_produtos_pedido').html(_pedidos.qtd_volume);
         $('#total_produtos_itens_pedido').html(_pedidos.qtd_itens);
         $('#valor_total_pedido').html(number_format(_pedidos.total, 2, ",", "."));
+
+        db2.update(
+                'pedidos',
+                {
+                    valor_total : _pedidos.total
+                },
+        {
+            id_pedidos : _session.get('id_pedidos'),
+            id_clientes : _session.get('cod_cliente')
+        },
+        function( ) {
+        });
+
     });
 }
 
@@ -299,7 +323,7 @@ _pedidos.novo = function() {
                 data_hora_cadastro : date('Y-m-d H:i:s'),
                 numero_pedido : '',
                 observacao : '',
-                situacao_envio : 1,
+                situacao_envio : 3,
                 situacao_pedido : 1,
                 valor_total : '0.00'
             },
@@ -310,6 +334,43 @@ _pedidos.novo = function() {
     );
 }
 
+// consulta ultimos pedidos do cliente
+_pedidos.get_all = function() {
+    _session.remove('id_pedidos');
+    db2.select(
+            'pedidos',
+            '*',
+            {
+                where : {
+                    id_clientes : _session.get('cod_cliente'),
+                    id_empresas : _session.get('id_empresas')
+                },
+                option : {
+                    limit : 5,
+                    order : 'data_hora_cadastro DESC',
+                }
+            },
+    function( f ) {
+        debug("TOTAL", f.rows.length);
+        for ( var e = 0; e < f.rows.length; e++ ) {
+
+            var v = f.rows.item(e);
+            if ( v.situacao_pedido == 1 ) {
+                _session.set('id_pedidos', v.id_pedidos);
+            }
+            var g = '<tr>';
+            g += '<th>' + v.numero_pedido + '</th>';
+            g += '<td>' + _situacoes.pedido[v.situacao_pedido] + '</td>';
+            g += '<td>' + _situacoes.sincronizacao[v.situacao_envio] + '</td>';
+            g += '<td> R$ ' + number_format(v.valor_total, 2, ",", ".") + '</td>';
+            g += '<td>' + date("d/m/Y H:i:s", new Date(v.data_hora_cadastro)) + '</td>';
+            g += "</tr>";
+            $("#ultimos-pedidos tbody").append(g);
+        }
+        atualiza_table();
+    });
+}
+
 // consulta cliente
 _clientes.get = function() {
     db2.select(
@@ -317,6 +378,7 @@ _clientes.get = function() {
             '*',
             {
                 where : {
+                    id_empresas : _session.get('id_empresas'),
                     cod_cliente : _session.get('cod_cliente')
                 }
             },
@@ -333,9 +395,9 @@ _clientes.get = function() {
             $('#' + z).html(x);
         });
         atualiza_table();
+        _pedidos.get_all();
     });
 }
-
 
 // consulta produtos
 _produtos.get = function() {
@@ -348,33 +410,36 @@ _produtos.get = function() {
         if ( value && value.length > 1 ) {
             $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
             $ul.listview("refresh");
-            var a = 'SELECT * FROM produtos WHERE dsc_produto LIKE "%' + value + '%" OR cod_produto LIKE "%' + value + '%" ORDER BY data_hora_atualizacao DESC LIMIT 100';
-            db.transaction(function( b ) {
-                b.executeSql(a, [ ],
-                        function( d, c ) {
-                            debug("QUERY", a);
-                            debug("TOTAL", c.rows.length);
-                            if ( c.rows.length == 0 ) {
-                                jAviso("Nenum registro localizado.");
-                            } else {
-                                for ( var e = 0; e < c.rows.length; e++ ) {
-                                    var f = c.rows.item(e);
-                                    html += '<li id_produtos="' + f.id_produtos + '" class="select_produtos">' + f.cod_produto + ' | ' + f.dsc_produto + '</li>';
-                                }
-                                $ul.html(html);
-                                $ul.listview("refresh");
-                                $ul.trigger("updatelayout");
-                                $(".select_produtos").on("click", function( b ) {
-                                    b.preventDefault();
-                                    _produtos.select($(this).attr('id_produtos'));
-                                    $(".select_produtos").remove();
-                                });
-                            }
-                        },
-                        function( d, c ) {
-                            debug("QUERY", a);
-                            debug("ERROR", c.message);
-                        });
+            var a = '(dsc_produto LIKE "%' + value + '%" OR cod_produto LIKE "%' + value + '%") AND id_empresas = "' + _session.get('id_empresas') + '" ';
+
+            db2.select(
+                    'produtos',
+                    '*',
+                    {
+                        where : a,
+                        options : {
+                            limit : 100,
+                            order : 'data_hora_atualizacao'
+                        }
+                    },
+            function( f ) {
+                debug("TOTAL", f.rows.length);
+                if ( f.rows.length == 0 ) {
+                    jAviso("Nenum registro localizado.");
+                } else {
+                    for ( var e = 0; e < f.rows.length; e++ ) {
+                        var v = f.rows.item(e);
+                        html += '<li id_produtos="' + v.id_produtos + '" class="select_produtos">' + v.cod_produto + ' | ' + v.dsc_produto + '</li>';
+                    }
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+                    $(".select_produtos").on("click", function( b ) {
+                        b.preventDefault();
+                        _produtos.select($(this).attr('id_produtos'));
+                        $(".select_produtos").remove();
+                    });
+                }
             });
         }
     });
@@ -387,6 +452,7 @@ _produtos.select = function( id_produtos ) {
             '*',
             {
                 where : {
+                    id_empresas : _session.get('id_empresas'),
                     id_produtos : id_produtos
                 }
             },
@@ -403,13 +469,15 @@ _produtos.select = function( id_produtos ) {
 // atualiza tabelas
 atualiza_table = function() {
     $('.ui-table-cell-label').remove();
+    $('.table-stroke').each(function() {
+        $(this).table("refresh");
+        $(this).find('a').buttonMarkup({
+            inline : true,
+            iconpos : "notext",
+            theme : "c"
+        });
+    });
     $("table :input").textinput({
         mini : true
-    });
-    $('table').table("refresh");
-    $("table a").buttonMarkup({
-        inline : true,
-        iconpos : "notext",
-        theme : "c"
     });
 }

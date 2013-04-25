@@ -29,6 +29,7 @@ function logar( d ) {
         debug("TOTAL", f.rows.length);
         if ( f.rows.length != 0 ) {
             debug("SUSSESO", "ID Usuário: " + f.rows.item(0).id_usuarios);
+            _session.set("id_empresas", f.rows.item(0).id_empresas);
             _session.set("id_usuarios", f.rows.item(0).id_usuarios);
             _session.set("cod_usuario", f.rows.item(0).cod_usuario);
             _session.set("usuario", f.rows.item(0).usuario);
