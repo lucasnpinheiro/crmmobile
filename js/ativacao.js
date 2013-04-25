@@ -3,26 +3,55 @@ $(document).on('pageinit', function() {
     $('.bt_ativar').click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
-            var codigo_cliente = $('#codigo_cliente').val();
             var uuid = $('#devUUID').text();
-            uuid = (uuid == '' ? '123456' : uuid);
-            var cod_ativacao = Math.ceil(Math.random() * 1000000000);
-            solicitar_ativacao(codigo_cliente, uuid, cod_ativacao);
+            if ( uuid == '' ) {
+                _ativacao.campos.codigo_cliente = $('#codigo_cliente').val();
+                _ativacao.campos.modelo = navigator.appCodeName;
+                _ativacao.campos.plataforma = navigator.platform;
+                _ativacao.campos.versao = navigator.appVersion;
+                _ativacao.campos.uuid = gerar_chave();
+            }
+            _ativacao.ativar();
         }
     });
 });
 
-function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
+function gerar_chave() {
+    var c = Math.ceil(Math.random() * 1000000) + "a" + md5((Math.ceil(Math.random() * 1000000) + "v" + md5(_ativacao.campos.versao) + 'r' + Math.ceil(Math.random() * 1000000))) + 'z' + Math.ceil(Math.random() * 1000000);
+    var s = '';
+    for ( var i = 0; i < c.length; i++ ) {
+        if ( i % 2 == 0 ) {
+            s += c[i];
+        }
+    }
+    return  s.substr((Math.ceil(s.length / 4) - 1), 16);
+}
+
+_ativacao = {
+    campos : {
+        id_empresas : '',
+        uuid : '',
+        modelo : '',
+        plataforma : '',
+        versao : '',
+        codigo_cliente : '',
+        cod_ativacao : '',
+        cpf_cnpj : '',
+        nome_empresa : '',
+        data_hora_cadastro : date('Y-m-d H:i:s')
+    }
+}
+_ativacao.ativar = function() {
     $.send({
         url : _situacoes.urls.ativacao,
         type : 'POST',
         crypt : true,
         data : {
-            cod_cliente : codigo_cliente,
-            nome_dispositivo : $('#devName').text() || 'SGH-T849',
-            plataforma : $('#devPlatform').text() || 'Android',
-            versao_plataforma : $('#devVersion').text() || '2.2',
-            uuid : uuid
+            cod_cliente : _ativacao.campos.codigo_cliente,
+            nome_dispositivo : _ativacao.campos.modelo,
+            plataforma : _ativacao.campos.plataforma,
+            versao_plataforma : _ativacao.campos.versao,
+            uuid : _ativacao.campos.uuid
         },
         beforeSend : function() {
             block(false);
@@ -31,7 +60,11 @@ function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
             if ( a.cod_retorno == 999 ) {
                 jSucesso(a.mensagem);
             } else {
-                insert_solicitar_ativacao(codigo_cliente, uuid, a.dados.dscChave, a.dados.idEmpresas.documento, a.dados.idEmpresas.dscEmpresa);
+                _ativacao.campos.cod_ativacao = a.dados.dscHash;
+                _ativacao.campos.cpf_cnpj = a.dados.documento;
+                _ativacao.campos.nome_empresa = a.dados.dscEmpresa;
+                _ativacao.campos.id_empresas = a.dados.idEmpresas;
+                _ativacao.insert();
             }
             jSucesso(a.cod_retorno);
         },
@@ -41,22 +74,22 @@ function solicitar_ativacao( codigo_cliente, uuid, cod_ativacao ) {
     });
 }
 
-function insert_solicitar_ativacao( codigo_cliente, uuid, cod_ativacao, cpf_cnpj, nome_empresa ) {
-    db2.replace(
+_ativacao.insert = function() {
+    db2.destroy(
             'empresas',
-            {
-                uuid : uuid,
-                codigo_cliente : codigo_cliente,
-                cod_ativacao : cod_ativacao,
-                cpf_cnpj : cpf_cnpj,
-                nome_empresa : nome_empresa,
-                data_hora_cadastro : date('Y-m-d H:i:s')
-            },
-    function(  ) {
-        jSucesso('Ativação realizada com sucesso.');
-        _constant.redirect("login.html");
-    }
+            '1=1',
+            function(  ) {
+                db2.insert(
+                        'empresas',
+                        _ativacao.campos,
+                        function(  ) {
+                            jSucesso('Ativação realizada com sucesso.');
+                            _constant.redirect("login.html");
+                        }
+                );
+            }
     );
+
 }
 
 // handling document ready and phonegap deviceready
@@ -71,6 +104,11 @@ function onDeviceReady() {
 
 // get device info
 function getDeviceInfo() {
+    _ativacao.campos.uuid = device.uuid;
+    _ativacao.campos.modelo = device.name;
+    _ativacao.campos.plataforma = device.platform;
+    _ativacao.campos.versao = device.version;
+
     $('#devName').text(device.name);
     $('#devPlatform').text(device.platform);
     $('#devUUID').text(device.uuid);

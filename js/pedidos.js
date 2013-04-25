@@ -337,6 +337,7 @@ _pedidos.novo = function() {
 // consulta ultimos pedidos do cliente
 _pedidos.get_all = function() {
     _session.remove('id_pedidos');
+
     db2.select(
             'pedidos',
             '*',

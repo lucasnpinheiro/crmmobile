@@ -27,6 +27,9 @@ _configuracoes = {
                 cols : {
                     id_empresas : 'INTEGER PRIMARY KEY AUTOINCREMENT',
                     uuid : 'VARCHAR(50)',
+                    modelo : 'VARCHAR(50)',
+                    plataforma : 'VARCHAR(50)',
+                    versao : 'VARCHAR(50)',
                     codigo_cliente : 'VARCHAR(50)',
                     cod_ativacao : 'VARCHAR(50)',
                     cpf_cnpj : 'VARCHAR(14)',
