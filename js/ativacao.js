@@ -7,7 +7,8 @@ $(document).on('pageinit', function() {
             _ativacao.campos.modelo = $('#devName').text();
             _ativacao.campos.plataforma = $('#devPlatform').text();
             _ativacao.campos.versao = $('#devVersion').text();
-
+            alert('a');
+            alert(json_encode(_ativacao.campos));
             if ( _ativacao.campos.uuid == '' ) {
                 _ativacao.campos.codigo_cliente = $('#codigo_cliente').val();
                 _ativacao.campos.modelo = navigator.appCodeName;
@@ -15,6 +16,8 @@ $(document).on('pageinit', function() {
                 _ativacao.campos.versao = navigator.appVersion;
                 _ativacao.campos.uuid = gerar_chave();
             }
+            alert('b');
+            alert(json_encode(_ativacao.campos));
             _ativacao.ativar();
         }
     });
@@ -33,7 +36,6 @@ function gerar_chave() {
 
 _ativacao = {
     campos : {
-        id_empresas : '',
         uuid : '',
         modelo : '',
         plataforma : '',
@@ -68,6 +70,8 @@ _ativacao.ativar = function() {
                 _ativacao.campos.cpf_cnpj = a.dados.documento;
                 _ativacao.campos.nome_empresa = a.dados.dscEmpresa;
                 _ativacao.campos.id_empresas = a.dados.idEmpresas;
+                alert('c');
+                alert(json_encode(_ativacao.campos));
                 _ativacao.insert();
             }
             jSucesso(a.cod_retorno);
@@ -79,6 +83,8 @@ _ativacao.ativar = function() {
 }
 
 _ativacao.insert = function() {
+    alert('d');
+    alert(json_encode(_ativacao.campos));
     db2.destroy(
             'empresas',
             '1=1',
