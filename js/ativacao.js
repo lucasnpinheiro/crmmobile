@@ -3,6 +3,7 @@ $(document).on('pageinit', function() {
     $('.bt_ativar').click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
+            _ativacao.campos.codigo_cliente = $('#codigo_cliente').val();
             _ativacao.campos.uuid = $('#devUUID').text();
             _ativacao.campos.modelo = $('#devName').text();
             _ativacao.campos.plataforma = $('#devPlatform').text();
@@ -10,7 +11,6 @@ $(document).on('pageinit', function() {
             alert('a');
             alert(json_encode(_ativacao.campos));
             if ( _ativacao.campos.uuid == '' ) {
-                _ativacao.campos.codigo_cliente = $('#codigo_cliente').val();
                 _ativacao.campos.modelo = navigator.appCodeName;
                 _ativacao.campos.plataforma = navigator.platform;
                 _ativacao.campos.versao = navigator.appVersion;
