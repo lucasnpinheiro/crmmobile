@@ -15,9 +15,9 @@ $(document).on('pageinit', function() {
                 _ativacao.campos.plataforma = navigator.platform;
                 _ativacao.campos.versao = navigator.appVersion;
                 _ativacao.campos.uuid = gerar_chave();
+                alert('b');
+                alert(json_encode(_ativacao.campos));
             }
-            alert('b');
-            alert(json_encode(_ativacao.campos));
             _ativacao.ativar();
         }
     });
