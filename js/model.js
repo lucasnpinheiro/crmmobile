@@ -25,7 +25,7 @@ _configuracoes = {
             }, {
                 name : 'empresas',
                 cols : {
-                    id_empresas : 'INTEGER PRIMARY KEY AUTOINCREMENT',
+                    id_empresas : 'INTEGER',
                     uuid : 'VARCHAR(50)',
                     modelo : 'VARCHAR(50)',
                     plataforma : 'VARCHAR(50)',

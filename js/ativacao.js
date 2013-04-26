@@ -85,9 +85,7 @@ _ativacao.insert = function() {
                 _constant.redirect("login.html");
             },
             function( error, query ) {
-                jSucesso("QUERY", query);
-                jSucesso('Oops. ' + error.message + ' (Code ' + error.code + ')');
-                _constant.redirect("login.html");
+                jSucesso("QUERY", query + ' <br/>Oops. ' + error.message + ' (Code ' + error.code + ')');
             }
     );
 
