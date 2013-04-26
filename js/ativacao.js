@@ -83,6 +83,11 @@ _ativacao.insert = function() {
             function(  ) {
                 jSucesso('Ativação realizada com sucesso.');
                 _constant.redirect("login.html");
+            },
+            function( error, query ) {
+                jSucesso("QUERY", query);
+                jSucesso('Oops. ' + error.message + ' (Code ' + error.code + ')');
+                _constant.redirect("login.html");
             }
     );
 
