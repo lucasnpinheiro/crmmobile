@@ -12,6 +12,7 @@
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.maskMoney.js"></script>
         <script src="js/pedidos.js"></script>
         <script>
             $(document).on("pageinit", function() {
@@ -19,6 +20,9 @@
                     jAviso('Cliente não informado.');
                     _constant.redirect("clientes_consultar.html");
                 }
+                _pedidos.update_totais();
+                _pedidos.parcela_all();
+                
             });
         </script>
     </head> 
@@ -38,26 +42,30 @@
                     <li data-role="list-divider">Forma de Pagamento</li>
                 </ul>
 
-
                 <form id="frm_novo_pedido_parte_3" name="frm_novo_pedido_parte_3" class="container_12">
-                    <div class="grid_4">
-                        <select name="condicoes_pagamnento" id="condicoes_pagamnento" data-mini="true" data-native-menu="false">
-                            <option>Condições de pagamento</option>
+                    <div class="grid_10">
+                        <select name="condicoes_pagamnento" id="condicoes_pagamnento" data-mini="true" data-native-menu="false" class="obrigatorio">
+                            <option value="">Condições de pagamento</option>
                             <option value="1">Avista</option>
                             <option value="2">Parcelado</option>
                         </select>
                     </div>
-                    <div class="grid_4">
-                        <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                            <option>Forma de pagamento</option>
+                    <div class="grid_2">
+                        <input type="text" data-mini="true" name="numero_parcelas" id="numero_parcelas" value="5" placeholder="Número de parcelas" class="obrigatorio">
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="grid_10">
+                        <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false" class="obrigatorio">
+                            <option value="">Forma de pagamento</option>
                             <option value="1">Dinheiro</option>
                             <option value="2">Cheque</option>
                             <option value="3">Boleto</option>
                             <option value="4">Transferências Bancaria</option>
                         </select>
                     </div>
-                    <div class="grid_4">
-                        <input type="text" data-mini="true" name="numero_parcelas" id="numero_parcelas" value="5" placeholder="Número de parcelas">
+                    <div class="grid_2">
+                        <a href="#" data-role="button" data-mini="true"  data-iconpos="notext" data-theme="c" data-inline="true" data-icon="plus" id="bt_adicionar_parcelas">Adicionar</a>
                     </div>
                 </form>
 
@@ -66,105 +74,26 @@
                 <table data-role="table" id="table-pagamentos-pedidos" data-mode="reflow" class="ui-responsive table-stroke">
                     <thead>
                         <tr class="ui-bar-a">
-                            <th title="Forma de Pagamento">Forma de pagamento</th>
-                            <th data-priority="1" title="Data de vencimento">Data vencimento</th>
-                            <th data-priority="2" title="Valor">Valor</th>
-                            <th data-priority="6" title="Ações">&nbsp;</th>
+                            <th>Forma de pagamento</th>
+                            <th>Data vencimento</th>
+                            <th>Valor</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                                    <option>Forma de pagamento</option>
-                                    <option value="1">Dinheiro</option>
-                                    <option value="2">Cheque</option>
-                                    <option value="3">Boleto</option>
-                                    <option value="4">Transferências Bancaria</option>
-                                </select>
-                            </th>
-                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/04/2013" class="data"></td>
-                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                                    <option>Forma de pagamento</option>
-                                    <option value="1">Dinheiro</option>
-                                    <option value="2">Cheque</option>
-                                    <option value="3">Boleto</option>
-                                    <option value="4">Transferências Bancaria</option>
-                                </select>
-                            </th>
-                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/05/2013" class="data"></td>
-                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                                    <option>Forma de pagamento</option>
-                                    <option value="1">Dinheiro</option>
-                                    <option value="2">Cheque</option>
-                                    <option value="3">Boleto</option>
-                                    <option value="4">Transferências Bancaria</option>
-                                </select>
-                            </th>
-                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/06/2013" class="data"></td>
-                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                                    <option>Forma de pagamento</option>
-                                    <option value="1">Dinheiro</option>
-                                    <option value="2">Cheque</option>
-                                    <option value="3">Boleto</option>
-                                    <option value="4">Transferências Bancaria</option>
-                                </select>
-                            </th>
-                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/07/2013" class="data"></td>
-                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <select name="forma_pagamnento" id="forma_pagamnento" data-mini="true" data-native-menu="false">
-                                    <option>Forma de pagamento</option>
-                                    <option value="1">Dinheiro</option>
-                                    <option value="2">Cheque</option>
-                                    <option value="3">Boleto</option>
-                                    <option value="4">Transferências Bancaria</option>
-                                </select>
-                            </th>
-                            <td><input type="text" data-mini="true" name="data_vencimento[]" value="10/08/2013" class="data"></td>
-                            <td><input type="text" data-mini="true" name="valor_parcela[]" value="R$ 101,43"></td>
-                            <td>
-                                <a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true">Remover</a>
-                            </td>
-                        </tr>
-
                     </tbody>
                 </table>
 
             </div><!-- /content -->
 
             <div data-role="footer" class="ui-bar" data-theme="a" data-position="fixed">
+                <div data-role="navbar" data-grid="b" data-theme="d" class="ui-body-d ui-body" style="font-size: 0.8em;">
+                    <ul style="text-align: center;">
+                        <li style="width: 33%;">T. produtos: <br /> <span id="total_produtos_pedido">0</span></li>
+                        <li style="width: 33%;">T. itens: <br /> <span id="total_produtos_itens_pedido">0</span></li>
+                        <li style="width: 33%;">Total: <br /> R$ <span id="valor_total_pedido">0,00</span></li>
+                    </ul>
+                </div><!-- /navbar -->
                 <div data-role="navbar" data-grid="c">
                     <ul>
                         <li><a href="pedidos_novo_01.html">Identificação</a></li>

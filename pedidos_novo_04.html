@@ -12,6 +12,7 @@
         <script src="js/scripts.js"></script>
         <script src="js/configs.js"></script>
         <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.maskMoney.js"></script>
         <script src="js/pedidos.js"></script>
         <script>
             $(document).on("pageinit", function() {
@@ -19,6 +20,8 @@
                     jAviso('Cliente não informado.');
                     _constant.redirect("clientes_consultar.html");
                 }
+                _pedidos.update_totais();
+                _pedidos.resumo();
             });
         </script>
     </head> 
@@ -45,16 +48,16 @@
                     <table data-role="table" id="table-resumo-pedidos-cliente" data-mode="reflow" class="ui-responsive table-stroke">
                         <thead>
                             <tr class="ui-bar-a">
-                                <th title="Forma de Pagamento">Código</th>
-                                <th data-priority="1" title="Data de vencimento">Nome</th>
-                                <th data-priority="2" title="Valor">CNPJ</th>
+                                <th>Código</th>
+                                <th data-priority="1">Nome</th>
+                                <th data-priority="2">CPF/CNPJ</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>30875</th>
-                                <td>JJ Empreendimentos Mat Construção</td>
-                                <td>30.3332.6222/0001-21</td>
+                                <th id="cliente_codigo">30875</th>
+                                <td id="cliente_nome">JJ Empreendimentos Mat Construção</td>
+                                <td id="cliente_documento">30.3332.6222/0001-21</td>
                             </tr>
                         </tbody>
                     </table>
@@ -68,31 +71,16 @@
                     <table data-role="table" id="table-resumo-pedidos-itens" data-mode="reflow" class="ui-responsive table-stroke">
                         <thead>
                             <tr class="ui-bar-a">
-                                <th title="Produto">Produto</th>
-                                <th data-priority="1" title="Código">Código</th>
-                                <th data-priority="2" title="Unidade">Unidade</th>
-                                <th data-priority="3" title="Desconto">Desconto</th>
-                                <th data-priority="4" title="Qtd.">Qtd.</th>
-                                <th data-priority="5" title="Valor">Valor</th>
+                                <th>Produto</th>
+                                <th>Código</th>
+                                <th>Unidade</th>
+                                <th>Valor unitario</th>
+                                <th>Desconto</th>
+                                <th>Qtd.</th>
+                                <th>Valor</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>Alicate</th>
-                                <td>3255</td>
-                                <td>CX</td>
-                                <td>10%</td>
-                                <td>5</td>
-                                <td>R$ 120,00</td>
-                            </tr>
-                            <tr>
-                                <th>Prego</th>
-                                <td>3256</td>
-                                <td>PCT</td>
-                                <td>3%</td>
-                                <td>12</td>
-                                <td>R$ 387,13</td>
-                            </tr>
                         </tbody>
                     </table>
 
@@ -105,37 +93,12 @@
                     <table data-role="table" id="table-resumo-pedidos-forma-pagamento" data-mode="reflow" class="ui-responsive table-stroke">
                         <thead>
                             <tr class="ui-bar-a">
-                                <th title="Forma de Pagamento">Forma de pagamento</th>
-                                <th data-priority="1" title="Data de vencimento">Data vencimento</th>
-                                <th data-priority="2" title="Valor">Valor</th>
+                                <th>Forma de pagamento</th>
+                                <th>Data vencimento</th>
+                                <th>Valor</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>Dinheiro</th>
-                                <td>10/04/2013</td>
-                                <td>R$ 101,43</td>
-                            </tr>
-                            <tr>
-                                <th>Cheque</th>
-                                <td>10/05/2013</td>
-                                <td>R$ 101,43</td>
-                            </tr>
-                            <tr>
-                                <th>Cheque</th>
-                                <td>10/06/2013</td>
-                                <td>R$ 101,43</td>
-                            </tr>
-                            <tr>
-                                <th>Cheque</th>
-                                <td>10/07/2013</td>
-                                <td>R$ 101,43</td>
-                            </tr>
-                            <tr>
-                                <th>Cheque</th>
-                                <td>10/08/2013</td>
-                                <td>R$ 101,43</td>
-                            </tr>
                         </tbody>
                     </table>
 
@@ -150,7 +113,7 @@
                     </div>
 
                     <div>
-                        <a href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Finalizar</a>
+                        <a href="#" data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b" class="bt_pedido_finalzar">Finalizar</a>
                     </div>
                 </div>   
             </div><!-- /content -->

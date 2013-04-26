@@ -12,16 +12,19 @@ $(document).on("pageinit", function() {
     }
     $(".logout").click(function( a ) {
         a.preventDefault();
+        block(false);
         _session.clear();
         _constant.redirect("login.html");
     });
     $(".sair").click(function( a ) {
         a.preventDefault();
+        block(false);
         _session.clear();
         navigator.app.exitApp();
     });
     $(".limpar_banco_dados").click(function( a ) {
         a.preventDefault();
+        block(false);
         _session.clear();
         _configuracoes.drop_tabelas();
     });

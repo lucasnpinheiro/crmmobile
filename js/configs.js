@@ -25,11 +25,17 @@ var _situacoes = {
         5 : '<span class="situacoes_sincronizacao_5">Cancelado</span>'
     },
     pedido : {
-        1 : '<span class="situacoes_pedido_1">Aguardando</span>',
+        1 : '<span class="situacoes_pedido_1">Aberto</span>',
         2 : '<span class="situacoes_pedido_2">Enviado</span>',
         3 : '<span class="situacoes_pedido_3">Error</span>',
         4 : '<span class="situacoes_pedido_4">Cancelado</span>',
-        5 : '<span class="situacoes_pedido_5">Aberto</span>'
+        5 : '<span class="situacoes_pedido_5">Aguardando envio</span>'
+    },
+    pedido_pagamentos : {
+        1 : '<span>Dinheiro</span>',
+        2 : '<span>Cheque</span>',
+        3 : '<span>Boleto</span>',
+        4 : '<span>Transferências Bancaria</span>'
     },
     produtos : {
         1 : '<span class="situacoes_produtos_1">{0}</span>',

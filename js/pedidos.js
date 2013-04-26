@@ -3,10 +3,19 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.all(this);
     });
+    $("#bt_pedido_finalzar").on("click", function( b ) {
+        b.preventDefault();
+        _pedidos.finalizar();
+    });
 
     $("#bt_adicionar_produtos").on("click", function( b ) {
         b.preventDefault();
         _pedidos.add();
+    });
+
+    $("#bt_adicionar_parcelas").on("click", function( b ) {
+        b.preventDefault();
+        _pedidos.parcela();
     });
 
     $(".select_produtos").on("click", function( b ) {
@@ -26,6 +35,7 @@ _clientes = {
 // constantes do objeto pedido
 _pedidos = {
     total : 0,
+    total_parcela : 0,
     qtd_itens : 0,
     qtd_volume : 0,
     qtd_parcelas : 0,
@@ -37,12 +47,13 @@ _pedidos = {
         valor : '',
         id : '',
         quantidade : ''
-    }
+    },
+    parcelas : [ ]
 }
 // consulta pedido por filtro
 _pedidos.all = function( obj ) {
     var and = {
-        id_empresas : _session.get('id_empresas')
+        'p.id_empresas' : _session.get('id_empresas')
     };
     $(obj).closest('form').find(':input').each(function() {
         switch ( this.name ) {
@@ -312,6 +323,139 @@ _pedidos.add = function() {
     }
 }
 
+// adiciona parcelas ao db
+_pedidos.parcela_add = function() {
+    $('#table-pagamentos-pedidos tbody').html('');
+    var tl = _pedidos.parcelas.length - 1;
+    $.each(_pedidos.parcelas, function( a, b ) {
+        db2.insert(
+                'pedidos_pagamentos',
+                b,
+                function( f ) {
+                    var v = '<tr id="' + b.parcela + '">';
+                    v += '<th>' + _situacoes.pedido_pagamentos[b.forma] + '</th>';
+                    v += '<td>' + date('d/m/Y', new Date(b.vencimento).getTime() / 1000) + '</td>';
+                    v += '<td>' + number_format(b.valor, 2, ",", ".") + '</td>';
+                    v += '<td>';
+                    v += '<a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true" class="bt_remove_parcela">Remover</a>';
+                    v += '<a href="#" data-role="button" data-icon="edit" data-iconpos="notext" data-theme="e" data-inline="true" class="bt_edit_parcela">Editar</a>';
+                    v += '</td>';
+                    v += '</tr>';
+                    $('#table-pagamentos-pedidos tbody').append(v);
+                    if ( a == tl ) {
+                        atualiza_table();
+                        $('.select_parcelas, .data, .moeda').on('change', function() {
+                            alert($(this).val());
+                        });
+                    }
+                }
+        );
+    });
+};
+
+// adiciona parcelas no pedido
+_pedidos.parcela = function() {
+    var erros = 0;
+    var msg = '';
+
+    if ( !parseInt($('#frm_novo_pedido_parte_3').find('#numero_parcelas').val()) ) {
+        erros++;
+        msg += 'Número de parcelas não informado <br />';
+    }
+
+    if ( !parseInt($('#frm_novo_pedido_parte_3').find('#forma_pagamnento').val()) ) {
+        erros++;
+        msg += 'Forma de pagamento não informado <br />';
+    }
+
+    if ( !parseInt($('#frm_novo_pedido_parte_3').find('#condicoes_pagamnento').val()) ) {
+        erros++;
+        msg += 'Condições de pagamento não informado <br />';
+    }
+
+    if ( erros == 0 ) {
+        $('#table-pagamentos-pedidos tbody').html('');
+        db2.destroy(
+                'pedidos_pagamentos', "id_pedidos = '" + _session.get('id_pedidos') + "'",
+                function( ) {
+                    db2.select(
+                            'pedidos_pagamentos',
+                            '*',
+                            {
+                                where : {
+                                    id_pedidos : _session.get('id_pedidos')
+                                }
+                            },
+                    function( f ) {
+                        debug("TOTAL", f.rows.length);
+                        if ( f.rows.length == 0 ) {
+                            var npar = 1;
+                            var cp = parseInt($('#frm_novo_pedido_parte_3').find('#condicoes_pagamnento').val());
+                            if ( cp == 1 ) {
+                                _pedidos.total_parcela = _pedidos.total;
+                                var d = new Date();
+                            } else {
+                                _pedidos.total_parcela = parseFloat(_pedidos.total / parseInt($('#frm_novo_pedido_parte_3').find('#numero_parcelas').val()));
+                                var d = new Date();
+                                d.setMonth(d.getMonth() + 1);
+                                npar = parseInt($('#frm_novo_pedido_parte_3').find('#numero_parcelas').val());
+                            }
+                            _pedidos.parcelas = [ ];
+                            for ( var i = 1; i <= npar; i++ ) {
+                                _pedidos.parcelas.push({
+                                    id_pedidos : _session.get('id_pedidos'),
+                                    parcela : i,
+                                    forma : parseInt($('#frm_novo_pedido_parte_3').find('#forma_pagamnento').val()),
+                                    vencimento : date('Y-m-d', d.getTime() / 1000),
+                                    valor : _pedidos.total_parcela
+                                });
+                                d.setMonth(d.getMonth() + 1);
+                            }
+                            _pedidos.parcela_add();
+                        } else {
+                            _pedidos.parcela();
+                        }
+                    });
+                });
+    } else {
+        jAviso(msg);
+    }
+}
+
+// adiciona parcelas no pedido
+_pedidos.parcela_all = function() {
+
+    db2.select(
+            'pedidos_pagamentos',
+            '*',
+            {
+                where : {
+                    id_pedidos : _session.get('id_pedidos')
+                }
+            },
+    function( f ) {
+        debug("TOTAL", f.rows.length);
+        if ( f.rows.length != 0 ) {
+            for ( var i = 0; i < f.rows.length; i++ ) {
+                var v = f.rows.item(i);
+                _pedidos.parcelas.push({
+                    id_pedidos : v.id_pedidos,
+                    parcela : v.parcela,
+                    forma : v.forma,
+                    vencimento : v.vencimento,
+                    valor : v.valor
+                });
+            }
+            db2.destroy(
+                    'pedidos_pagamentos', "id_pedidos = '" + _session.get('id_pedidos') + "'", function() {
+                _pedidos.parcela_add();
+            });
+
+        }
+    });
+
+}
+
 // gera no pedido
 _pedidos.novo = function() {
     db2.insert(
@@ -332,6 +476,45 @@ _pedidos.novo = function() {
         _pedidos.add();
     }
     );
+}
+
+// finalizar no pedido
+_pedidos.finalizar = function() {
+    db2.update(
+            'pedidos',
+            {
+                valor_total : _pedidos.total,
+                observacao : $('#observacao').val(),
+                situacao_envio : 3,
+                situacao_pedido : 5
+            },
+    {
+        id_pedidos : _session.get('id_pedidos')
+    },
+            function( ) {
+               jSucesso('Pedido Finalizado com sucesso.');
+               _session.remove('id_pedidos');
+               _session.remove('cod_cliente');
+            });
+}
+
+// resumo do pedido
+_pedidos.resumo = function() {
+    db2.update(
+            'pedidos',
+            {
+                valor_total : _pedidos.total,
+                observacao : $('#observacao').val(),
+                situacao_envio : 3,
+                situacao_pedido : 5
+            },
+    {
+        id_pedidos : _session.get('id_pedidos'),
+    },
+            function( ) {
+                _pedidos._add_table();
+                _pedidos.update_totais();
+            });
 }
 
 // consulta ultimos pedidos do cliente
@@ -388,12 +571,19 @@ _clientes.get = function() {
         $.each(f.rows.item(0), function( z, x ) {
             if ( z == 'data_hora_atualizacao' ) {
                 x = date("d/m/Y H:i:s", new Date(x));
+                $('#' + z).html(x);
             } else if ( z == 'valor_devido' ) {
                 x = number_format(x, 2, ",", ".");
+                $('#' + z).html(x);
+                if ( x != '0,00' ) {
+                    $('#' + z).css('color', 'red');
+                }
             } else if ( z == 'situacao' ) {
                 x = _situacoes.clientes[x.situacao]
+                $('#' + z).html(x);
+            } else {
+                $('#' + z).html(x);
             }
-            $('#' + z).html(x);
         });
         atualiza_table();
         _pedidos.get_all();
@@ -478,7 +668,27 @@ atualiza_table = function() {
             theme : "c"
         });
     });
-    $("table :input").textinput({
+    $("table :input").not('.select_parcelas').textinput({
         mini : true
+    });
+    $('.select_parcelas').selectmenu({
+        mini : true,
+        nativeMenu : false
+    });
+
+    $("form, table").insere_mascara();
+
+    $(".moeda").maskMoney({
+        symbol : '',
+        thousands : '.',
+        decimal : ',',
+        symbolStay : false
+    });
+    $(".qtd").maskMoney({
+        symbol : '',
+        precision : 0,
+        thousands : '',
+        decimal : '',
+        symbolStay : false
     });
 }

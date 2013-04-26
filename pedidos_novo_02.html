@@ -22,22 +22,8 @@
                 }
                  _produtos.get();
                  _pedidos.add_all();
-                function moeda() {
-                    $(".moeda").maskMoney({
-                        symbol : '',
-                        thousands : '.',
-                        decimal : ',',
-                        symbolStay : false
-                    });
-                    $(".qtd").maskMoney({
-                        symbol : '',
-                        precision : 0,
-                        thousands : '',
-                        decimal : '',
-                        symbolStay : false
-                    });
-                }
-                moeda();
+                
+                atualiza_table();
             });
         </script>
     </head> 
@@ -110,9 +96,9 @@
             <div data-role="footer" class="ui-bar" data-theme="a" data-position="fixed">
                 <div data-role="navbar" data-grid="b" data-theme="d" class="ui-body-d ui-body" style="font-size: 0.8em;">
                     <ul style="text-align: center;">
-                        <li style="width: 33%;">Total de produtos: <br /> <span id="total_produtos_pedido">0</span></li>
-                        <li style="width: 33%;">Total de itens: <br /> <span id="total_produtos_itens_pedido">0</span></li>
-                        <li style="width: 33%;">Valor Total: <br /> R$ <span id="valor_total_pedido">0,00</span></li>
+                        <li style="width: 33%;">T. produtos: <br /> <span id="total_produtos_pedido">0</span></li>
+                        <li style="width: 33%;">T. itens: <br /> <span id="total_produtos_itens_pedido">0</span></li>
+                        <li style="width: 33%;">Total: <br /> R$ <span id="valor_total_pedido">0,00</span></li>
                     </ul>
                 </div><!-- /navbar -->
                 <div data-role="navbar" data-grid="c">

@@ -1,4 +1,5 @@
 $(document).on('pageinit', function() {
+
     $('form').insere_mascara();
     $('.bt_ativar').click(function( a ) {
         a.preventDefault();
@@ -12,6 +13,7 @@ $(document).on('pageinit', function() {
                 _ativacao.campos.modelo = navigator.appCodeName;
                 _ativacao.campos.plataforma = navigator.platform;
                 _ativacao.campos.versao = navigator.appVersion;
+                _ativacao.campos.cod_ativacao = gerar_chave();
                 _ativacao.campos.uuid = gerar_chave();
             }
             _ativacao.ativar();
@@ -19,27 +21,17 @@ $(document).on('pageinit', function() {
     });
 });
 
-function gerar_chave() {
-    var c = Math.ceil(Math.random() * 1000000) + "a" + md5((Math.ceil(Math.random() * 1000000) + "v" + md5(_ativacao.campos.versao) + 'r' + Math.ceil(Math.random() * 1000000))) + 'z' + Math.ceil(Math.random() * 1000000);
-    var s = '';
-    for ( var i = 0; i < c.length; i++ ) {
-        if ( i % 2 == 0 ) {
-            s += c[i];
-        }
-    }
-    return  s.substr((Math.ceil(s.length / 4) - 1), 16);
-}
-
 _ativacao = {
     campos : {
+        id_empresas : 1,
         uuid : '',
         modelo : '',
         plataforma : '',
         versao : '',
         codigo_cliente : '',
         cod_ativacao : '',
-        cpf_cnpj : '',
-        nome_empresa : '',
+        cpf_cnpj : '04833542000104',
+        nome_empresa : 'EMPRESA TESTE',
         data_hora_cadastro : date('Y-m-d H:i:s')
     }
 }
@@ -59,35 +51,40 @@ _ativacao.ativar = function() {
             block(false);
         },
         success : function( a ) {
-            if ( a.cod_retorno == 999 ) {
-                jAviso(a.mensagem);
-            } else {
-                _ativacao.campos.cod_ativacao = a.dados.dscHash;
-                _ativacao.campos.cpf_cnpj = a.dados.documento;
-                _ativacao.campos.nome_empresa = a.dados.dscEmpresa;
-                _ativacao.campos.id_empresas = a.dados.idEmpresas;
-                _ativacao.insert();
-            }
+            _ativacao.campos.cod_ativacao = a.dados.dscHash;
+            _ativacao.campos.cpf_cnpj = a.dados.documento;
+            _ativacao.campos.nome_empresa = a.dados.dscEmpresa;
+            _ativacao.campos.id_empresas = a.dados.idEmpresas;
+            _ativacao.insert();
         },
         error : function(  ) {
-            block(true);
+            _ativacao.insert();
         }
     });
 }
 
 _ativacao.insert = function() {
-    jSucesso('Configurando dispositvo');
-    db2.insert(
+    db2.destroy(
             'empresas',
-            _ativacao.campos,
+            '1=1',
             function(  ) {
-                jSucesso('Ativação realizada com sucesso.');
-                _constant.redirect("login.html");
+                db2.insert(
+                        'empresas',
+                        _ativacao.campos,
+                        function(  ) {
+                            jSucesso('Ativação realizada com sucesso.');
+                            _constant.redirect("login.html");
+                        },
+                        function( error, query ) {
+                            jSucesso("QUERY", query + ' <br/>Oops. ' + error.message + ' (Code ' + error.code + ')');
+                        }
+                );
             },
             function( error, query ) {
                 jSucesso("QUERY", query + ' <br/>Oops. ' + error.message + ' (Code ' + error.code + ')');
             }
     );
+
 
 }
 
@@ -107,4 +104,15 @@ function getDeviceInfo() {
     $('#devPlatform').text(device.platform);
     $('#devUUID').text(device.uuid);
     $('#devVersion').text(device.version);
+}
+
+function gerar_chave() {
+    var c = Math.ceil(Math.random() * 1000000) + "a" + md5((Math.ceil(Math.random() * 1000000) + "v" + md5(_ativacao.campos.versao) + 'r' + Math.ceil(Math.random() * 1000000))) + 'z' + Math.ceil(Math.random() * 1000000);
+    var s = '';
+    for ( var i = 0; i < c.length; i++ ) {
+        if ( i % 2 == 0 ) {
+            s += c[i];
+        }
+    }
+    return  s.substr((Math.ceil(s.length / 4) - 1), 16);
 }

@@ -25,7 +25,7 @@ _configuracoes = {
             }, {
                 name : 'empresas',
                 cols : {
-                    id_empresas : 'INTEGER',
+                    id_empresas : 'INTEGER PRIMARY KEY AUTOINCREMENT',
                     uuid : 'VARCHAR(50)',
                     modelo : 'VARCHAR(50)',
                     plataforma : 'VARCHAR(50)',
@@ -66,9 +66,10 @@ _configuracoes = {
                 cols : {
                     id_pedidos_pagamentos : 'INTEGER PRIMARY KEY AUTOINCREMENT',
                     id_pedidos : 'INTEGER',
-                    data_vencimento : 'DATE',
-                    forma_pagamento : 'INTEGER',
-                    valor_parcela : 'REAL(10, 2)'
+                    vencimento : 'DATE',
+                    forma : 'INTEGER',
+                    parcela : 'INTEGER',
+                    valor : 'REAL(10, 2)'
                 }
             }, {
                 name : 'produtos',
