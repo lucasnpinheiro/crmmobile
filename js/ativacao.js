@@ -60,7 +60,7 @@ _ativacao.ativar = function() {
         },
         success : function( a ) {
             if ( a.cod_retorno == 999 ) {
-                jSucesso(a.mensagem);
+                jAviso(a.mensagem);
             } else {
                 _ativacao.campos.cod_ativacao = a.dados.dscHash;
                 _ativacao.campos.cpf_cnpj = a.dados.documento;
@@ -68,7 +68,6 @@ _ativacao.ativar = function() {
                 _ativacao.campos.id_empresas = a.dados.idEmpresas;
                 _ativacao.insert();
             }
-            jSucesso(a.cod_retorno);
         },
         error : function(  ) {
             block(true);
@@ -77,18 +76,13 @@ _ativacao.ativar = function() {
 }
 
 _ativacao.insert = function() {
-    db2.destroy(
+    jSucesso('Configurando dispositvo');
+    db2.insert(
             'empresas',
-            '1=1',
+            _ativacao.campos,
             function(  ) {
-                db2.insert(
-                        'empresas',
-                        _ativacao.campos,
-                        function(  ) {
-                            jSucesso('Ativação realizada com sucesso.');
-                            _constant.redirect("login.html");
-                        }
-                );
+                jSucesso('Ativação realizada com sucesso.');
+                _constant.redirect("login.html");
             }
     );
 
