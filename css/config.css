@@ -1,6 +1,7 @@
 body{font-size:16px}
 .ui-footer .ui-title{font-size:.7em}
 .ui-header .ui-title{text-align:left;margin:.6em 0 .8em}
+.ui-dialog-contain .ui-title{text-align:center;margin:.6em 0 .8em}
 .ui-li-divider{font-size:1em}
 .ui-btn-inner{font-size:.875em}
 .crm_mobile_versao,.crm_mobile_atutenticacao{display:inline-block;position:absolute;right:5px;top:40px;font-size:.75em}
@@ -40,10 +41,10 @@ input[disabled], input[disabled=disabled]{
     margin-left: 23%;
 }
 .msg_error{
-    background-color: red;
+    background-color: #FC6;
 }
 .msg_aviso{
-    background-color: yellowgreen;
+    background-color: #9F9;
 }
 .msg_sucesso_combo{
     display: block;

@@ -63,7 +63,7 @@ $(document).bind("mobileinit", function() {
         touchOverflowEnabled : false,
         defaultPageTransition : "none",
         defaultDialogTransition : "none",
-        loadingMessage : "Carregando...",
+        loadingMessage : "Aguarde...",
         buttonMarkup : {
             hoverDelay : 0
         }

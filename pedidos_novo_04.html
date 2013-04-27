@@ -22,6 +22,7 @@
                 }
                 _pedidos.update_totais();
                 _pedidos.resumo();
+                _clientes.get();
             });
         </script>
     </head> 
@@ -49,15 +50,15 @@
                         <thead>
                             <tr class="ui-bar-a">
                                 <th>Código</th>
-                                <th data-priority="1">Nome</th>
-                                <th data-priority="2">CPF/CNPJ</th>
+                                <th>Nome</th>
+                                <th>CPF/CNPJ</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th id="cliente_codigo">30875</th>
-                                <td id="cliente_nome">JJ Empreendimentos Mat Construção</td>
-                                <td id="cliente_documento">30.3332.6222/0001-21</td>
+                                <th id="cod_cliente"></th>
+                                <td id="dsc_cliente"></td>
+                                <td id="cpf_cnpj"></td>
                             </tr>
                         </tbody>
                     </table>

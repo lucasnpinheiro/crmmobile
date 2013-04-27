@@ -38,7 +38,7 @@ _clientes = {
                     var g = '<tr cod_cliente="' + v.cod_cliente + '">';
                     g += ' <th>' + v.dsc_cliente + '</th>';
                     g += ' <td>' + v.cod_cliente + '</td>';
-                    g += ' <td>' + number_format(v.valor_devido, 2, ",", ".") + '</td>';
+                    g += ' <td style="color : red;">' + number_format(v.valor_devido, 2, ",", ".") + '</td>';
                     g += ' <td>' + _situacoes.clientes[v.situacao] + '</td>';
                     g += ' <td>' + date("d/m/Y H:i:s", new Date(v.data_hora_atualizacao)) + '</td>';
                     g += ' <td> <a href="#" data-role="button" data-icon="bars" data-theme="c" data-inline="true" class="bt_cliente_detalhes">Detalhes</a> <a href="#" data-role="button" data-icon="plus" data-theme="c" data-inline="true" class="bt_cliente_novo_pedido">Novo Pedido</a> </td>';

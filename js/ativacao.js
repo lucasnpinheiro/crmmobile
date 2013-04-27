@@ -1,6 +1,8 @@
 $(document).on('pageinit', function() {
-
+    block(false);
+    _ativacao.get();
     $('form').insere_mascara();
+
     $('.bt_ativar').click(function( a ) {
         a.preventDefault();
         if ( $(this).closest("form").form_valida() == true ) {
@@ -84,8 +86,27 @@ _ativacao.insert = function() {
                 jSucesso("QUERY", query + ' <br/>Oops. ' + error.message + ' (Code ' + error.code + ')');
             }
     );
+}
 
-
+_ativacao.get = function() {
+    db2.select(
+            'empresas',
+            '*',
+            '1=1',
+            function( f ) {
+                debug("TOTAL", f.rows.length);
+                if ( f.rows.length != 0 ) {
+                    $.each(f.rows.item(0), function( k, v ) {
+                        _ativacao.campos[k] = v;
+                    });
+                }
+                if ( _ativacao.campos.codigo_cliente != '' ) {
+                    $('.bt_ativar').hide();
+                    $('#codigo_cliente').attr('disabled',true).val(_ativacao.campos.codigo_cliente);
+                    $('#codigo_cliente').parent().after('<p>Dispositivo já ativado.</p>');
+                }
+                block(true);
+            });
 }
 
 // handling document ready and phonegap deviceready

@@ -3,7 +3,7 @@ $(document).on("pageinit", function() {
         b.preventDefault();
         _pedidos.all(this);
     });
-    $("#bt_pedido_finalzar").on("click", function( b ) {
+    $(".bt_pedido_finalzar").on("click", function( b ) {
         b.preventDefault();
         _pedidos.finalizar();
     });
@@ -332,21 +332,73 @@ _pedidos.parcela_add = function() {
                 'pedidos_pagamentos',
                 b,
                 function( f ) {
-                    var v = '<tr id="' + b.parcela + '">';
+                    var v = '<tr id="' + b.parcela + '" forma="' + b.forma + '" data_vencimento="' + date('d/m/Y', new Date(b.vencimento).getTime() / 1000) + '" valor="' + number_format(b.valor, 2, ",", ".") + '">';
                     v += '<th>' + _situacoes.pedido_pagamentos[b.forma] + '</th>';
                     v += '<td>' + date('d/m/Y', new Date(b.vencimento).getTime() / 1000) + '</td>';
                     v += '<td>' + number_format(b.valor, 2, ",", ".") + '</td>';
                     v += '<td>';
                     v += '<a href="#" data-role="button" data-icon="minus" data-iconpos="notext" data-theme="e" data-inline="true" class="bt_remove_parcela">Remover</a>';
-                    v += '<a href="#" data-role="button" data-icon="edit" data-iconpos="notext" data-theme="e" data-inline="true" class="bt_edit_parcela">Editar</a>';
+                    v += '<a href="#dialogPage" data-ajax="true" data-role="button" data-icon="edit" data-iconpos="notext" data-theme="e" data-inline="true"  data-rel="dialog" class="bt_edit_parcela">Editar</a>';
                     v += '</td>';
                     v += '</tr>';
                     $('#table-pagamentos-pedidos tbody').append(v);
                     if ( a == tl ) {
                         atualiza_table();
-                        $('.select_parcelas, .data, .moeda').on('change', function() {
-                            alert($(this).val());
+                        $('.bt_edit_parcela').click(function() {
+                            var obj = this;
+                            var pid = $(obj).closest('tr').attr('id');
+                            var pforma = $(obj).closest('tr').attr('forma');
+                            var pdv = $(obj).closest('tr').attr('data_vencimento');
+                            var pv = $(obj).closest('tr').attr('valor');
+                            $("#dialogPage").dialog({
+                                closeBtn : "none",
+                                create : function( event, ui ) {
+                                    $('#parcela_edit').find('#parcela').val(pid);
+                                    $('#parcela_edit').find('#forma_pagamnento').val(pforma);
+                                    $('#parcela_edit').find('#data_vencimento').val(pdv);
+                                    $('#parcela_edit').find('#valor').val(pv);
+                                    atualiza_table();
+                                    $('#bt_atualizar_parcela').click(function( e ) {
+                                        e.preventDefault();
+                                        _pedidos.total_parcela = parseFloat((_pedidos.total - convert_moeda($('#parcela_edit').find('#valor').val())) / (_pedidos.qtd_parcelas - 1));
+                                        for ( var i = 0; i < _pedidos.qtd_parcelas; i++ ) {
+                                            if ( _pedidos.parcelas[i].parcela == pid ) {
+                                                _pedidos.parcelas[i].forma = parseInt($('#parcela_edit').find('#forma_pagamnento').val());
+                                                _pedidos.parcelas[i].vencimento = convert_date($('#parcela_edit').find('#data_vencimento').val()).toString();
+                                                _pedidos.parcelas[i].valor = convert_moeda($('#parcela_edit').find('#valor').val());
+                                            } else {
+                                                _pedidos.parcelas[i].valor = _pedidos.total_parcela;
+                                            }
+                                        }
+                                        db2.destroy('pedidos_pagamentos', "id_pedidos = '" + _session.get('id_pedidos') + "'", function() {
+                                            _pedidos.parcela_update();
+                                        });
+
+                                    });
+                                }
+                            });
                         });
+                        $(".bt_remove_parcela").on("click", function( b ) {
+                            b.preventDefault();
+                            $('#frm_novo_pedido_parte_3').find('#numero_parcelas').val(parseInt($('#frm_novo_pedido_parte_3').find('#numero_parcelas').val()) - 1);
+                            _pedidos.parcela();
+                        });
+                    }
+                }
+        );
+    });
+};
+
+// adiciona parcelas ao db
+_pedidos.parcela_update = function() {
+    var tl = _pedidos.parcelas.length - 1;
+    $.each(_pedidos.parcelas, function( a, b ) {
+        db2.insert(
+                'pedidos_pagamentos',
+                b,
+                function( f ) {
+                    if ( a == tl ) {
+                        _constant.redirect('pedidos_novo_03.html');
                     }
                 }
         );
@@ -400,6 +452,7 @@ _pedidos.parcela = function() {
                                 d.setMonth(d.getMonth() + 1);
                                 npar = parseInt($('#frm_novo_pedido_parte_3').find('#numero_parcelas').val());
                             }
+                            _pedidos.qtd_parcelas = npar;
                             _pedidos.parcelas = [ ];
                             for ( var i = 1; i <= npar; i++ ) {
                                 _pedidos.parcelas.push({
@@ -436,6 +489,8 @@ _pedidos.parcela_all = function() {
     function( f ) {
         debug("TOTAL", f.rows.length);
         if ( f.rows.length != 0 ) {
+            _pedidos.parcelas = [ ];
+            _pedidos.qtd_parcelas = 0;
             for ( var i = 0; i < f.rows.length; i++ ) {
                 var v = f.rows.item(i);
                 _pedidos.parcelas.push({
@@ -445,6 +500,18 @@ _pedidos.parcela_all = function() {
                     vencimento : v.vencimento,
                     valor : v.valor
                 });
+                _pedidos.qtd_parcelas++;
+            }
+            _pedidos.total_parcela = parseFloat(_pedidos.total / _pedidos.qtd_parcelas);
+            if ( _pedidos.qtd_parcelas > 0 ) {
+                if ( _pedidos.qtd_parcelas == 1 ) {
+                    $('#frm_novo_pedido_parte_3 #condicoes_pagamnento').val(1);
+                } else if ( _pedidos.qtd_parcelas > 1 ) {
+                    $('#frm_novo_pedido_parte_3 #condicoes_pagamnento').val(2);
+                }
+                $('#frm_novo_pedido_parte_3 #numero_parcelas').val(_pedidos.qtd_parcelas);
+                $('#frm_novo_pedido_parte_3 #forma_pagamnento').val(_pedidos.parcelas[0].forma);
+                atualiza_table();
             }
             db2.destroy(
                     'pedidos_pagamentos', "id_pedidos = '" + _session.get('id_pedidos') + "'", function() {
@@ -491,30 +558,60 @@ _pedidos.finalizar = function() {
     {
         id_pedidos : _session.get('id_pedidos')
     },
-            function( ) {
-               jSucesso('Pedido Finalizado com sucesso.');
-               _session.remove('id_pedidos');
-               _session.remove('cod_cliente');
-            });
+    function( ) {
+        jSucesso('Pedido Finalizado com sucesso.');
+        _session.remove('id_pedidos');
+        _session.remove('cod_cliente');
+        _constant.redirect('pedidos_consultar.html')
+    });
+}
+_pedidos.calcula = function( v, d, q ) {
+    var sub = v-d;
+    var mult = sub*q;
+    return mult
 }
 
 // resumo do pedido
 _pedidos.resumo = function() {
-    db2.update(
-            'pedidos',
-            {
-                valor_total : _pedidos.total,
-                observacao : $('#observacao').val(),
-                situacao_envio : 3,
-                situacao_pedido : 5
-            },
-    {
-        id_pedidos : _session.get('id_pedidos'),
+    db2.select('pedidos_itens as pi JOIN produtos as p ON pi.id_produtos = p.id_produtos', 'pi.*, p.dsc_produto, p.cod_produto, p.unidade', {
+        where : {
+            id_empresas : _session.get('id_empresas'),
+            id_pedidos : _session.get('id_pedidos')
+        }
     },
-            function( ) {
-                _pedidos._add_table();
-                _pedidos.update_totais();
-            });
+    function( f ) {
+        for ( var e = 0; e < f.rows.length; e++ ) {
+            var v = f.rows.item(e);
+            var g = '<tr>';
+            g += '<th>' + v.dsc_produto + '</th>';
+            g += '<td>' + v.cod_produto + '</td>';
+            g += '<td>' + v.unidade + '</td>';
+            g += '<td>' + number_format(v.valor_unitario, 2, ",", ".") + '</td>';
+            g += '<td>' + number_format(v.desconto, 2, ",", ".") + '</td>';
+            g += '<td>' + v.quantidade + '</td>';
+            g += '<td>' +  number_format(_pedidos.calcula(v.valor_unitario, v.valor_desconto, v.quantidade), 2, ",", ".") + '</td>';
+            g += "</tr>";
+            $("#table-resumo-pedidos-itens tbody").append(g);
+        }
+    });
+
+    db2.select('pedidos_pagamentos', '*', {
+        where : {
+            id_empresas : _session.get('id_empresas'),
+            id_pedidos : _session.get('id_pedidos')
+        }
+    },
+    function( f ) {
+        for ( var e = 0; e < f.rows.length; e++ ) {
+            var v = f.rows.item(e);
+            var g = '<tr>';
+            g += '<th>' + _situacoes.pedido_pagamentos[v.forma] + '</th>';
+            g += '<td>' + date('d/m/Y', v.vencimento) + '</td>';
+            g += '<td>' + number_format(v.Valor, 2, ",", ".") + '</td>';
+            g += "</tr>";
+            $("#table-resumo-pedidos-forma-pagamento tbody").append(g);
+        }
+    });
 }
 
 // consulta ultimos pedidos do cliente
@@ -674,7 +771,7 @@ atualiza_table = function() {
     $('.select_parcelas').selectmenu({
         mini : true,
         nativeMenu : false
-    });
+    }).selectmenu("refresh", true);
 
     $("form, table").insere_mascara();
 
