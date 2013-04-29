@@ -125,9 +125,10 @@ _pedidos.consultar = function( condicoes ) {
                         var g = '<tr cod_cliente="' + v.cod_cliente + '">';
                         g += ' <th>' + v.dsc_cliente + '</th>';
                         g += ' <td>' + v.numero_pedido + '</td>';
-                        g += ' <td>' + v.valor_total + '</td>';
-                        g += ' <td>' + v.data_hora_cadastro + '</td>';
-                        g += ' <td>' + v.situacao_pedido + "</td>";
+                        g += ' <td>' + number_format(v.valor_total, 2, ',', '.') + '</td>';
+                        g += ' <td>' + date('d/m/Y H:i:s', v.data_hora_cadastro) + '</td>';
+                        g += ' <td>' + _situacoes.pedido[v.situacao_pedido] + "</td>";
+                        g += ' <td>' + _situacoes.sincronizacao[v.situacao_envio] + "</td>";
                         g += ' <td> <a href="#" data-role="button" data-icon="bars" data-theme="c" data-inline="true" class="bt_cliente_novo_pedido">Novo Pedido</a> </td>';
                         g += '</tr>';
                         $("#table-consulta-pedidos tbody").append(g);
@@ -566,13 +567,14 @@ _pedidos.finalizar = function() {
     });
 }
 _pedidos.calcula = function( v, d, q ) {
-    var sub = v-d;
-    var mult = sub*q;
+    var sub = v - d;
+    var mult = sub * q;
     return mult
 }
 
 // resumo do pedido
 _pedidos.resumo = function() {
+    // itens
     db2.select('pedidos_itens as pi JOIN produtos as p ON pi.id_produtos = p.id_produtos', 'pi.*, p.dsc_produto, p.cod_produto, p.unidade', {
         where : {
             id_empresas : _session.get('id_empresas'),
@@ -589,15 +591,15 @@ _pedidos.resumo = function() {
             g += '<td>' + number_format(v.valor_unitario, 2, ",", ".") + '</td>';
             g += '<td>' + number_format(v.desconto, 2, ",", ".") + '</td>';
             g += '<td>' + v.quantidade + '</td>';
-            g += '<td>' +  number_format(_pedidos.calcula(v.valor_unitario, v.valor_desconto, v.quantidade), 2, ",", ".") + '</td>';
+            g += '<td>' + number_format(_pedidos.calcula(v.valor_unitario, v.valor_desconto, v.quantidade), 2, ",", ".") + '</td>';
             g += "</tr>";
             $("#table-resumo-pedidos-itens tbody").append(g);
         }
     });
 
+    // pagamentos
     db2.select('pedidos_pagamentos', '*', {
         where : {
-            id_empresas : _session.get('id_empresas'),
             id_pedidos : _session.get('id_pedidos')
         }
     },
