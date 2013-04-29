@@ -126,7 +126,7 @@ _pedidos.consultar = function( condicoes ) {
                         g += ' <th>' + v.dsc_cliente + '</th>';
                         g += ' <td>' + v.numero_pedido + '</td>';
                         g += ' <td>' + number_format(v.valor_total, 2, ',', '.') + '</td>';
-                        g += ' <td>' + date('d/m/Y H:i:s', v.data_hora_cadastro) + '</td>';
+                        g += ' <td>' + date('d/m/Y H:i:s', new Date(v.data_hora_cadastro)) + '</td>';
                         g += ' <td>' + _situacoes.pedido[v.situacao_pedido] + "</td>";
                         g += ' <td>' + _situacoes.sincronizacao[v.situacao_envio] + "</td>";
                         g += ' <td> <a href="#" data-role="button" data-icon="bars" data-theme="c" data-inline="true" class="bt_cliente_novo_pedido">Novo Pedido</a> </td>';
