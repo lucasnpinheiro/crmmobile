@@ -608,8 +608,8 @@ _pedidos.resumo = function() {
             var v = f.rows.item(e);
             var g = '<tr>';
             g += '<th>' + _situacoes.pedido_pagamentos[v.forma] + '</th>';
-            g += '<td>' + date('d/m/Y', v.vencimento) + '</td>';
-            g += '<td>' + number_format(v.Valor, 2, ",", ".") + '</td>';
+            g += '<td>' + date('d/m/Y', new Date(v.vencimento)) + '</td>';
+            g += '<td>' + number_format(v.valor, 2, ",", ".") + '</td>';
             g += "</tr>";
             $("#table-resumo-pedidos-forma-pagamento tbody").append(g);
         }
